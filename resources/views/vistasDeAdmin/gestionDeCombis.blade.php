@@ -37,7 +37,7 @@
     @section('content2')
         <h1>Gestion de combis</h1>
         <div>
-            <button> <a href="/crearCombi"> Crear Combi  </a></button>
+            <button> <a href="{{route('crearCombi')}}"> Crear Combi  </a></button>
             <button> <a href="http://localhost/ProjectBar/logincombivirt/public/admin">Atras</a></button>
         </div>
         <div>
@@ -55,12 +55,12 @@
                         <div class="col">{{$combi['cant asientos']}}</div>
                         <div class="col">{{$combi['patente']}}</div>
                         
-                           {{--  <div class="col">
-                                <form method="POST" action="{{ route('combi.borrar', $combi)}}">@csrf @method('DELETE')<button onclick="return ConfirmDelete() ">Eliminar</button></form></div>
-                            
-                            <div class="col">
+                        <div class="col">
+                            <form method="POST" action="{{ route('combi.borrar', $combi)}}">@csrf @method('DELETE')<button onclick="return ConfirmDelete() ">Eliminar</button></form>
+                        </div>
+                        <div class="col">
                                 <form method="POST" action="{{ route('combi.actualizar',$combi)}}">@csrf @method('PATCH')<button onclick="return ConfirmEdit() ">Editar</button></form></div>
-                            </div> --}}
+                        </div> 
                     </div>
                     @endforeach
                 </div>

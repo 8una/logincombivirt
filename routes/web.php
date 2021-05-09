@@ -26,3 +26,11 @@ Route::get('/myprofile', 'HomeController@userProfile')->name('myprofile');
 Route::get('/admin', 'adminController@show')->name('homeAdmin');
 //Gestion de combis
 Route::get('/gestionCombis', 'adminController@showGestionCombis')->name('gestionDeCombis');
+//Crear combi
+Route::get('/crearCombi', 'adminController@showCrearCombi')->name('crearCombi');
+Route::post('/crearCombi', 'adminController@store')->name('combi.store');
+
+//Combi eliminar
+Route::delete('/borrarCombi/{combi}', 'adminController@destroy')->name('combi.borrar');
+//Combi Actualizar
+Route::patch('/gestionCombis/{combi}', 'adminController@showActCombi')->name('combi.actualizar');

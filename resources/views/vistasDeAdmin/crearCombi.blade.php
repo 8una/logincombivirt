@@ -1,4 +1,5 @@
-@extends('layout')
+@extends('layouts.nav')
+@extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,7 @@
 </head>
 <body>
     @section('content')
+    @section('content2')
         <div>Cargar una nueva combi</div>    
         <form method="POST" action="{{ route('combi.store')}}">
             @csrf
@@ -22,13 +24,14 @@
                 </select>
             </label>
             <br>
-            <button>Enviar</button>
-            <button><a href="/gestionCombis"> Cancelar </a></button> 
+            <button class="bg-primary">Enviar</button>
+            <button><a href="http://localhost/ProjectBar/logincombivirt/public/gestionCombis"> Atras </a></button> 
         </form>
         <p>{{$data}}</p>
         
         
 
+    @endsection
     @endsection
 </body>
 </html>
