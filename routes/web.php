@@ -22,3 +22,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/myprofile', 'HomeController@userProfile')->name('myprofile');
 
+//ADMIN
+Route::get('/admin', 'adminController@show')->name('homeAdmin');
+//Gestion de combis
+Route::get('/gestionCombis', 'adminController@showGestionCombis')->name('gestionDeCombis');
