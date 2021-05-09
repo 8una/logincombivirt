@@ -54,12 +54,11 @@
                         <div class="col">{{$combi['tipo']}}</div>
                         <div class="col">{{$combi['cant asientos']}}</div>
                         <div class="col">{{$combi['patente']}}</div>
-                        
-                        <div class="col">
-                            <form method="POST" action="{{ route('combi.borrar', $combi)}}">@csrf @method('DELETE')<button onclick="return ConfirmDelete() ">Eliminar</button></form>
+                        <div class="d-grid gap-2 d-md-block">
+                            <form method="POST" action="{{ route('combi.borrar', $combi)}}">@csrf @method('DELETE')<button onclick="return ConfirmDelete() ">Eliminar ✖</button></form>
                         </div>
                         <div class="col">
-                                <form method="POST" action="{{ route('combi.actualizar',$combi)}}">@csrf @method('PATCH')<button onclick="return ConfirmEdit() ">Editar</button></form></div>
+                                <form method="POST" action="{{ route('combi.actualizar',$combi)}}">@csrf @method('PATCH')<button onclick="return ConfirmEdit() ">Editar 📋</button></form></div>
                         </div> 
                     </div>
                     @endforeach

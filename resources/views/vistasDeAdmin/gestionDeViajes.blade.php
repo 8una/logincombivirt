@@ -1,4 +1,5 @@
-@extends('layout')
+@extends('layouts.nav')
+@extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,7 @@
 </head>
 <body>
     @section('content')
+    @section('content2')
         
     
     <h1> Bienvenido a la Administracion de viajes</h1>
@@ -33,7 +35,7 @@
         <button> <a href="/crearViaje"> Cargar Viajes</a></button>
         <button> <a href="#"> Eliminar Viajes</a></button>
         <button> <a href="#"> Actualizar Viajes</a></button>
-        <button> <a href="/admin">Atras</a></button>
+        <button> <a href="http://localhost/ProjectBar/logincombivirt/public/admin">Atras</a></button>
     </div>
 
         <br>
@@ -62,6 +64,7 @@
         
     </div>
 
+    @endsection
     @endsection
 </body>
 </html>

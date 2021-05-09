@@ -29,7 +29,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-3">
-                        <button type="button" class="btn btn-dark btn-lg" ><a href="/gestionDeViajes" > Administracion de Viajes</a></button>
+                        <button type="button" class="btn btn-dark btn-lg" ><a href="{{route("gestionDeViajes")}}" > Administracion de Viajes</a></button>
                         </div>
                         <div class="col-4">
                             <button type="button" class="btn btn-dark btn-lg"><a href="{{route("gestionDeCombis")}}"> Administracion de Combis</a></button>
