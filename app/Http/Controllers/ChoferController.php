@@ -57,12 +57,12 @@ class ChoferController extends Controller
             else{
                 $msg = "el dni ingresado ya esta registrado en el sistema";
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             //$msg = "el dni ingresado no es válido";
             $msg= $th->getMessage();
-            if (strcmp($msg,"preg_match(): No ending delimiter '/' found" == 0)){
+            /*if (strcmp($msg,"preg_match(): No ending delimiter '/' found" == 0)){
                 $msg = "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres";
-            }
+            }*/
         }        
         return view('chofer.crear', ['data' =>$msg]);
         //return redirect()->route('chofer.index');      

@@ -22,7 +22,7 @@
                 {!! $errors->first('precio','<small>:message</small></br>')!!}
             </label><br>
             <label for="">DNI</label><br>
-                <input type="text" name="dni" /><br>
+                <input number="text" name="dni" /><br>
                 {!! $errors->first('stock','<small>:message</small></br>')!!}
             </label><br>
             <label for="">Email <br>
