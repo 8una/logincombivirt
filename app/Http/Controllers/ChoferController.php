@@ -33,8 +33,9 @@ class ChoferController extends Controller
             'apellido' => 'required',
             'dni' => 'required',
             'email' => 'required',
-            'password' => 'required | regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()+]+.*)[0-9a-zA-Z\w!@#$%^&*()+]{8,}$/',
+            'password' => 'required |min :8|',
             ]);
+            //'password' => 'required | regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()+]+.*)[0-9a-zA-Z\w!@#$%^&*()+]{8,}$/',
             $dni = $request->input('dni');
             $cantidadChoferes= Chofer::where("dni", "=", $dni)->count();
             $email = $request->input('email');
@@ -60,7 +61,7 @@ class ChoferController extends Controller
             //$msg = "el dni ingresado no es válido";
             $msg= $th->getMessage();
             if (strcmp($msg,"preg_match(): No ending delimiter '/' found" == 0)){
-                $msg = "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres, 1 letra mayuscula, 1 minuscula, y un caracter especial";
+                $msg = "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres";
             }
         }        
         return view('chofer.crear', ['data' =>$msg]);
