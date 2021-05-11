@@ -1,4 +1,4 @@
-@extends('layouts.nav')
+@extends('layouts.navAdmin')
 @extends('layouts.app')
 
 <!DOCTYPE html>
@@ -34,35 +34,45 @@
 
 <body>
     @section('content')
-    @section('content2')
-        <h1>Gestion de combis</h1>
+    @section('contentAdmin')
+        <h1 class="m-2">Gestion de combis</h1>
         <div>
-            <button> <a href="{{route('crearCombi')}}"> Crear Combi  </a></button>
-            <button> <a href="http://localhost/ProjectBar/logincombivirt/public/admin">Atras</a></button>
+            <button class="btn btn-outline-primary ml-2" > <a href="{{route('crearCombi')}}"> Crear Combi  </a></button>
+            <button class="btn btn-outline-primary ml-2"> <a href= "{{route('homeAdmin')}}" >Atras</a></button>
         </div>
+
         <div>
-            <h3>Combis:</h3>
-                <div class="container ">
-                    <div class="row bg-primary">
-                        <div class="col">Tipo:</div>
-                        <div class="col">Capacidad:</div>
-                        <div class="col">Patente:</div>
-                        <div class="col">Acciones:</div>
-                    </div>
+            <h3 class="m-2">Combis:</h3>
+            <hr>
+                <p class="m-2">{{$mensaje}}</p>
+            <hr>
+            <table class="table table-striped ">
+                <div class="container "">
+                    <thead class="bg-primary">
+                        <tr >
+                            <th scope="col">Tipo:</th>
+                            <th scope="col" class="text-center">Capacidad:</th>
+                            <th scope="col" class="text-center">Patente:</th>
+                            <th scope="col">Acciones:</th>
+                        </tr>
+                    </thead>
                     @foreach ($data as $combi)
-                    <div class="row d-flex">
-                        <div class="col">{{$combi['tipo']}}</div>
-                        <div class="col">{{$combi['cant asientos']}}</div>
-                        <div class="col">{{$combi['patente']}}</div>
-                        <div class="d-grid gap-2 d-md-block">
-                            <form method="POST" action="{{ route('combi.borrar', $combi)}}">@csrf @method('DELETE')<button onclick="return ConfirmDelete() ">Eliminar ✖</button></form>
-                        </div>
-                        <div class="col">
-                                <form method="POST" action="{{ route('combi.actualizar',$combi)}}">@csrf @method('PATCH')<button onclick="return ConfirmEdit() ">Editar 📋</button></form></div>
-                        </div> 
+                        <tr>   
+                            <th><div class="col">{{$combi['tipo']}}</th></div>
+                            <th><div class="col text-center">{{$combi['cant asientos']}} </th></div>
+                            <th><div class="col text-center">{{$combi['patente']}}  </th></div>
+                            <th>
+                                <div class="d-flex ">
+                                    <div class="pr-2"><form method="POST" action="{{ route('combi.borrar', $combi)}}">@csrf @method('DELETE')<button class="btn btn-outline-danger" onclick="return ConfirmDelete() ">Eliminar ✖</button></form></div>
+                                    <div class="pl-2"><form method="POST" action="{{ route('combi.actualizar',$combi)}}">@csrf @method('PATCH')<button  class="btn btn-primary ml-2" onclick="return ConfirmEdit() ">Editar 📋</button></form></div>
+                                </div>
+                            </th> 
+                        </tr>
                     </div>
                     @endforeach
+            </table>
                 </div>
+                
         </div>
         
     @endsection

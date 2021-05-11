@@ -1,4 +1,5 @@
-@extends('layout')
+@extends('layouts.navAdmin')
+@extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,43 +10,49 @@
 </head>
 <body>
     @section('content')
-       <h1>Crear Nuevo viaje</h1>
+    @section('contentAdmin')
+    <hr><h5>{{$msg}}</h5>
+    <h1>Crear Nuevo viaje</h1>
+
         <br>
-        <form method="POST" action="{{ route('viaje.SeleccionDeCombi')}}">
-            @csrf 
-            <label for=""></label>
-                Ruta:
-                <select name="combo">
-                    <!-- Opciones de la lista -->
-                    @foreach ($data as $item)
-                        <option name="ruta" value="{{($item['ruta'])}}">{{$item['ruta']}}</option>
-                    @endforeach
-                </select>
-            </label>
-            <br>
-            <label for=""></label>
-                Fecha: 
-                <input type="date" name="fecha" id="" min="2021-7-5" required value="{{old('fecha')}} ">
-            </label>
-            <br>
-            <label for=""></label>
-                Hora:
-                <input type="time" name="hora" id="" required value="{{old('hora')}}">
-            </label>
-            <br>
-            <label for=""></label>
-                Duracion en Hs:
-                <input type="number" name="duracion" id=""  required value="{{old('duracion')}}" >
-            </label>
-            <br>
-            <label for=""></label>
-                Precio:
-                <input type="number" name="precio" id="" required value="{{old('precio')}}">
-            </label>
-            
-            <button >Continuar</button>
-            <button> <a href="/gestionDeViajes"> Cancelar</a></button>
-        </form>
+        <table>
+            <form method="" action="{{ route('selectCombiYChofer')}} ">
+                @csrf 
+                <label for=""></label>
+                    <h3 class="d-inline m-2 p-2">Ruta:</h3>
+                    <select name="combo">
+                        @foreach ($data as $item)
+                            <option name="ruta" value="{{($item['nombreRuta'])}}">{{$item['nombreRuta']}}</option>
+                        @endforeach
+                    </select>
+                </label>
+                <br>
+                <label for=""></label>
+                <h3 class="d-inline m-2 p-2">Fecha:</h3>
+                    <input type="date" name="fecha" id="" min={{ now()->format('Y-m-d')}} required value="{{old('fecha')}} ">
+                </label>
+                <br>
+                <label for=""></label>
+                <h3 class="d-inline m-2 p-2">Hora:</h3>
+                    <input type="time" name="hora" id="" required value="{{old('hora')}}">
+                </label>
+                <br>
+                <label for=""></label>
+                    <h3 class="d-inline m-2 p-2">Duracion: <h6 class="d-inline">(Hs)</h6></h3>
+                    <input type="number" name="duracion" id=""  required value="{{old('duracion')}}" >
+                </label>
+                <br>
+                <label for=""></label>
+                    <h3 class="d-inline m-2 p-2">Precio:</h3>
+                    <input type="number" name="precio" id="" required value="{{old('precio')}}">
+                </label>
+                <div class="m-2 p-2">
+                    <button class="btn btn-primary">Siguiente</button>
+                    <button type="button" class="btn btn-outline-secondary"> <a href="{{route('gestionDeViajes')}}">Atras</a></button>
+                </div>
+            </form>
+        </table> 
+    @endsection
     @endsection
 </body>
 </html>

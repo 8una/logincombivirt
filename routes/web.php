@@ -42,7 +42,6 @@ Route::post('/itemCargado','ItemController@crear');
 Route::get('/updateItem/{item}','ItemController@actualizarForm')->name('item.update');
 Route::patch('/itemActualizado/{item}','ItemController@actualizar')->name('item.actualizado');
 Route::delete('/itemBorrado/{item}','ItemController@eliminar')->name('item.borrar');
-
 //FIN GESTION DE ITEMS
 
 //Gestion de choferes
@@ -56,7 +55,20 @@ Route::get('/choferPerfil/{chofer}','ChoferController@perfil')->name('chofer.per
 //FIN GESTION DE CHOFERES
 
 
-
 //RUTAS GESTION DE VIAJES:
 Route::get('/gestionDeViajes', 'adminViajesController@showGestionDeViajes')->name('gestionDeViajes');
+//Creacion de viaje
+Route::get('/crearViaje', 'adminViajesController@create')->name('crearViaje');
+Route::get('/selectCombiYChofer', 'adminViajesController@selectcombiYChofer')->name('selectCombiYChofer');
+Route::post('/selectCombiYChofer', 'adminViajesController@crearviaje')->name('crearviaje');
+//FIN CREACION DE VIAJES
+//Eliminar Viajes:
+Route::delete('/borrarViaje/{viaje}/{patente}', 'adminViajesController@borrarviaje')->name('viaje.borrar');
 
+//VIAJES DE USUARIO:
+Route::get('/misViajes/{dni}', 'userViajesController@showMisViajes')->name('misViajes');
+Route::get('/viajesDelUsuario', 'userViajesController@viajesDelUsuario')->name('viajesDelUsuario');
+//Cancelar viaje
+Route::delete('/cancelarViaje/{dni}/{viaje}', 'userViajesController@cancelarViaje')->name('cancelarViaje');
+//Ordenar viajes del usuario:
+Route::get('/misViajes/', 'userViajesController@showMisViajesOrdenados')->name('ordenarViaje');

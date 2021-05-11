@@ -16,7 +16,8 @@ class adminController extends Controller
     public function showGestionCombis(){
  
         $data=Combi::all();
-        return view('vistasDeAdmin/gestionDeCombis', ['data' =>$data]);
+        $msg="";
+        return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg);
     }
 
     public function showCrearCombi(){
@@ -41,7 +42,6 @@ class adminController extends Controller
             $capacidad = 22;
             $tipoCombi = 'super-comoda';
         }
-        
         $cantidad= Combi::where("patente", "=", $patente)->count();
         $patente=strtoupper($patente);
         $patente=trim($patente);
@@ -88,6 +88,7 @@ class adminController extends Controller
     public function destroy($id)
     {
         $hoy = date("Y-m-d");
+        $msg="La patente se elimino con éxito";
         $patente = Combi::where('id',$id)->get('patente');
         if (strlen($patente)==22){
             $patente= substr($patente, 13,6);
@@ -99,7 +100,12 @@ class adminController extends Controller
         if ($cantidadViajesFuturos == 0){
             Combi::where('id',$id)->delete();
         }
-        return redirect()->route('gestionDeCombis');
+        else{
+            $msg="La patente combi con patente: $patente tiene: $cantidadViajesFuturos viajes por hacer";
+        }
+        $data=Combi::all();
+        
+        return view('vistasDeAdmin/gestionDeCombis')->with('data',$data)->with("mensaje", $msg);
     }  
 
 

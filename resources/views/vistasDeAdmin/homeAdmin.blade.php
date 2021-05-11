@@ -40,7 +40,7 @@
                         <button type="button" class="btn btn-dark btn-lg"><a href="/gestionDeCuentas"> gestion De Cuentas</a></button>
                         </div>
                     <div class="col-3">
-                        <button type="button" class="btn btn-dark btn-lg"><a href="/gestionDeItems"> gestion De Items</a></button>
+                        <button type="button" class="btn btn-dark btn-lg"><a href="/gestionDeItems""> gestion De Items</a></button>
                         </div>
                 </div>
                 <div class="row">

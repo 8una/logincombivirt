@@ -1,4 +1,4 @@
-@extends('layouts.nav')
+@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -8,57 +8,80 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+<script type="text/javascript">
+    function ConfirmDelete(){
+        var respuesta=confirm("¿Estas seguro que deseas eliminar El viaje?");
+        if (respuesta){
+            return true;
+        }
+        return false;
+    }
+</script>
 <body>
     @section('content')
-    @section('content2')
+    @section('contentAdmin')
         
     
-    <h1> Bienvenido a la Administracion de viajes</h1>
-    <hr>
-    <h4>Esto es lo que puede hacer:</h4>
+    <h1>Administracion de viajes</h1>
+   
     <div>
         <p>Buscar un viaje:</p>
         <div class="buscador-viaje">
             <form action="">
-                <input type="text" name="ciudad-origen" id="" placeholder="origen">
-                <input type="text" name="ciudad-destino" id="" placeholder="destino">
+                <input type="text" name="ciudad-origen" id="" placeholder="ruta">
                 <input type="date" name="fecha-viaje" id="">
-                <input type="number" name="cantidad-pasajes" id="" placeholder="cant pasajes" min="1">
                 <button class="boton-buscar">Buscar</button>
             </form>
         </div>
 
     </div>
     <br><br><br>
-    <div class="bg-primary">
-        <h4>Manipulacion De Viajes:</h4>
-        <button> <a href="/crearViaje"> Cargar Viajes</a></button>
-        <button> <a href="#"> Eliminar Viajes</a></button>
-        <button> <a href="#"> Actualizar Viajes</a></button>
-        <button> <a href="http://localhost/ProjectBar/logincombivirt/public/admin">Atras</a></button>
+    <div class="bg-dark">
+        <h4 class="text-light h2 text-right">Manipulacion De Viajes:</h4>
+        <button class="btn btn-dark btn-lg"><a href="{{route("crearViaje")}}" class="text-light"> Cargar Viajes</a></button>
+        <button class="btn btn-dark btn-lg"> <a href="#" class="text-light"> Historial de viajes</a></button>
+        <button class="btn btn-dark btn-lg"> <a href="{{route('homeAdmin')}}" class="text-light">Atras</a></button>
     </div>
 
         <br>
         <br>
+
+    <hr>
+        {{$msg}}
+    <hr>
     <div>
-        <h3>Viajes:</h3>
-            <table border="1">
-            <tr>
-                <td>Ruta:</td>
-                <td>Precio:</td>
-                <td>Fecha:</td>
-                <td>Patente:</td>
-                <td>DNI chofer:</td>
-            </tr>
+        <h3>Viajes a realizar:</h3>
+            <table class="table table-striped ">
+                <thead class="bg-primary">
+                    <tr >
+                        <th scope="col">Ruta:</th>
+                        <th scope="col" class="text-center">Fecha:</th>
+                        <th scope="col" class="text-center">Hora:</th>
+                        <th scope="col" class="text-center">Patente:</th>
+                        <th scope="col">DNI chofer:</th>
+                        <th scope="col">Precio:</th>
+                        <th scope="col">Cant disponibles:</th>
+                        <th scope="col">Acciones:</th>
+                    </tr>
+                </thead>
             @foreach ($data as $viaje)
-            
-            <tr>
-                <td>{{$viaje['ruta']}}</td>
-                <td>{{$viaje['precio']}}</td>
-                <td>{{$viaje['fecha']}}</td>
-                <td>{{$viaje['patente']}}</td>
-                <td>{{$viaje['DNI']}}</td>
-            </tr>
+                <tr>   
+                    <th><div class="col">{{$viaje['ruta']}}</th></div>
+                    <th><div class="col text-center">{{$viaje['fecha']}}  </th></div>
+                    <th><div class="col text-center">{{$viaje['hora']}}  </th></div>
+                    <th><div class="col text-center">{{$viaje['patente']}}  </th></div>
+                    <th><div class="col text-center">{{$viaje['DNI']}}  </th></div>
+                    <th><div class="col text-center">{{$viaje['precio']}} $ARS </th></div>
+                    <th><div class="col text-center">{{$viaje['cant disponibles']}}  </th></div>
+                    <th>
+                        <div class="d-flex ">
+
+                            
+                            <div class="pr-2"><form method="POST"  action="{{ route('viaje.borrar', [$viaje, $viaje->patente])}}">@csrf @method('DELETE')<button class="btn btn-outline-danger" onclick="return ConfirmDelete() ">Eliminar ✖</button></form></div>
+                            <div class="pl-2"><form method="POST" {{-- ACA VA EL ACTUALIZAR VIAJE --}}">@csrf @method('PATCH')<button  class="btn btn-primary ml-2" onclick="return ConfirmEdit() ">Editar 📋</button></form></div>
+                        </div>
+                    </th> 
+                </tr>
             @endforeach
             </table>
         

@@ -1,5 +1,6 @@
-@extends('layouts.nav')
+@extends('layouts.navAdmin')
 @extends('layouts.app')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,24 +11,31 @@
 </head>
 <body>
     @section('content')
-    @section('content2')
-        <div>Cargar una nueva combi</div>    
+    @section('contentAdmin')
+        <div><h1> Cargar una nueva combi </h1></div>   
         <form method="POST" action="{{ route('combi.store')}}">
             @csrf
-            <label for="">Patente de combi <br>
-                <input type="text" name="patente" required minlength="6" maxlength="7" placeholder="Ingrese Patente sin espacios">
-            </label><br>
-            <label for="">Tipo de Combi</label>
-                <select name="tipo">
-                    <option value="1">Comoda</option>
-                    <option value="2">Super Comoda</option>
-                </select>
+            <br><br>
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label "><h3>Patente de la Nueva Combi:</h3></label>
+                <input type="text" class="form-control ml-1" name='patente' id="exampleFormControlInput1" placeholder="Ingrese la patente sin espacios">
+            </div>
+            <br>
+            <div class="mb-3">
+            <label for=""><h3>Tipo de Combi: </h3></label>
+                <div  class="ml-2">
+                    <select class="form-select" aria-label="Default select example" name='tipo'>
+                        <option value="1">Comoda</option>
+                        <option value="2">Super-Comoda</option>
+                    </select>
+            </div>
             </label>
             <br>
-            <button class="bg-primary">Enviar</button>
-            <button><a href="http://localhost/ProjectBar/logincombivirt/public/gestionCombis"> Atras </a></button> 
+            <button class="btn btn-primary ml-2" type="submit">Enviar</button>
+            <button type="button" class="btn btn-outline-primary"><a href="{{route('gestionDeCombis')}}}}"> Atras </a></button>
         </form>
-        <p>{{$data}}</p>
+        <hr>
+        <p class="fw-bold m-2" >{{$data}}</p>
         
         
 
