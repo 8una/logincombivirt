@@ -43,6 +43,12 @@
                         <button type="button" class="btn btn-dark btn-lg"><a href="/gestionDeItems"> gestion De Items</a></button>
                         </div>
                 </div>
+                <div class="row">
+                    <div class="col-3">
+                        <button type="button" class="btn btn-dark btn-lg"><a href="/gestionDeChoferes"> gestion De Choferes</a></button>
+                        </div>
+                    
+                </div>
             </div>
         </div>
     @endsection
