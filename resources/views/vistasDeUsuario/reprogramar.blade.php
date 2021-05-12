@@ -43,7 +43,7 @@
                         
                         <th>
                             <div class="d-flex ">
-                                <div class="pr-2"><form method="POST" action="{{ route('reprogramar', [Auth::user()->DNI, $viaje->ruta])}}"><button class="btn btn-primary ml-2">Reprogramar 📋</button></form></div>
+                                <div class="pr-2"><form method="POST" action="{{ route('actualizar', [Auth::user()->DNI, $idviajeviejo, $viaje->id])}}">@csrf<button class="btn btn-primary ml-2">Seleccionar 📋</button></form></div>
                                 
                             </div>
                         </th> 

@@ -51,7 +51,7 @@
                         
                         <th>
                             <div class="d-flex ">
-                                <div class="pr-2"><form method="POST" action="{{ route('reprogramar', [Auth::user()->DNI, $viaje->ruta])}}">@csrf<button class="btn btn-primary ml-2">Reprogramar 📋</button></form></div>
+                                <div class="pr-2"><form method="POST" action="{{ route('reprogramar', [Auth::user()->DNI, $viaje->ruta, $viaje->id])}}">@csrf<button class="btn btn-primary ml-2">Reprogramar 📋</button></form></div>
                                 <div class="pl-2"><form method="POST" action="{{ route('cancelarViaje', [Auth::user()->DNI, $viaje->idViaje])}}">@csrf  @method('DELETE')<button  class="btn btn-outline-danger" onclick="return ConfirmDelete() ">Cancelar ✖</button></form></div>
                             </div>
                         </th> 
