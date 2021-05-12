@@ -10,7 +10,7 @@
 </head>
 @section('content')
     @section('content2')
-    <button> <a href="/gestionDeChoferes">Atras</a></button><br>
+    <button> <a href="{{route('chofer.index')}}">Atras</a></button><br>
     
     <h1> Chofer #{{$chofer->id}} </h1>
     
@@ -19,7 +19,6 @@
     <p> Dni: {{$chofer->DNI}} </p>
     <p> Email: {{$chofer->email}} </p>
     <p> Password: {{$chofer->password}} </p>     
-    <p> Cantidad de viajes realizados: {{$viajes->count()}}</p>
         <h3>Viajes:</h3>
             <table border="1">
             <tr>
@@ -49,4 +48,5 @@
 
 @endsection
 @endsection
+
 

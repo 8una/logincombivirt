@@ -24,7 +24,12 @@ class adminController extends Controller
         $data = '';
         return view('vistasDeAdmin/crearCombi', ['data' =>$data]);
     }
-
+    public function showBuscarCombi(){
+        
+        $data=Combi::where('patente','=',request('patente'))->get();
+        $msg="";
+        return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg);
+    }
 
 
     public function store()

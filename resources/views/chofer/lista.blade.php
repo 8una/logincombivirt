@@ -1,4 +1,4 @@
-@extends('layouts.nav')
+@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -27,36 +27,46 @@
 </script>
 <body>
 @section('content')
-    @section('content2')
-    <h1>Gestion de choferes</h1>
+@section('contentAdmin')
+    <h1 class="m-2">Gestion de choferes</h1>
         <div>
-            <button> <a href="/createChofer"> Crear Chofer  </a></button>
-            <button> <a href="/admin">Atras</a></button>
+            <button class="btn btn-outline-primary ml-2" > <a href="{{route('chofer.crear')}}"> Crear Chofer  </a></button>
+            <button class="btn btn-outline-primary ml-2"> <a href= "{{route('homeAdmin')}}" >Atras</a></button>
         </div>
         <div>
-            <h3>Choferes:</h3>
-                <div class="container ">
-                    <div class="row bg-primary">
-                        <div class="col">Apellido:</div>
-                        <div class="col">Dni:</div>
-                        <div class="col">Email:</div>
-                    </div>
+            
+       
+        <h3 class="m-2">Choferes:</h3>
+            <hr>
+                {{$msg}}
+            <hr>
+
+        <table class="table table-striped ">
+                <div class="container ">  
+                    <thead class="bg-primary">
+                        <tr>
+                            <th scope="col">Apellido:</th>
+                            <th scope="col" class="text-center">DNI:</th>
+                            <th scope="col" class="text-center">Email:</th>
+                            <th scope="col">Acciones:</th>
+                        </tr>
+                    </thead>                
                     @foreach ($choferes as $chofer)
-                    <div class="row d-flex">
-                        <div class="col">{{$chofer['apellido']}}</div>
-                        <div class="col">{{$chofer['DNI']}}</div>
-                        <div class="col">{{$chofer['email']}}</div>
-                        <div class="d-grid gap-2 d-md-block">
-                            <form method="POST" action="{{ route('chofer.borrado', $chofer)}}">@csrf @method('DELETE')<button onclick="return ConfirmDelete() ">Eliminar ✖</button></form>
-                        </div>
-                        <div class="col">
-                                <form method="GET" action="{{ route('chofer.update',$chofer)}}"><button onclick="return ConfirmEdit() ">Editar 📋</button></form></div>
-                                <form method="GET" action="{{ route('chofer.perfil',$chofer)}}"><button >Ver perfil</button></form></div>
-                        </div> 
-                        
-                    </div>
+                    <tr>
+                            <th><div class="col ">{{$chofer['apellido']}}</th></div>
+                            <th><div class="col text-center">{{$chofer['DNI']}}</th></div>
+                            <th><div class="col text-center">{{$chofer['email']}}</th></div>
+                        <th>
+                            <div class="d-flex">
+                                <div class="pr-2"><form method="POST" action="{{ route('chofer.borrado', $chofer)}}">@csrf @method('DELETE')<button onclick="return ConfirmDelete() ">Eliminar ✖</button></form></div>
+                                <div class="pl-2"><form method="GET" action="{{ route('chofer.update',$chofer)}}"><button onclick="return ConfirmEdit() ">Editar 📋</button></form></div>
+                                <div class="pr-2"><form method="GET" action="{{ route('chofer.perfil',$chofer)}}"><button >Ver perfil</button></form></div>
+                            </div> 
+                        </th>
+                    </tr>
                     @endforeach
                 </div>
+        </table>      
         </div>
         
     @endsection

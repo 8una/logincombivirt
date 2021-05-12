@@ -1,4 +1,4 @@
-@extends('layouts.nav')
+@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -10,9 +10,9 @@
 </head>
 <body>
 @section('content')
-    @section('content2')
-        <div>Cargar un nuevo chofer</div>    
-        <form method="POST" action="/choferCargado">
+@section('contentAdmin')
+        <div><h1> Cargar un nuevo chofer </h1></div>   
+        <form method="POST" action="{{route('chofer.creado')}}">
             @csrf
             <label for="">Nombre <br>
                 <input type="text" name="nombre" required minlength="2" maxlength="10" >
@@ -22,18 +22,19 @@
                 {!! $errors->first('precio','<small>:message</small></br>')!!}
             </label><br>
             <label for="">DNI</label><br>
-                <input number="text" name="dni" /><br>
+                <input type="number" name="dni" /><br>
                 {!! $errors->first('stock','<small>:message</small></br>')!!}
             </label><br>
             <label for="">Email <br>
                 <input type="email" name="email" required minlength="1" maxlength="20" >
             </label><br>
             <label for="">Password <br>
-                <input type="text" name="password" required minlength="1" maxlength="10" >
+                <input type="password" name="password" required minlength="1" maxlength="10" >
             </label><br>
             <br>
-            <button class="bg-primary">Enviar</button>
-            <button><a href="/gestionDeChoferes"> Atras </a></button> 
+            <button class="btn btn-primary ml-2" type="submit">Enviar</button>
+            <button type="button" class="btn btn-outline-primary"><a href="{{route('chofer.index')}}"> Atras </a></button>
+
         </form>
         <p>{{$data}}</p>
         

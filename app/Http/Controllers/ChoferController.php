@@ -5,13 +5,15 @@ use App\Models\Chofer;
 use App\Models\Viaje;
 use App\Combi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ChoferController extends Controller
 {
     public function index()
     {
+        $msg = "";
         $choferes = Chofer::get();
-        return view("chofer.lista",compact("choferes"));
+        return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg);
     }
     public function crearForm()
     {
@@ -33,7 +35,12 @@ class ChoferController extends Controller
             'apellido' => 'required',
             'dni' => 'required',
             'email' => 'required',
-            'password' => 'required |min :8|',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/[0-9]/',      // must contain at least one digit
+                'regex:/[@"$!%*#?&]/'],
             ]);
             //'password' => 'required | regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()+]+.*)[0-9a-zA-Z\w!@#$%^&*()+]{8,}$/',
             $dni = $request->input('dni');
@@ -58,8 +65,17 @@ class ChoferController extends Controller
                 $msg = "el dni ingresado ya esta registrado en el sistema";
             }
         } catch (\Exception $th) {
+            if(!is_int(request('dni'))){
+                $msg = "el dni ingresado es invalido";
+            }
+            
+            else{
+                $msg= "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres, 1 numero, 1 caracter especial ";
+            }
+            $msg= "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres, 1 numero, 1 caracter especial ";
+            //$msg = $th->getMessage();
             //$msg = "el dni ingresado no es válido";
-            $msg= $th->getMessage();
+
             /*if (strcmp($msg,"preg_match(): No ending delimiter '/' found" == 0)){
                 $msg = "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres";
             }*/
@@ -69,15 +85,44 @@ class ChoferController extends Controller
     }
     public function actualizar(Chofer $chofer)
     {       
-        $msg = "el chofer se actualizó con éxito";
         try {
-            $chofer->update([
-                'nombre'=>request('nombre'),
-                'apellido'=>request('apellido'),
-                'dni'=>request('dni'),
-                'email'=>request('email'),
-                'password'=>request('password'),
-            ]);
+            $msg = "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres, 1 numero, 1 caracter especial ";
+            $rules = [
+                'nombre' => 'required',
+                'apellido' => 'required',
+                'dni' => 'required',
+                'email' => 'required',
+                'password' => [
+                    'required',
+                    'min:8',             // must be at least 10 characters in length
+                    'regex:/[a-z]/',      // must contain at least one lowercase letter
+                    'regex:/[A-Z]/',      // must contain at least one uppercase letter
+                    'regex:/[0-9]/',      // must contain at least one digit
+                    'regex:/[@$!%*#?&]/', // must contain a special character
+                ],
+            ];
+            $fields = [
+                "password" => request('password')
+            ];
+            //echo $chofer->password.PHP_EOL;
+            //echo request('password').PHP_EOL;
+            $validator = Validator::make($fields,$rules);
+            //echo $validator->fails();
+            if (!$validator->fails()){
+                $msg = "el chofer se actualizó con exito";
+                $chofer->update([
+                    'nombre'=>request('nombre'),
+                    'apellido'=>request('apellido'),
+                    'dni'=>request('dni'),
+                    'email'=>request('email'),
+                    'password'=>(request('password')),
+                ]);
+            }
+            if (request('email')== null){
+                $msg = "Tiene que ingresar un email";
+            }
+            //echo $msg.PHP_EOL;
+            
             //return redirect()->route('chofer.index');
         } catch (\Illuminate\Database\QueryException $th) {
             /*$needle = 'chofer_dni_unique';
@@ -94,7 +139,12 @@ class ChoferController extends Controller
                 }
             }*/
             $msg= $th->getMessage();
+          /*  if(is_string(request('dni'))){
+                $msg = "el dni ingresado es invalido";
+            }*/
+            
             if ($chofer->DNI != request('dni')){
+                $msg = "el dni ingresado es invalido";
                 $cantChoferes = Chofer::where("dni", "=", request('dni'))->count();
                 if ($cantChoferes == 1){
                     $msg = "el dni ingresado ya se encuentra registrado en el sistema";
@@ -106,17 +156,28 @@ class ChoferController extends Controller
                     if ($cantChoferes2 == 1){
                         $msg = "el email ingresado ya se encuentra registrado en el sistema";
                     }
-    
+        
                 }
-            }          
+                
+            } 
+        }
+                     
             //return redirect()->route('chofer.index');
-        }   
         return view("chofer.actualizar", ["data"=>$msg,"chofer"=>$chofer]);
     }
     public function eliminar(Chofer $chofer)
     {
-        $chofer->delete();
-        return redirect()->route('chofer.index');
+        $hoy=date('Y-m-d');
+        $msg = "Se borró el chofer seleccionado con éxito";
+        $viajes = Viaje::where('DNI','=',$chofer->DNI)->where('fecha','>', $hoy)->get();
+        if ($viajes->count() == 0){
+            $chofer->delete();
+        }
+        else{
+            $msg = "No se puede eliminar el chofer seleccionado porque tiene viajes programados. Primero actualizar el viaje";
+        }
+        $choferes = Chofer::all();
+        return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg);
     }
     
     public function perfil(Chofer $chofer)
