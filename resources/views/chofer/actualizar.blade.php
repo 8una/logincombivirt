@@ -16,11 +16,11 @@
         @csrf @method('PATCH')
         <p>nombre: <input type="text" name="nombre" value = "{{$chofer->nombre}}"/></p>
         <p>apellido: <input type="text" name="apellido" value = "{{$chofer->apellido}}" /></p>
-        <p>DNI: <input type="text" name="dni" value = "{{$chofer->DNI}}"/></p>
-        <p>email: <input type="text" name="email" value = "{{$chofer->email}}"/></p>
-        <p>password: <input type="text" name="password" value = "{{$chofer->password}}"/></p>
+        <p>DNI: <input type="number" name="dni" value = "{{$chofer->DNI}}"/></p>
+        <p>email: <input type="email" name="email" value = "{{$chofer->email}}"/></p>
+        <p>password: <input type="password" name="password" value = "{{$chofer->password}}"/></p>
         <button class="bg-primary">Enviar</button>
-        <button><a href="/gestionDeChoferes"> Atras </a></button> 
+        <button><a href="{{route('chofer.index')}}"> Atras </a></button> 
         @csrf
     </form>
     <p>{{$data}}</p>

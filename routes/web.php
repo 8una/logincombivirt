@@ -26,6 +26,8 @@ Route::get('/myprofile', 'HomeController@userProfile')->name('myprofile');
 Route::get('/admin', 'adminController@show')->name('homeAdmin');
 
 //Gestion de combis
+Route::post('/buscarCombi', 'adminController@showBuscarCombi')->name('buscarCombi');
+
 Route::get('/gestionCombis', 'adminController@showGestionCombis')->name('gestionDeCombis');
 //Crear combi
 Route::get('/crearCombi', 'adminController@showCrearCombi')->name('crearCombi');
@@ -38,7 +40,7 @@ Route::patch('/gestionCombis/{combi}', 'adminController@showActCombi')->name('co
 //Gestion de items
 Route::get('/gestionDeItems','ItemController@index')->name('item.index');
 Route::get('/crearItem','ItemController@crearForm')->name ('item.crear');
-Route::post('/itemCargado','ItemController@crear');
+Route::post('/itemCargado','ItemController@crear')->name('item.cargado');
 Route::get('/updateItem/{item}','ItemController@actualizarForm')->name('item.update');
 Route::patch('/itemActualizado/{item}','ItemController@actualizar')->name('item.actualizado');
 Route::delete('/itemBorrado/{item}','ItemController@eliminar')->name('item.borrar');
@@ -47,7 +49,7 @@ Route::delete('/itemBorrado/{item}','ItemController@eliminar')->name('item.borra
 //Gestion de choferes
 Route::get('/gestionDeChoferes','ChoferController@index')->name('chofer.index');
 Route::get('/updateChofer/{chofer}','ChoferController@actualizarForm')->name('chofer.update');
-Route::get('/createChofer','ChoferController@crearForm');
+Route::get('/createChofer','ChoferController@crearForm')->name('chofer.crear');
 Route::post('/choferCargado','ChoferController@crear')->name('chofer.creado');
 Route::patch('/ChoferActualizado/{chofer}','ChoferController@actualizar')->name('chofer.actualizado');
 Route::delete('/choferBorrado/{chofer}','ChoferController@eliminar')->name('chofer.borrado');

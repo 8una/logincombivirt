@@ -1,4 +1,4 @@
-@extends('layouts.nav')
+@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -10,15 +10,15 @@
 </head>
 <body>
 @section('content')
-    @section('content2')
+@section('contentAdmin')
         <div>Cargar un nuevo item</div>    
-        <form method="POST" action="/itemCargado">
+        <form method="POST" action="{{route('item.cargado')}}">
             @csrf
             <label for="">Nombre <br>
                 <input type="text" name="nombre" required minlength="1" maxlength="10" >
             </label><br>
             <label for="">Precio</label><br>
-                <input type="text" name="precio" value = "0"/><br>
+                <input type="number" name="precio" value = "0"/><br>
                 {!! $errors->first('precio','<small>:message</small></br>')!!}
             </label><br>
             <label for="">Stock</label><br>
@@ -26,11 +26,11 @@
                 {!! $errors->first('stock','<small>:message</small></br>')!!}
             </label><br>
             <br>
-            <button class="bg-primary">Enviar</button>
-            <button><a href="/gestionDeItems"> Atras </a></button> 
+            <button class="btn btn-primary ml-2" type="submit">Enviar</button>
+            <button type="button" class="btn btn-outline-primary"><a href="{{route('item.index')}}"> Atras </a></button>
         </form>
-        <p>{{$data}}</p>
         
+        <p>{{$data}}</p>
         
    
     @endsection

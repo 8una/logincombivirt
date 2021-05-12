@@ -11,7 +11,8 @@ class ItemController extends Controller
     {
         $items = Item::get();
         
-        return view("item.lista",compact("items"));
+        $msg = "";
+        return view('item.lista')->with(['items' =>$items])->with('msg',$msg);
     }
     public function crearForm()
     {
@@ -53,7 +54,7 @@ class ItemController extends Controller
     }
     public function actualizar(Item $item)
     {
-        $msg ="";
+        $msg ="el item se actualizó con éxito";
         try {
             $item->update([
                 'nombre'=>request('nombre'),
@@ -105,6 +106,7 @@ class ItemController extends Controller
     {
         $item->delete();
         return redirect()->route('item.index');
+        
     }
     
     public function confirmarBorrado(Item $item)

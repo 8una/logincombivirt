@@ -37,8 +37,14 @@
     @section('contentAdmin')
         <h1 class="m-2">Gestion de combis</h1>
         <div>
+        @csrf
             <button class="btn btn-outline-primary ml-2" > <a href="{{route('crearCombi')}}"> Crear Combi  </a></button>
             <button class="btn btn-outline-primary ml-2"> <a href= "{{route('homeAdmin')}}" >Atras</a></button>
+            <form method = 'POST' action = "{{route('buscarCombi')}}" >
+                <input class="btn btn-outline-primary ml-2" type = "submite" name = "patente">Patente a buscar</input>
+                @csrf
+            </form>
+            @csrf
         </div>
 
         <div>

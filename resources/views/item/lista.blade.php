@@ -1,4 +1,4 @@
-@extends('layouts.nav')
+@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -27,40 +27,44 @@
 </script>
 <body>
 @section('content')
-    @section('content2')
-    <h1>Gestion de items</h1>
+@section('contentAdmin')
+    <h1 class="m-2">Gestion de items</h1>
         <div>
-            <button> <a href="{{route('item.crear')}}"> Crear Item  </a></button>
-            <button> <a href="/admin">Atras</a></button>
+        <button class="btn btn-outline-primary ml-2" > <a href="{{route('item.crear')}}"> Crear Item </a></button>
+            <button class="btn btn-outline-primary ml-2"> <a href= "{{route('homeAdmin')}}" >Atras</a></button>
         </div>
+        
         <div>
-            <h3>Items:</h3>
-                <div class="container ">
-                    <div class="row bg-primary">
-                        <div class="col">Nombre:</div>
-                        <div class="col">Precio:</div>
-                        <div class="col">Stock:</div>
-                    </div>
+        <h3 class="m-2">Items:</h3>
+        <hr>
+        {{$msg}}
+            <hr>
+        <table class="table table-striped ">
+                <div class="container ">  
+                    <thead class="bg-primary">
+                        <tr>
+                            <th scope="col">Nombre:</th>
+                            <th scope="col" class="text-center">Precio:</th>
+                            <th scope="col" class="text-center">Stock:</th>
+                            <th scope="col">Acciones:</th>
+                        </tr>
+                    </thead>                
                     @foreach ($items as $item)
-                    <div class="row d-flex">
-                        <div class="col">{{$item['nombre']}}</div>
-                        <div class="col">{{$item['precio']}}</div>
-                        <div class="col">{{$item['stock']}}</div>
-                        <div class="d-grid gap-2 d-md-block">
-                            <form method="POST" action="{{ route('item.borrar', $item)}}">@csrf @method('DELETE')<button onclick="return ConfirmDelete() ">Eliminar ✖</button></form>
-                        </div>
-                        <div class="col">
-                                <form method="GET" action="{{ route('item.update',$item)}}"><button onclick="return ConfirmEdit() ">Editar 📋</button></form></div>
-                        </div> 
-                    </div>
+                    <tr>
+                            <th><div class="col">{{$item['nombre']}}</th></div>
+                            <th><div class="col text-center">{{$item['precio']}}</th></div>
+                            <th><div class="col text-center">{{$item['stock']}}</th></div>
+                        <th>
+                            <div class="d-flex">
+                                <div class="pr-2"><form method="POST" action="{{ route('item.borrar', $item) }}">@csrf @method('DELETE')<button onclick="return ConfirmDelete() ">Eliminar ✖</button></form></div>
+                                <div class="pl-2"><form method="GET" action="{{ route('item.update',$item)}}"><button >Editar 📋</button></form></div>
+                            </div> 
+                        </th>
+                    </tr>
                     @endforeach
                 </div>
+        </table>      
         </div>
         
     @endsection
     @endsection
-
-
-
-
-@section("pie")

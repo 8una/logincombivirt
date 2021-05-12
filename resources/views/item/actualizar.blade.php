@@ -1,4 +1,4 @@
-@extends('layouts.nav')
+@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -10,15 +10,17 @@
 </head>
 <body>
 @section('content')
-    @section('content2')
+@section('contentAdmin')
     <h1> Edición del item {{$item->id}} </h1>
     <form  method="POST" action="{{route ('item.actualizado',$item)}}">
         @csrf @method('PATCH')
         <p>nombre: <input type="text" name="nombre" value = "{{$item->nombre}}"/></p>
-        <p>precio: <input type="text" name="precio" value = "{{$item->precio}}" /></p>
-        <p>stock: <input type="text" name="stock" value = "{{$item->stock}}"/></p>
-        <button class="bg-primary">Enviar</button>
-        <button><a href="/gestionDeItems"> Atras </a></button> 
+        <p>precio: <input type="number" name="precio" value = "{{$item->precio}}" /></p>
+        {!! $errors->first('precio','<small>:message</small></br>')!!}
+        <p>stock: <input type="number" name="stock" value = "{{$item->stock}}"/></p>
+        {!! $errors->first('stock','<small>:message</small></br>')!!}
+        <button class="btn btn-outline-primary ml-2"> Confirmar  </a></button>
+        <button class="btn btn-outline-primary ml-2"> <a href= "{{route('item.index')}}" >Atras</a></button>
         @csrf
     </form>
     <p>{{$data}}</p>
