@@ -13,43 +13,48 @@
 <body>
     @section('content')
     @section('content2')
-        <h1>Combi 19</h1>
-        <h3>Buscar un viaje</h3>
-        <div class="buscador-viaje">
-            <form action="">
-                <input type="text" name="ciudad-origen" id="" placeholder="origen">
-                <input type="text" name="ciudad-destino" id="" placeholder="destino">
-                <input type="date" name="fecha-viaje" id="">
-                <input type="number" name="cantidad-pasajes" id="" placeholder="cant pasajes" min="1">
-                <button class="boton-buscar">Buscar</button>
+        <h1 class="m-2 p-2">Combi 19</h1>
+        
+        <div class="border border-primary border-3 ">
+            <form action="" class="m-2 p-2 ">
+                <h3 class="m-2 p-2 ">Buscar un viaje</h3>
+                <div class="d-flex ">
+                <input type="text" class="form-control w-25 m-2" name="ciudad-origen" id="" placeholder="origen">
+                <input type="text" class="form-control w-25 m-2" name="ciudad-destino" id="" placeholder="destino">
+                <input type="date" class="form-control w-25 m-2" name="fecha-viaje" id="">
+                <input type="number" class="form-control w-25 m-2" name="cantidad-pasajes" id="" placeholder="cant pasajes" min="1">
+                <button class="rounded-pill btn btn-primary">Buscar</button>
+            </div>
             </form>
         </div>
-            <div class="bg-primary">
-                <h4>Panel de administracion</h4>
-                <div class="container">
-                    <div class="row">
+            <div class="bg-dark">
+                <h3 class="text-light">Panel de administracion:</h3>
+                <div class="container ">
+                    <div class="row m-2 p-2 justify-content-center">
+                        <div class="col-3 ">
+                        <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="{{route("gestionDeViajes")}}" class="text-dark"> Administracion de Viajes</a></button>
+                        </div>
                         <div class="col-3">
-                        <button type="button" class="btn btn-dark btn-lg" ><a href="{{route("gestionDeViajes")}}" > Administracion de Viajes</a></button>
+                            <button type="button" class="btn btn-primary btn-lg w-100 h-100"><a href="{{route("gestionDeCombis")}}" class="text-dark"> Administracion de Combis</a></button>
                         </div>
-                        <div class="col-4">
-                            <button type="button" class="btn btn-dark btn-lg"><a href="{{route("gestionDeCombis")}}"> Administracion de Combis</a></button>
-                        </div>
-                </div>
-                <div class="row">
-                    <div class="col-3">
-                        <button type="button" class="btn btn-dark btn-lg"><a href="/gestionDeCuentas"> gestion De Cuentas</a></button>
-                        </div>
-                    <div class="col-3">
-                        <button type="button" class="btn btn-dark btn-lg"><a href="/gestionDeItems""> gestion De Items</a></button>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-primary btn-lg w-100 h-100"><a href="/gestionDeCuentas" class="text-dark"> gestion De Cuentas</a></button>
                         </div>
                 </div>
-                <div class="row">
+                <div class="row m-2 p-2 justify-content-center">
+                    
                     <div class="col-3">
-                        <button type="button" class="btn btn-dark btn-lg"><a href="/gestionDeChoferes"> gestion De Choferes</a></button>
+                        <button type="button" class="btn btn-primary btn-lg w-100 h-100"><a href="/gestionDeItems"" class="text-dark"> gestion De Items</a></button>
                         </div>
                     
+                    <div class="col-3">
+                        <button type="button" class="btn btn-primary btn-lg w-100 h-100"><a href="/gestionDeChoferes" class="text-dark"> gestion De Choferes</a></button>
+                    </div>
+
+                    <div class="col-3">
+                        <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="#" class="text-dark">Rutas</a></button>
+                    </div>
                 </div>
-            </div>
         </div>
     @endsection
     @endsection
