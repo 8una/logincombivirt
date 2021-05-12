@@ -32,7 +32,7 @@
             </label>
             <br>
             <button class="btn btn-primary ml-2" type="submit">Enviar</button>
-            <button type="button" class="btn btn-outline-primary"><a href="{{route('gestionDeCombis')}}}}"> Atras </a></button>
+            <button type="button" class="btn btn-outline-primary"><a href="{{route('gestionDeCombis')}}"> Atras </a></button>
         </form>
         <hr>
         <p class="fw-bold m-2" >{{$data}}</p>

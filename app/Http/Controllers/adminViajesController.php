@@ -117,4 +117,59 @@ class adminViajesController extends Controller
         $data=Viaje::where('fecha','>', $hoy)->orderBy('fecha','ASC')->orderBy('hora','ASC')->get();
         return view('vistasDeAdmin/gestionDeViajes')->with(['data' =>$data])->with('msg',$msg);
     }
+
+    public function showActForm($viaje)
+    {
+        $data=Viaje::where('id',$viaje)->get();
+        return view('vistasDeAdmin/actualizarViaje')->with(['data'=>$data])->with('id',$viaje);
+    }
+
+    public function selectCombiYChoferActualizar($idviaje){
+        $ruta = request('ruta');
+        $fecha = request('fecha');
+        $precio = request('precio');
+        $hora = request('hora');
+        $duracion= request('duracion');
+        
+        $choferesDeLaFechaLibres=Viaje::where("fecha" ,'=', $fecha)->where("hora",'<>',$hora)->select('DNI')->distinct()->get();
+
+        $choferes= Chofer::select('DNI')->distinct()->get()->union($choferesDeLaFechaLibres);
+        $choferesCount= Chofer::select('DNI')->distinct()->get()->union($choferesDeLaFechaLibres)->count();
+
+        $combisLibres= (Viaje::where("fecha", '=', $fecha)->where("hora",'<>',$hora)->select('patente')->distinct()->get());
+        $combisPatente= Combi::select('patente')->distinct()->get()->union($combisLibres);
+        $combisCount= Combi::select('patente')->distinct()->get()->union($combisLibres)->count();
+        
+        return view("vistasDeAdmin/selectCombiYChoferAct")->with(['data' =>$combisPatente])->with(['choferes' =>$choferes])->with("ruta",$ruta)->with("precio",$precio)->with("fecha",$fecha)->with("hora",$hora)->with("duracion",$duracion)->with('cantCombis',$combisCount)->with('cantChoferes',$choferesCount)->with('id',$idviaje);
+    }
+
+    public function actualizarViaje($viaje)
+    {
+        $msg = "El viaje se actualizo con exito";
+        $ruta = request('ruta');
+        $fecha = request('fecha');
+        $precio = request('precio');
+        $hora = request('hora');
+        $duracion= request('duracion');
+        $patente= request('patente');
+        $capacidadCombi= Combi::where('patente', $patente)->select('cant asientos')->get();
+        $capacidadCombi=substr($capacidadCombi,18,2);
+        
+        $dni= request('dni');
+        
+
+        Viaje::where('id',$viaje)->update([
+            'ruta' => $ruta,
+            'patente'=> $patente,
+            'DNI'=> $dni,
+            'fecha'=> $fecha,
+            'hora'=> $hora,
+            'duracion'=> $duracion,
+            'cant disponibles'=> $capacidadCombi,
+            'precio'=>$precio
+        ]);
+        $hoy=date('Y-m-d');
+        $data=Viaje::where('fecha','>', $hoy)->orderBy('fecha','ASC')->orderBy('hora','ASC')->get();
+        return view('vistasDeAdmin/gestionDeViajes')->with(['data' =>$data])->with('msg',$msg);
+    }
 }

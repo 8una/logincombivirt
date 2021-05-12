@@ -19,8 +19,7 @@
             <form action="" class="m-2 p-2 ">
                 <h3 class="m-2 p-2 ">Buscar un viaje</h3>
                 <div class="d-flex ">
-                <input type="text" class="form-control w-25 m-2" name="ciudad-origen" id="" placeholder="origen">
-                <input type="text" class="form-control w-25 m-2" name="ciudad-destino" id="" placeholder="destino">
+                <input type="text" class="form-control w-25 m-2" name="Ruta" id="" placeholder="ruta">
                 <input type="date" class="form-control w-25 m-2" name="fecha-viaje" id="">
                 <input type="number" class="form-control w-25 m-2" name="cantidad-pasajes" id="" placeholder="cant pasajes" min="1">
                 <button class="rounded-pill btn btn-primary">Buscar</button>

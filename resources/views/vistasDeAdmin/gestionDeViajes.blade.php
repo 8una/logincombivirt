@@ -78,7 +78,7 @@
 
                             
                             <div class="pr-2"><form method="POST"  action="{{ route('viaje.borrar', [$viaje, $viaje->patente])}}">@csrf @method('DELETE')<button class="btn btn-outline-danger" onclick="return ConfirmDelete() ">Eliminar ✖</button></form></div>
-                            <div class="pl-2"><form method="POST" {{-- ACA VA EL ACTUALIZAR VIAJE --}}">@csrf @method('PATCH')<button  class="btn btn-primary ml-2" onclick="return ConfirmEdit() ">Editar 📋</button></form></div>
+                            <div class="pl-2"><form method="" action="{{route('viaje.actualizar', $viaje)}}">@csrf <button  class="btn btn-primary ml-2">Editar 📋</button></form></div>
                         </div>
                     </th> 
                 </tr>

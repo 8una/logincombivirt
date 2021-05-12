@@ -64,6 +64,10 @@ Route::post('/selectCombiYChofer', 'adminViajesController@crearviaje')->name('cr
 //FIN CREACION DE VIAJES
 //Eliminar Viajes:
 Route::delete('/borrarViaje/{viaje}/{patente}', 'adminViajesController@borrarviaje')->name('viaje.borrar');
+//REPROGRRAMAR VIAJE:
+Route::get('/viajeactualizar/{viaje}', 'adminViajesController@showActForm')->name('viaje.actualizar');
+Route::get('/viajeactualizarcombiYChofer/{viaje}', 'adminViajesController@selectCombiYChoferActualizar')->name('selectCombiYChoferActualizar');
+Route::patch('/viajeactualizarfin/{viaje}', 'adminViajesController@actualizarViaje')->name('viajeactualizarfin');
 
 //VIAJES DE USUARIO:
 Route::get('/misViajes/{dni}', 'userViajesController@showMisViajes')->name('misViajes');
