@@ -24,7 +24,7 @@
                     <p class="d-inline m-2 p-2">Usted tiene para elegir: {{$cantCombis}} Combis</p>
                     <select name="patente">
                     @foreach ($data as $item)
-                        <option value="{{$item['patente']}}">{{$item['patente']}}</option>
+                        <option value="{{$item->patente}}">{{$item->patente}}</option>
                     @endforeach 
                     </select>
                 </label>
@@ -34,7 +34,7 @@
                     <p class="d-inline m-2 p-2 ">Usted tiene para elegir: {{$cantChoferes}} Choferes</p>
                     <select name="dni">
                     @foreach ($choferes as $choferes)
-                        <option value="{{$choferes['DNI']}}">{{$choferes['DNI']}}</option>
+                        <option value="{{$choferes->DNI}}">{{$choferes->DNI}}</option>
                     @endforeach 
                     </select>
                 </label>
