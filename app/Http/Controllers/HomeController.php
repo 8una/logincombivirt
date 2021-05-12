@@ -28,6 +28,7 @@ class HomeController extends Controller
     }
 
     public function userProfile() {
+        $data= Viaje::where("cant disponibles", ">", 0)->get();
         return view ('userProfile');
     }
 }

@@ -12,22 +12,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
-<script>
-    function ConfirmDelete(){
-        var respuesta=confirm("¿Estas seguro que deseas cancelar el viaje?");
-        if (respuesta){
-            return true;
-        }
-        return false;
-    }
-</script>
+
 <body>
     @section('content')
     @section('content2')
     <div>
         <h3 class="m-2">Mis viajes:</h3>
         <hr>
-            <p class="m-2">{{$msg}}</p> 
+          
         <hr>
         <table class="table table-striped ">
             <div class="container "">
@@ -51,8 +43,8 @@
                         
                         <th>
                             <div class="d-flex ">
-                                <div class="pr-2"><form method="POST" action="{{ route('reprogramar', [Auth::user()->DNI, $viaje->ruta])}}">@csrf<button class="btn btn-primary ml-2">Reprogramar 📋</button></form></div>
-                                <div class="pl-2"><form method="POST" action="{{ route('cancelarViaje', [Auth::user()->DNI, $viaje->idViaje])}}">@csrf  @method('DELETE')<button  class="btn btn-outline-danger" onclick="return ConfirmDelete() ">Cancelar ✖</button></form></div>
+                                <div class="pr-2"><form method="POST" action="{{ route('reprogramar', [Auth::user()->DNI, $viaje->ruta])}}"><button class="btn btn-primary ml-2">Reprogramar 📋</button></form></div>
+                                
                             </div>
                         </th> 
                     </tr>

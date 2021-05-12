@@ -51,6 +51,9 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.centrado{
+  text-align: center;
+}
 article,
 aside,
 figcaption,

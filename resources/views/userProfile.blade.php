@@ -15,8 +15,8 @@
                     @endif
 
                     Email: {{Auth::user()->email}}<br>
-                    Mis viajes:
-
+                    DNI:{{Auth::user()->DNI}}<br>
+                    <a href="misViajes/{{Auth::user()->DNI}}">Mis Viajes</a>
                 </div>
             </div>
         </div>

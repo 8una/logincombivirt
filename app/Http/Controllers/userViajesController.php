@@ -68,6 +68,15 @@ class userViajesController extends Controller
         }
         return view('home', ['data'=>$data]);
     }
+
+    public function reprogramarViaje($dni, $idviaje)
+    {       $Date = date('Y-m-d');
+         $tiempo=date('Y-m-d', strtotime($Date. ' + 15 days'));
+        $msg="";
+         $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje','=','viajes.id')->where('ruta',$idviaje)->where('fecha','>', $tiempo)->get();
+    return view('vistasDeUsuario/reprogramar')->with(['data'=>$data]);
+       
+    }
 }
 
 

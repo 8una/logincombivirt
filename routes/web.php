@@ -68,6 +68,8 @@ Route::delete('/borrarViaje/{viaje}/{patente}', 'adminViajesController@borrarvia
 //VIAJES DE USUARIO:
 Route::get('/misViajes/{dni}', 'userViajesController@showMisViajes')->name('misViajes');
 Route::get('/viajesDelUsuario', 'userViajesController@viajesDelUsuario')->name('viajesDelUsuario');
+//Reprogramar viaje
+Route::post('/reprogramar/{dni}/{viaje}', 'userViajesController@reprogramarViaje')->name('reprogramar');
 //Cancelar viaje
 Route::delete('/cancelarViaje/{dni}/{viaje}', 'userViajesController@cancelarViaje')->name('cancelarViaje');
 //Ordenar viajes del usuario:

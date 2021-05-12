@@ -9,13 +9,18 @@
 <body>
         
   <div class="d-flex bg-dark">
-    <img  src="{{ asset('images/logo_is.png') }}" alt="" width="100" height="100">
-     <div class=""">
-        <div class="d-flex text-light h2 align-middle pt-5 ml-2 mr-2 "  >
+   
+     <div>
+        <div class="text-light">
+          @guest {{-- ACA VAN LAS COSAS EN LA NAVEGACION QUE SE LE MUESTRAN A UNA PERSONA NO LOGEADA--}}
+          Esto sale si el user no esta registrado, no se que poner aca 
+          @endguest
+          @auth{{-- ACA LAS DE USUARIO REGISTRADO--}}
           <button class="btn btn-dark btn-lg"><div class="ml-2" ><a class="text-light" href="{{route('home')}}"> Inicio</a></div></button>
           <button class="btn btn-dark btn-lg"><div class="ml-2"><a class="text-light" href="{{route('misViajes', Auth::user()->DNI)}}"> Mis viajes </a></div></button>
-          <button class="btn btn-dark btn-lg"><div class="ml-2"><a href="" class="text-light"> Historial </a></div></button>
+          <button class="btn btn-dark btn-lg"><div class="ml-2"><a href="{{route('misViajes', Auth::user()->DNI)}}" class="text-light"> Historial </a></div></button>
           <button class="btn btn-dark btn-lg"><div class="ml-2"><a href="" class="text-light"> Subscripcion </a></div></button>
+        @endauth
         </div>        
      </div>
   </div>
