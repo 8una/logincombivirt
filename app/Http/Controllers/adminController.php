@@ -112,6 +112,7 @@ class adminController extends Controller
 
     public function showActCombi($combi)
     {
+        $msg="Se cambio el modo de la combi";
         $tipo = Combi::where('id',$combi)->get('tipo');
         if (strlen($tipo)==25){
             $tipo = substr($tipo,10,12 );
@@ -127,7 +128,7 @@ class adminController extends Controller
         else{
             $patente= substr($patente, 13,7);
         }
-        if ($tipo == 'comoda' ){
+        if ($tipo == 'comoda'){
             Combi::where('id',$combi)->update([
                 'tipo' => 'super-comoda',
                 'cant asientos' => '22',
@@ -135,13 +136,20 @@ class adminController extends Controller
             ]);
         }
         else{
-            Combi::where('id',$combi)->update([
-                'tipo' => 'comoda',
-                'cant asientos' => '20',
-                'patente' => $patente,
-            ]);
+            $cantViajesCapacidadMaxima=Viaje::where('patente',$patente)->where('cant disponibles','=','0')->count();
+            if ($cantViajesCapacidadMaxima==0){
+                Combi::where('id',$combi)->update([
+                    'tipo' => 'comoda',
+                    'cant asientos' => '20',
+                    'patente' => $patente,
+                ]);
+            }
+            else {
+                $msg="No se puede cambiar el modo, la misma tiene viajes con capacidad maxima";
+            }
         }
-        return redirect()->route('gestionDeCombis');  
+        $data=Combi::all();
+        return view('vistasDeAdmin/gestionDeCombis')->with('data',$data)->with('mensaje',$msg);  
     } 
 }
 
