@@ -31,7 +31,7 @@
                 
                 <label for=""></label>
                     <h4 class="d-inline m-2 p-2 ml-5 pl-5">Chofer:</h4>
-                    <p class="d-inline m-2 p-2 ">Usted tiene para elegir: {{$cantChoferes}} Combis</p>
+                    <p class="d-inline m-2 p-2 ">Usted tiene para elegir: {{$cantChoferes}} Choferes</p>
                     <select name="dni">
                     @foreach ($choferes as $choferes)
                         <option value="{{$choferes['DNI']}}">{{$choferes['DNI']}}</option>

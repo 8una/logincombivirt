@@ -48,7 +48,7 @@ class userViajesController extends Controller
             Usuarioviaje::where('dniusuario',$dni)->where('idViaje', $idviaje)->delete();
             Viaje::where('id', $idviaje)->update(['cant disponibles'=> $cantDisponible ]);
         }
-        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje','=','viajes.id')->where('fecha','>', $hoy)->get();
+        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje','=','viajes.id')->where('dniusuario',$dni)->where('fecha','>', $hoy)->get();
         return view('vistasDeUsuario/viajesDelUsuario')->with(['data'=>$data])->with('msg',$msg);
         
     }
@@ -73,8 +73,8 @@ class userViajesController extends Controller
     {       $Date = date('Y-m-d');
          $tiempo=date('Y-m-d', strtotime($Date. ' + 15 days'));
         $msg="";
-         $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje','=','viajes.id')->where('ruta',$idviaje)->where('fecha','>', $tiempo)->get();
-    return view('vistasDeUsuario/reprogramar')->with(['data'=>$data]);
+        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje','=','viajes.id')->where('ruta',$idviaje)->where('fecha','>', $tiempo)->get();
+        return view('vistasDeUsuario/reprogramar')->with(['data'=>$data]);
        
     }
 }

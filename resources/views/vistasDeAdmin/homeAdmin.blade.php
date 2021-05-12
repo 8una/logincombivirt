@@ -34,7 +34,7 @@
                         <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="{{route("gestionDeViajes")}}" class="text-dark"> Administracion de Viajes</a></button>
                         </div>
                         <div class="col-3">
-                            <button type="button" class="btn btn-primary btn-lg w-100 h-100"><a href="{{route("gestionDeCombis")}}" class="text-dark"> Administracion de Combis</a></button>
+                            <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="{{route("gestionDeCombis")}}" class="text-dark"> Administracion de Combis</a></button>
                         </div>
                         <div class="col-3">
                             <button type="button" class="btn btn-primary btn-lg w-100 h-100"><a href="/gestionDeCuentas" class="text-dark"> gestion De Cuentas</a></button>
@@ -43,7 +43,7 @@
                 <div class="row m-2 p-2 justify-content-center">
                     
                     <div class="col-3">
-                        <button type="button" class="btn btn-primary btn-lg w-100 h-100"><a href="/gestionDeItems"" class="text-dark"> gestion De Items</a></button>
+                        <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="/gestionDeItems"" class="text-dark"> gestion De Items</a></button>
                         </div>
                     
                     <div class="col-3">
