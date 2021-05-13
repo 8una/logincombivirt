@@ -21,6 +21,7 @@
                     <h4 class="d-inline m-2 p-2">Combi:</h4>
                     <p class="d-inline m-2 p-2">Usted tiene para elegir: {{$cantCombis}} Combis</p>
                     <select name="patente">
+                        <option value="{{$patenteAct}}">{{$patenteAct}}</option>
                     @foreach ($data as $item)
                         <option value="{{$item->patente}}">{{$item->patente}}</option>
                     @endforeach 
@@ -31,6 +32,7 @@
                     <h4 class="d-inline m-2 p-2 ml-5 pl-5">Chofer:</h4>
                     <p class="d-inline m-2 p-2 ">Usted tiene para elegir: {{$cantChoferes}} Choferes</p>
                     <select name="dni">
+                        <option value="{{$dniAct}}">{{$dniAct}}</option>
                     @foreach ($choferes as $choferes)
                         <option value="{{$choferes->DNI}}">{{$choferes->DNI}}</option>
                     @endforeach 
