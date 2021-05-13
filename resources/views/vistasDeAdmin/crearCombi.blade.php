@@ -1,4 +1,3 @@
-@extends('layouts.navAdmin')
 @extends('layouts.app')
 
 <!DOCTYPE html>
@@ -11,7 +10,6 @@
 </head>
 <body>
     @section('content')
-    @section('contentAdmin')
         <div><h1> Cargar una nueva combi </h1></div>   
         <form method="POST" action="{{ route('combi.store')}}">
             @csrf
@@ -37,9 +35,6 @@
         <hr>
         <p class="fw-bold m-2" >{{$data}}</p>
         
-        
-
-    @endsection
     @endsection
 </body>
 </html>

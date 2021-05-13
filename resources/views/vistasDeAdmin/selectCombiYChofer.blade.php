@@ -1,4 +1,3 @@
-@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -10,8 +9,6 @@
 </head>
 <body>
     @section('content')
-    @section('contentAdmin')
-
     <h1>Seleccion de Combi y Chofer</h1>
         <br>
         <table>
@@ -69,7 +66,6 @@
                     <button type="button" class="btn btn-outline-secondary"> <a href="{{route('gestionDeViajes')}}">Cancelar</a></button>
                 </div>
             </form>
-    @endsection
     @endsection
 </body>
 </html>    

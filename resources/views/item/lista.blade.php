@@ -1,4 +1,3 @@
-@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +26,7 @@
 </script>
 <body>
 @section('content')
-@section('contentAdmin')
+
     <h1 class="m-2">Gestion de items</h1>
         <div>
         <button class="btn btn-outline-primary ml-2" > <a href="{{route('item.crear')}}"> Crear Item </a></button>
@@ -67,4 +66,4 @@
         </div>
         
     @endsection
-    @endsection
+

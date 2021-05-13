@@ -1,4 +1,3 @@
-@extends('layouts.nav')
 @extends('layouts.app')
 
 <!DOCTYPE html>
@@ -12,7 +11,6 @@
 </head>
 <body>
     @section('content')
-    @section('content2')
         <h1 class="m-2 p-2">Combi 19</h1>
         
         <div class="border border-primary border-3 ">
@@ -43,11 +41,11 @@
                 <div class="row m-2 p-2 justify-content-center">
                     
                     <div class="col-3">
-                        <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="/gestionDeItems"" class="text-dark"> gestion De Items</a></button>
+                        <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="{{route("item.index")}}"" class="text-dark"> gestion De Items</a></button>
                         </div>
                     
                     <div class="col-3">
-                        <button type="button" class="btn btn-primary btn-lg w-100 h-100"><a href="/gestionDeChoferes" class="text-dark"> gestion De Choferes</a></button>
+                        <button type="button" class="btn btn-primary btn-lg w-100 h-100"><a href="{{route("chofer.index")}}"" class="text-dark"> gestion De Choferes</a></button>
                     </div>
 
                     <div class="col-3">
@@ -55,7 +53,6 @@
                     </div>
                 </div>
         </div>
-    @endsection
     @endsection
 </body>
 </html>

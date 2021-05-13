@@ -1,4 +1,3 @@
-@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -19,20 +18,19 @@
 </script>
 <body>
     @section('content')
-    @section('contentAdmin')
         
     
     <h1>Administracion de viajes</h1>
    
-    <div>
-        <p>Buscar un viaje:</p>
-        <div class="buscador-viaje">
-            <form action="">
-                <input type="text" name="ciudad-origen" id="" placeholder="ruta">
-                <input type="date" name="fecha-viaje" id="">
-                <button class="boton-buscar">Buscar</button>
-            </form>
+    <div class="border border-primary border-3 ">
+        <form action="" class="m-2 p-2 ">
+            <h3 class="m-2 p-2 ">Buscar un viaje</h3>
+            <div class="d-flex ">
+            <input type="text" class="form-control w-25 m-2" name="Ruta" id="" placeholder="ruta">
+            <input type="date" class="form-control w-25 m-2" name="fecha-viaje" id="">
+            <button class="rounded-pill btn btn-primary w-25"> Buscar</button>
         </div>
+        </form>
 
     </div>
     <br><br><br>
@@ -87,7 +85,6 @@
         
     </div>
 
-    @endsection
     @endsection
 </body>
 </html>

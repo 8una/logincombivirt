@@ -1,4 +1,3 @@
-@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +9,6 @@
 </head>
 <body>
     @section('content')
-    @section('contentAdmin')
     <h2>Datos Del Viaje:</h2>
     <hr>
     <h5 class="p-2 m-2"> Elegir la nueva fecha, hora y duracion</h3>
@@ -79,7 +77,6 @@
                     <button type="button" class="btn btn-outline-secondary"> <a href="{{route('gestionDeViajes')}}">Atras</a></button>
         </div>
     </form>
-    @endsection
     @endsection
 </body>
 </html>

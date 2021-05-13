@@ -1,4 +1,3 @@
-@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +9,6 @@
 </head>
 <body>
     @section('content')
-    @section('contentAdmin')
     <hr><h5>{{$msg}}</h5>
     <h1>Crear Nuevo viaje</h1>
 
@@ -52,7 +50,6 @@
                 </div>
             </form>
         </table> 
-    @endsection
     @endsection
 </body>
 </html>

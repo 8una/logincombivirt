@@ -1,4 +1,4 @@
-@extends('layouts.navAdmin')
+
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +10,6 @@
 </head>
 <body>
 @section('content')
-@section('contentAdmin')
     <h1> Edición del item {{$item->id}} </h1>
     <form  method="POST" action="{{route ('item.actualizado',$item)}}">
         @csrf @method('PATCH')
@@ -24,7 +23,5 @@
         @csrf
     </form>
     <p>{{$data}}</p>
-
-    @endsection
     @endsection
 </html>

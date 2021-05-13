@@ -159,6 +159,7 @@ class adminViajesController extends Controller
 
         //ACA IRIA EL CALCULO DE CAPACIDAD
 
+
         $combisPatente = DB::table('combis')->whereNotExists(function ($query) {
                 $query->select(DB::raw(1))
                     ->from('viajes')
@@ -204,6 +205,8 @@ class adminViajesController extends Controller
         
         $capacidadCombi= Combi::where('patente', $patente)->select('cant asientos')->get();
         $capacidadCombi=substr($capacidadCombi,18,2);
+
+        
         
         $dni= request('dni');
         

@@ -1,4 +1,3 @@
-@extends('layouts.navAdmin')
 @extends('layouts.app')
 
 <!DOCTYPE html>
@@ -34,17 +33,13 @@
 
 <body>
     @section('content')
-    @section('contentAdmin')
         <h1 class="m-2">Gestion de combis</h1>
-        <div>
-        @csrf
-            <button class="btn btn-outline-primary ml-2" > <a href="{{route('crearCombi')}}"> Crear Combi  </a></button>
-            <button class="btn btn-outline-primary ml-2"> <a href= "{{route('homeAdmin')}}" >Atras</a></button>
-            <form method = 'POST' action = "{{route('buscarCombi')}}" >
-                <input class="btn btn-outline-primary ml-2" type = "submite" name = "patente">Patente a buscar</input>
-                @csrf
+        <div class="d-flex">
+        
+            <button class="btn btn-outline-dark ml-2 h-75 mt-2" > <a href="{{route('crearCombi')}}"> Crear Combi  </a></button>
+            <button class="btn btn-outline-dark ml-2 h-75 mt-2"> <a href= "{{route('homeAdmin')}}" >Atras</a></button>
+            <form method = 'POST' action = "{{route('buscarCombi')}}" ><input class="btn btn-outline-dark ml-2 m-2 h-75 justify-content-right" type = "submite" name = "patente" placeholder="Patente a Buscar">@csrf</input>
             </form>
-            @csrf
         </div>
 
         <div>
@@ -81,7 +76,6 @@
                 
         </div>
         
-    @endsection
     @endsection
 </body>
 </html>

@@ -1,4 +1,3 @@
-@extends('layouts.navAdmin')
 @extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +32,6 @@
         <p>{{$data}}</p>
         
    
-    @endsection
     @endsection
 </body>
 </html>
