@@ -78,8 +78,19 @@ class userViajesController extends Controller
         $hoy = date("Y-m-d");
         $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', $dni)->where('fecha', '>', $hoy)->get();
         $hayEspacio = Viaje::where('id', $idviajenuevo)->value('cant disponibles');
-        if ($hayEspacio > 0) {
+        $Fecha_viaje_nuevo = Viaje::where('id', $idviajenuevo)->value('fecha');
+        $Hora_viaje_nuevo = Viaje::where('id', $idviajenuevo)->value('hora');
         $idViajeViejo = Usuarioviaje::where('id', $idusuarioviaje)->value('idViaje');
+        $Fecha_viaje_viejo = Viaje::where('id', $idViajeViejo)->value('fecha');
+        $Hora_viaje_viejo = Viaje::where('id', $idViajeViejo)->value('hora');
+        if ($Fecha_viaje_nuevo == $Fecha_viaje_viejo) {
+            if($Hora_viaje_viejo == $Hora_viaje_nuevo) {
+                $msg = "Usted ya dispone de un viaje el día $Fecha_viaje_viejo a las $Hora_viaje_viejo.";
+                return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg); 
+            }
+
+        }  elseif ($hayEspacio > 0) {
+        
         Usuarioviaje::where('dniusuario', $dni)->where('id', $idusuarioviaje)->update(array('idViaje' => $idviajenuevo));
         $msg = "Usted ha reprogramado su viaje con éxito";
         return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
