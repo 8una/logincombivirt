@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="col-3">
-                        <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="#" class="text-dark">Rutas</a></button>
+                        <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="{{route("ruta.index")}}"" class="text-dark">Rutas</a></button>
                     </div>
                 </div>
         </div>

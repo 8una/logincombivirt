@@ -4,8 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ruta extends Model
+class Ciudad extends Model
 {
-    protected $fillable = ['nombreRuta', 'origen', 'destino'];
+    protected $fillable = ['nombre'];
     public $timestamps = false;
 }
+

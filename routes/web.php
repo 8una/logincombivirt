@@ -81,3 +81,25 @@ Route::post('/actualizar/{dni}/{idviajeviejo}/{idviajenuevo}', 'userViajesContro
 Route::delete('/cancelarViaje/{dni}/{viaje}', 'userViajesController@cancelarViaje')->name('cancelarViaje');
 //Ordenar viajes del usuario:
 Route::get('/misViajes/', 'userViajesController@showMisViajesOrdenados')->name('ordenarViaje');
+
+
+
+//GESTION DE RUTAS ENTONCES
+Route::get('/administracionRuta', 'adminRutasController@showindex')->name('ruta.index');
+Route::get('/crearRuta', 'adminRutasController@crearRuta')->name('crearRuta');
+Route::get('/elegirDestino', 'adminRutasController@elegirDestino')->name('selectDestino');
+Route::post('/elegirDestino', 'adminRutasController@cargarNuevaRuta')->name('cargarNuevaRuta');
+//borrar Ruta
+Route::delete('/borrarRuta/{ruta}', 'adminRutasController@borrarRuta')->name('ruta.borrar');
+
+//buscarRuta
+Route::post('/buscarPorRuta', 'adminRutasController@buscarRuta')->name('buscarRuta');
+Route::post('/buscarPorRutaPorOrigen', 'adminRutasController@buscarRutaPorOrigen')->name('buscarRutaPorOrigen');
+Route::post('/buscarPorRutaPorDestino', 'adminRutasController@buscarRutaPorDestino')->name('buscarRutaPorDestino');
+
+//Crear ciudad:
+Route::get('/agregarCiudad', 'adminRutasController@crearCiudad')->name('crearCiudad');
+Route::post('/agregarCiudad', 'adminRutasController@cargarNuevaCiudad')->name('cargarNuevaCiudad');
+//quitar ciudad:
+Route::get('/quitarCiudad', 'adminRutasController@quitarCiudad')->name('quitarCiudad');
+Route::delete('/borrarciudad', 'adminRutasController@borrarciudad')->name('borrarciudad');
