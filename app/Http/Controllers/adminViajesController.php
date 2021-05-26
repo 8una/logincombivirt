@@ -37,36 +37,37 @@ class adminViajesController extends Controller
         $hora = request('hora');
         $duracion= request('duracion');
         
+        $fechaInicio= date ('Y-m-d H:i:s', (strtotime( $fecha.$hora)));
+        $fechaFin = strtotime ( '+'.$duracion.' hour' , strtotime ($fechaInicio) ) ; 
+        $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin); 
         $combisPatente = DB::table('combis')->whereNotExists(function ($query) {
+            $fechaInicio= date ('Y-m-d H:i:s', (strtotime( request('fecha').request('hora'))));
+            $fechaFin = strtotime ( '+'.request('duracion').' hour' , strtotime ($fechaInicio)) ; 
+            $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin);  
             $query->select(DB::raw(1))
-                ->from('viajes')
-                ->whereColumn('viajes.patente', 'combis.patente')->where("viajes.fecha" ,'=',  request('fecha'))->where("viajes.hora",'=', request('hora'));
-        })
-        ->select('patente')->distinct()->get();
-        // FIN ATTEMP 3
-        
-        $combisCount= DB::table('combis')->whereNotExists(function ($query) {
-            $query->select(DB::raw(1))
-                ->from('viajes')
-                ->whereColumn('viajes.patente', 'combis.patente')->where("viajes.fecha" ,'=',  request('fecha'))->where("viajes.hora",'=', request('hora'));
-        })
-        ->select('patente')->distinct()->get()->count();
-        
-        
-        $choferes=DB::table('chofers')->whereNotExists(function ($query) {
-            $query->select(DB::raw(1))
-                ->from('viajes')
-                ->whereColumn('chofers.DNI', 'viajes.DNI')->where("viajes.fecha" ,'=',  request('fecha'))->where("viajes.hora",'=', request('hora'));
-        })
-        ->select('DNI')->distinct()->get();
+                ->from('viajes')                                                    
+                ->whereColumn('viajes.patente', 'combis.patente')->whereBetween('viajes.inicio',[$fechaInicio,$fechaFin])
+                ->orWhereColumn('viajes.patente', 'combis.patente')->whereBetween('viajes.fin',[$fechaInicio,$fechaFin])
+                ->orWhereColumn('viajes.patente', 'combis.patente')->where('viajes.inicio','<', $fechaInicio)->where('viajes.fin','>', $fechaInicio)
+                ->orWhereColumn('viajes.patente', 'combis.patente')->where('viajes.inicio','>', $fechaInicio)->where('viajes.fin','<', $fechaInicio);
+        })->distinct()->select('patente')->get();
 
-        $choferesCount=DB::table('chofers')->whereNotExists(function ($query) {
-            $query->select(DB::raw(1))
-                ->from('viajes')
-                ->whereColumn('chofers.DNI', 'viajes.DNI')->where("viajes.fecha" ,'=',  request('fecha'))->where("viajes.hora",'=', request('hora'));
-        })
-        ->select('DNI')->distinct()->get()->count();
+        $combisCount=$combisPatente->count();
         
+
+        $choferes=DB::table('chofers')->whereNotExists(function ($query) {
+            $fechaInicio= date ('Y-m-d H:i:s', (strtotime( request('fecha').request('hora'))));
+            $fechaFin = strtotime ( '+'.request('duracion').' hour' , strtotime ($fechaInicio)) ; 
+            $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin);  
+            $query->select(DB::raw(1))
+                ->from('viajes')                                                    
+                ->whereColumn('chofers.DNI', 'viajes.DNI')->whereBetween('viajes.inicio',[$fechaInicio,$fechaFin])
+                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->whereBetween('viajes.fin',[$fechaInicio,$fechaFin])
+                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->where('viajes.inicio','<', $fechaInicio)->where('viajes.fin','>', $fechaInicio)
+                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->where('viajes.inicio','>', $fechaInicio)->where('viajes.fin','<', $fechaInicio);
+        })->distinct()->select('DNI')->get();
+
+        $choferesCount=$choferes->count();
         
         return view("vistasDeAdmin/selectCombiYChofer")->with(['data' =>$combisPatente])->with(['choferes' =>$choferes])->with("ruta",$ruta)->with("precio",$precio)->with("fecha",$fecha)->with("hora",$hora)->with("duracion",$duracion)->with('cantCombis',$combisCount)->with('cantChoferes',$choferesCount); 
     }
@@ -81,9 +82,11 @@ class adminViajesController extends Controller
         $hora = request('hora'); 
         $duracion=request('duracion');
 
-        $capacidadCombi= Combi::where('patente', $patente)->select('cant asientos')->get();
-        $capacidadCombi=substr($capacidadCombi,18,2);
-        $capacidadCombi=intval($capacidadCombi);
+        $fechaInicio= date ('Y-m-d H:i:s', (strtotime( $fecha.$hora)));
+        $fechaFin = strtotime ( '+'.$duracion.' hour' , strtotime ($fechaInicio) ) ; 
+        $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin); 
+
+        $capacidadCombi= Combi::where('patente', $patente)->value('cant asientos');
         $capacidadCombi=($capacidadCombi)/2;
 
         Viaje::create([
@@ -94,7 +97,9 @@ class adminViajesController extends Controller
             'hora'=> $hora,
             'duracion'=> $duracion,
             'cant disponibles'=> $capacidadCombi,
-            'precio'=>$precio
+            'precio'=>$precio,
+            'inicio'=>$fechaInicio,
+            'fin'=>$fechaFin
         ]);
 
         $msg="El viaje se cargo con exito!!";
@@ -156,44 +161,43 @@ class adminViajesController extends Controller
         $hora = request('hora');
         $duracion= request('duracion');
 
+
         $patente=Viaje::where('id',$idviaje)->select('patente')->value('patente');
         $dniAct=Viaje::where('id',$idviaje)->select('DNI')->value('DNI');
         $capacidad=Combi::where('patente',$patente)->value('cant asientos');
-        
 
         $asientosDisponibles=Viaje::where('id',$idviaje)->select('cant disponibles')->value('cant disponibles');
-        
-        $combisPatente =DB::table('combis')->whereNotExists(function ($query) {
+
+        $fechaInicio= date ('Y-m-d H:i:s', (strtotime( $fecha.$hora)));
+        $fechaFin = strtotime ( '+'.$duracion.' hour' , strtotime ($fechaInicio) ) ; 
+        $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin); 
+        $combisPatente = DB::table('combis')->whereNotExists(function ($query) {
+            $fechaInicio= date ('Y-m-d H:i:s', (strtotime( request('fecha').request('hora'))));
+            $fechaFin = strtotime ( '+'.request('duracion').' hour' , strtotime ($fechaInicio)) ; 
+            $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin);  
             $query->select(DB::raw(1))
-                ->from('viajes')
-                ->whereColumn('viajes.patente', 'combis.patente')->where("viajes.fecha" ,'=',  request('fecha'))->where("viajes.hora",'=', request('hora'));
-        })
-        ->select('patente')->distinct()->get();
-                
-        $combisCount =DB::table('combis')->whereNotExists(function ($query) {
-            $query->select(DB::raw(1))
-                ->from('viajes')
-                ->whereColumn('viajes.patente', 'combis.patente')->where("viajes.fecha" ,'=',  request('fecha'))->where("viajes.hora",'=', request('hora'));
-        })
-        ->select('patente')->distinct()->get()->count();
-        
-        $combisCount=$combisCount+1;
-        // FIN ATTEMP 3
+                ->from('viajes')                                                    
+                ->whereColumn('viajes.patente', 'combis.patente')->whereBetween('viajes.inicio',[$fechaInicio,$fechaFin])
+                ->orWhereColumn('viajes.patente', 'combis.patente')->whereBetween('viajes.fin',[$fechaInicio,$fechaFin])
+                ->orWhereColumn('viajes.patente', 'combis.patente')->where('viajes.inicio','<', $fechaInicio)->where('viajes.fin','>', $fechaInicio)
+                ->orWhereColumn('viajes.patente', 'combis.patente')->where('viajes.inicio','>', $fechaInicio)->where('viajes.fin','<', $fechaInicio);
+        })->distinct()->select('patente')->get();
+
+        $combisCount=$combisPatente->count();
         
         $choferes=DB::table('chofers')->whereNotExists(function ($query) {
+            $fechaInicio= date ('Y-m-d H:i:s', (strtotime( request('fecha').request('hora'))));
+            $fechaFin = strtotime ( '+'.request('duracion').' hour' , strtotime ($fechaInicio)) ; 
+            $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin);  
             $query->select(DB::raw(1))
-                ->from('viajes')
-                ->whereColumn('chofers.DNI', 'viajes.DNI')->where("viajes.fecha" ,'=',  request('fecha'))->where("viajes.hora",'=', request('hora'));
-        })
-        ->select('DNI')->distinct()->get();
+                ->from('viajes')                                                    
+                ->whereColumn('chofers.DNI', 'viajes.DNI')->whereBetween('viajes.inicio',[$fechaInicio,$fechaFin])
+                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->whereBetween('viajes.fin',[$fechaInicio,$fechaFin])
+                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->where('viajes.inicio','<', $fechaInicio)->where('viajes.fin','>', $fechaInicio)
+                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->where('viajes.inicio','>', $fechaInicio)->where('viajes.fin','<', $fechaInicio);
+        })->distinct()->select('DNI')->get();
 
-        $choferesCount=DB::table('chofers')->whereNotExists(function ($query) {
-            $query->select(DB::raw(1))
-                ->from('viajes')
-                ->whereColumn('chofers.DNI', 'viajes.DNI')->where("viajes.fecha" ,'=',  request('fecha'))->where("viajes.hora",'=', request('hora'));
-        })
-        ->select('DNI')->distinct()->get()->count();
-        $choferesCount=$choferesCount+1;
+        $choferesCount=$choferes->count();
         return view("vistasDeAdmin/selectCombiYChoferAct")->with(['data' =>$combisPatente])->with(['choferes' =>$choferes])->with("ruta",$ruta)->with("precio",$precio)->with("fecha",$fecha)->with("hora",$hora)->with("duracion",$duracion)->with('cantCombis',$combisCount)->with('cantChoferes',$choferesCount)->with('id',$idviaje)->with('patenteAct',$patente)->with('dniAct',$dniAct); 
     }
 
@@ -208,6 +212,10 @@ class adminViajesController extends Controller
         $patente= request('patente');
 
         
+        $fechaInicio= date ('Y-m-d H:i:s', (strtotime( $fecha.$hora)));
+        $fechaFin = strtotime ( '+'.$duracion.' hour' , strtotime ($fechaInicio) ) ; 
+        $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin); 
+
         $capacidadCombi= Combi::where('patente', $patente)->select('cant asientos')->value('cant asientos');
         
         
@@ -222,8 +230,11 @@ class adminViajesController extends Controller
             'hora'=> $hora,
             'duracion'=> $duracion,
             'cant disponibles'=> $capacidadCombi,
-            'precio'=>$precio
+            'precio'=>$precio,
+            'inicio'=>$fechaInicio,
+            'fin'=>$fechaFin
         ]);
+
         $hoy=date('Y-m-d');
         $data=Viaje::where('fecha','>', $hoy)->orderBy('fecha','ASC')->orderBy('hora','ASC')->get();
         return view('vistasDeAdmin/gestionDeViajes')->with(['data' =>$data])->with('msg',$msg);

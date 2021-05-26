@@ -9,5 +9,5 @@ class Viaje extends Model
 {
     public $timestamps = false;
     protected $fillable = ['fecha', 'hora', 'duracion',
-    'precio', 'ruta', 'patente', 'DNI', 'cant disponibles'];
+    'precio', 'ruta', 'patente', 'DNI', 'cant disponibles', 'inicio', 'fin'];
 }
