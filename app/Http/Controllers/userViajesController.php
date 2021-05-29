@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Viaje;
 use App\Usuarioviaje;
 use App\User;
+use App\Calificacion;
 use Carbon\Carbon;
+use Auth;
+
 
 class userViajesController extends Controller
 {
@@ -99,5 +102,42 @@ class userViajesController extends Controller
             $msg = "El viaje que usted seleccionó no dispone de asientos libres. Por favor, seleccione otro viaje.";
         return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
         }
+    }
+
+
+    public function showMisViajesPasados($dni)
+    {
+        $hoy = date("Y-m-d H:i:s");  
+        $msg = "";
+        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', $dni)->where('viajes.fin', '<', $hoy)->get();
+        return view('vistasDeUsuario/viajesDelUsuarioPasados')->with(['data' => $data])->with('msg', $msg);
+    }
+
+    public function calificarviaje($viaje)
+    {
+        return view('vistasDeUsuario/calificarViaje')->with('viaje', $viaje);
+    }
+
+    public function usuarioCalificaViaje($idViaje)
+    {
+        $puntuacion= request('inlineRadioOptions');
+        $comentario= request('comentario');
+        $nombre= Auth::user()->name;
+
+        Calificacion::create([
+            'nombre' => $nombre,
+            'calificacion' => $puntuacion,
+            'comentario' => $comentario,
+            'fecha' => date("Y-m-d H:i:s")
+        ]); 
+
+        Usuarioviaje::where('id', $idViaje)->update([
+            'estado' => 'calificado'
+        ]);
+        
+        $hoy = date("Y-m-d H:i:s");  
+        $msg = "";
+        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', Auth::user()->DNI)->where('viajes.fin', '<', $hoy)->get();
+        return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
     }
 }

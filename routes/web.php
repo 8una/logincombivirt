@@ -73,6 +73,7 @@ Route::patch('/viajeactualizarfin/{viaje}', 'adminViajesController@actualizarVia
 
 //VIAJES DE USUARIO:
 Route::get('/misViajes/{dni}', 'userViajesController@showMisViajes')->name('misViajes');
+Route::get('/misViajesPasados/{dni}', 'userViajesController@showMisViajesPasados')->name('misViajesPasados');
 Route::get('/viajesDelUsuario', 'userViajesController@viajesDelUsuario')->name('viajesDelUsuario');
 //Reprogramar viaje
 Route::post('/reprogramar/{dni}/{ruta}/{idviaje}', 'userViajesController@reprogramarViaje')->name('reprogramar');
@@ -103,3 +104,7 @@ Route::post('/agregarCiudad', 'adminRutasController@cargarNuevaCiudad')->name('c
 //quitar ciudad:
 Route::get('/quitarCiudad', 'adminRutasController@quitarCiudad')->name('quitarCiudad');
 Route::delete('/borrarciudad', 'adminRutasController@borrarciudad')->name('borrarciudad');
+
+//calificaciones de viajes
+Route::get('/calificarViaje/{usuario}', 'userViajesController@calificarviaje')->name('calificarviaje');
+Route::post('/usuarioCalificaViaje/{viaje}', 'userViajesController@usuarioCalificaViaje')->name('usuarioCalificaViaje');

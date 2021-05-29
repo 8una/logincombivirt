@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Viaje;
+use App\Calificacion;
 class HomeController extends Controller
 {
     /**
@@ -23,8 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $comments=Calificacion::orderBy('fecha')->get();
         $data= Viaje::where("cant disponibles", ">", 0)->get();
-        return view('home', ['data'=>$data]);
+        return view('home')->with(['data'=>$data])->with('comments',$comments);
     }
 
     public function userProfile() {
@@ -32,3 +34,4 @@ class HomeController extends Controller
         return view ('userProfile');
     }
 }
+
