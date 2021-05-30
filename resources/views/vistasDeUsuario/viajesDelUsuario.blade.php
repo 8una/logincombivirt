@@ -38,6 +38,7 @@
                         <th scope="col" class="text-center">Hora:</th>
                         <th scope="col" class="text-center">Duracion:</th>
                         <th scope="col">Precio:</th>
+                        <th scope="col">Estado:</th>
                         <th scope="col">Acciones:</th>
                     </tr>
                 </thead>
@@ -48,6 +49,7 @@
                         <th><div class="col text-center"> {{$viaje->hora}} </th></div>
                         <th><div class="col text-center">{{$viaje->duracion}} </th></div>
                         <th><div class="col text-center">{{$viaje->precio}} $ARS</th></div>
+                        <th><div class="col text-center"> {{$viaje->estado}}</th></div>
                         
                         <th>
                             <div class="d-flex ">

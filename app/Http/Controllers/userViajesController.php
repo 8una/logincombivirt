@@ -16,9 +16,9 @@ class userViajesController extends Controller
 {
     public function showMisViajes($dni)
     {
-        $hoy = date("Y-m-d");
+        $hoy = date("Y-m-d H:i:s"); 
         $msg = "";
-        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', $dni)->where('fecha', '>', $hoy)->get();
+        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', $dni)->where('inicio', '>', $hoy)->get();
         return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
     }
 
@@ -55,15 +55,17 @@ class userViajesController extends Controller
     public function showMisViajesOrdenados()
     {
         $value = request('boton');
-        $hoy = date("Y-m-d");
+        $hoy = date("Y-m-d H:i:s"); 
+        
         if ($value == 1) {
-            $data = Viaje::where("cant disponibles", ">", 0)->where('fecha', '>', $hoy)->orderBy('ruta', 'ASC')->get();
+            $data = Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->orderBy('ruta', 'ASC')->get();
         } elseif ($value == 2) {
-            $data = Viaje::where("cant disponibles", ">", 0)->where('fecha', '>', $hoy)->orderBy('fecha', 'ASC')->orderBy('hora', 'ASC')->get();
+            $data = Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->orderBy('inicio', 'ASC')->orderBy('hora', 'ASC')->get();
         } else {
-            $data = Viaje::where("cant disponibles", ">", 0)->where('fecha', '>', $hoy)->orderBy('precio', 'ASC')->get();
+            $data = Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->orderBy('precio', 'ASC')->get();
         }
-        return view('home', ['data' => $data]);
+        $comments=Calificacion::orderBy('fecha')->get()->take(5);
+        return view('home')->with(['data'=>$data])->with('comments',$comments);
     }
 
     public function reprogramarViaje($dni, $ruta, $idviajeviejo)
