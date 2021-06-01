@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $comments=Calificacion::orderBy('fecha')->get()->take(5);
+        $comments=Calificacion::orderBy('fecha', 'DESC')->get()->take(5);
         $data= Viaje::where("cant disponibles", ">", 0)->get();
         return view('home')->with(['data'=>$data])->with('comments',$comments);
     }

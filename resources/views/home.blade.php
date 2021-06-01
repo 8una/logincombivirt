@@ -68,7 +68,7 @@
                                     <div class="row g-0">
                                         <div class="col-md-6">
                                             <div class="card-body">
-                                                <h5 class="card-title">{{$comentario->nombre}}</h5>
+                                                <h5 class="card-title"> {{$comentario->nombre}} </small></h5>
                                                 <p class="card-text">{{$comentario->comentario}}</p>
                                                 <p class="card-text"><small class="text-muted">Puntuacion: {{$comentario->calificacion}} ⭐</small></p>
                                             </div>
@@ -104,7 +104,7 @@
                                 
                                 <div  class="card-title"> Subscribite</div>
                                 <div class="card-text">Y recibi descuentos del 10% en todas tus compras</div>
-                                <p class="card-text"><small class="text-muted">A solo 220$ ARS x Mes</small></p>
+                                <p class="card-text"><small class="text-muted">A solo 250$ ARS x Mes</small></p>
                             </div>
                         </div>
                     </div>

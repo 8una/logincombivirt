@@ -110,7 +110,7 @@ class adminRutasController extends Controller
             ]);
         }
         else{
-            $msg="No se puede crear la ciudad, ya existe.";
+            $msg="No se puede cargar la ciudad, ya existe.";
         }
         $data=Ruta::all();
         return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
@@ -127,16 +127,16 @@ class adminRutasController extends Controller
     {
         $ciudad= request('combo');
         $hoy = date("Y-m-d");
-        $cantViajes=DB::table('rutas')->join('viajes', 'viajes.ruta', 'rutas.nombreRuta')->where('fecha', '>', $hoy)->where('rutas.origen', '=', $ciudad)->orWhere('rutas.destino', '=', $ciudad)->get()->count();
+        /* $cantViajes=DB::table('rutas')->join('viajes', 'viajes.ruta', 'rutas.nombreRuta')->where('fecha', '>', $hoy)->where('rutas.origen', '=', $ciudad)->orWhere('rutas.destino', '=', $ciudad)->get()->count(); */
         $msg="La ciudad se borro satisfactoriamente";
 
-        if ($cantViajes > 0){
+        /* if ($cantViajes > 0){
             $msg="La ciudad esta anotada a: ".$cantViajes. " viajes, la misma no se puede borrar";
         }
 
-        else{
+        else{ */
             Ciudad::where('nombre', request('combo'))->delete();
-        }
+        /* } */
         $data=Ruta::all();
         return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
     }
