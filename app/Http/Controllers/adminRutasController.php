@@ -127,7 +127,7 @@ class adminRutasController extends Controller
     {
         $ciudad= request('combo');
         $hoy = date("Y-m-d");
-        /* $cantViajes=DB::table('rutas')->join('viajes', 'viajes.ruta', 'rutas.nombreRuta')->where('fecha', '>', $hoy)->where('rutas.origen', '=', $ciudad)->orWhere('rutas.destino', '=', $ciudad)->get()->count(); */
+        /*  */
         $msg="La ciudad se borro satisfactoriamente";
 
         /* if ($cantViajes > 0){

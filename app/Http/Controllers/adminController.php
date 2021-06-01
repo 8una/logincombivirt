@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 
 class adminController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
+        $request->user()->authorizeRoles(['admin']);
         return view("vistasDeAdmin/homeAdmin");
     }
 

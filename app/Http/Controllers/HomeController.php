@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Auth;
 use Illuminate\Http\Request;
 use App\Models\Viaje;
 use App\Calificacion;
@@ -22,16 +22,16 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        $comments=Calificacion::orderBy('fecha', 'DESC')->get()->take(5);
+    public function index(Request $request)
+    {   
+        $comments=Calificacion::orderBy('fecha')->get()->take(5);
         $data= Viaje::where("cant disponibles", ">", 0)->get();
         return view('home')->with(['data'=>$data])->with('comments',$comments);
     }
 
-    public function userProfile() {
+    public function userProfile(Request $request) {
+       // echo Auth::user();
         $data= Viaje::where("cant disponibles", ">", 0)->get();
         return view ('userProfile');
     }
-}
 

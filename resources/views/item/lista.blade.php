@@ -30,7 +30,7 @@
     <h1 class="m-2">Gestion de items</h1>
         <div>
         <button class="btn btn-outline-primary ml-2" > <a href="{{route('item.crear')}}"> Crear Item </a></button>
-            <button class="btn btn-outline-primary ml-2"> <a href= "{{route('homeAdmin')}}" >Atras</a></button>
+           
         </div>
         
         <div>
