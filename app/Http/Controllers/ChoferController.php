@@ -88,10 +88,6 @@ class ChoferController extends Controller
         try {
             $msg = "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres, 1 numero, 1 caracter especial ";
             $rules = [
-                'nombre' => 'required',
-                'apellido' => 'required',
-                'dni' => 'required',
-                'email' => 'required',
                 'password' => [
                     'required',
                     'min:8',             // must be at least 10 characters in length
@@ -108,16 +104,19 @@ class ChoferController extends Controller
             //echo request('password').PHP_EOL;
             $validator = Validator::make($fields,$rules);
             //echo $validator->fails();
-            if (!$validator->fails()){
-                $msg = "el chofer se actualizó con exito";
-                $chofer->update([
-                    'nombre'=>request('nombre'),
-                    'apellido'=>request('apellido'),
-                    'dni'=>request('dni'),
-                    'email'=>request('email'),
-                    'password'=>(request('password')),
-                ]);
-            }
+           
+                if(!$validator->fails()){
+                    $msg = "el chofer se actualizó con exito";
+                    $chofer->update([
+                        'nombre'=>request('nombre'),
+                        'apellido'=>request('apellido'),
+                        'dni'=>request('dni'),
+                        'email'=>request('email'),
+                        'password'=>(request('password')),
+                    ]);
+                }
+
+            
             if (request('email')== null){
                 $msg = "Tiene que ingresar un email";
             }
@@ -137,8 +136,7 @@ class ChoferController extends Controller
                 else{
                     $error = 'el dni ingresado es invalido';
                 }
-            }*/
-            $msg= $th->getMessage();
+            
           /*  if(is_string(request('dni'))){
                 $msg = "el dni ingresado es invalido";
             }*/
@@ -174,7 +172,7 @@ class ChoferController extends Controller
             $chofer->delete();
         }
         else{
-            $msg = "No se puede eliminar el chofer seleccionado porque tiene viajes programados. Primero actualizar el viaje";
+            $msg = "No se puede eliminar el chofer seleccionado porque tiene viajes programados.";
         }
         $choferes = Chofer::all();
         return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg);

@@ -26,18 +26,14 @@
 </script>
 <body>
 @section('content')
-
-    <h1 class="m-2">Gestion de items</h1>
+   
+    <h1 class="m-2">Items disponibles </h1>
         <div>
-        <button class="btn btn-outline-primary ml-2" > <a href="{{route('item.crear')}}"> Crear Item </a></button>
-            <button class="btn btn-outline-primary ml-2"> <a href= "{{route('homeAdmin')}}" >Atras</a></button>
-        </div>
-        
-        <div>
+            <button class="btn btn-outline-primary ml-2"> <a href= "{{route('home')}}" >Atras</a></button>
         <h3 class="m-2">Items:</h3>
-        <hr>
-        {{$msg}}
-            <hr>
+        <h3 class="m-2">Viaje : {{$viaje->id}}</h3>
+        <h3 class="m-2">Viaje : {{$viaje->fecha}}</h3>
+
         <table class="table table-striped ">
                 <div class="container ">  
                     <thead class="bg-primary">
@@ -53,15 +49,18 @@
                             <th><div class="col text-center">{{$item['precio']}}</th></div>
                         <th>
                             <div class="d-flex">
-                                <div class="pr-2"><form method="POST" action="{{ route('item.borrar', $item) }}">@csrf @method('DELETE')<button onclick="return ConfirmDelete() ">Eliminar ✖</button></form></div>
-                                <div class="pl-2"><form method="GET" action="{{ route('item.update',$item)}}"><button >Editar 📋</button></form></div>
+                                <div class="pl-2"><form method="GET" action="{{ route('item.agregarCarro',$item,$viaje)}}"><button >Agregar al viaje 📋</button></form></div>
                             </div> 
                         </th>
                     </tr>
                     @endforeach
                 </div>
-        </table>      
+                
+        </table>  
+        <th>
+                <button class="btn btn-outline-primary ml-2"> <a href= "{{route('pagarViaje',$viaje)}}" >Pagar viaje</a></button>
+                        </th>    
         </div>
         
     @endsection
-
+    

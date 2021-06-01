@@ -17,8 +17,7 @@
     <p> Nombre: {{$chofer->nombre}} </p>
     <p> Apellido: {{$chofer->apellido}} </p>
     <p> Dni: {{$chofer->DNI}} </p>
-    <p> Email: {{$chofer->email}} </p>
-    <p> Password: {{$chofer->password}} </p>     
+    <p> Email: {{$chofer->email}} </p>    
         <h3>Viajes:</h3>
             <table border="1">
             <tr>

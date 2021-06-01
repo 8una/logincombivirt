@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class Marcados extends Model
 {
-    public $table = "Items";
+    public $table = "Marcados";
     public $timestamps = false;
 
     protected $fillable = [
-        'nombre',
-        'precio',
+        'DNI',
+        'fechaInicio',
+        'fechaFin'
     ];
 }
 

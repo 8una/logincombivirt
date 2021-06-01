@@ -79,6 +79,13 @@ Route::get('/viajesDelUsuario', 'userViajesController@viajesDelUsuario')->name('
 //Reprogramar viaje
 Route::post('/reprogramar/{dni}/{ruta}/{idviaje}', 'userViajesController@reprogramarViaje')->name('reprogramar');
 Route::post('/actualizar/{dni}/{idviajeviejo}/{idviajenuevo}', 'userViajesController@actualizarViaje')->name('actualizar');
+//Comprar viaje
+
+Route::get('/agregarItemViaje/{item}/{viaje]', 'userViajesController@agregarItemAViaje')->name('item.agregarCarro');
+Route::get('/comprarViaje/{viaje}', 'userViajesController@compraItems')->name('compraItems');
+Route::get('/pagarViaje/{viaje}', 'userViajesController@formPago')->name('pagarViaje');
+Route::post('/viajePagado/{viaje}', 'userViajesController@agregarViajeAUsuario')->name('pagarViajeConfirmado');
+
 //Cancelar viaje
 Route::delete('/cancelarViaje/{dni}/{viaje}', 'userViajesController@cancelarViaje')->name('cancelarViaje');
 //Ordenar viajes del usuario:

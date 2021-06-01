@@ -135,7 +135,7 @@
                         <th><div class="col text-center">{{$viaje['fecha']}} </th></div>
                         <th><div class="col text-center">{{$viaje['hora']}}  </th></div>
                         <th><div class="col text-left">{{$viaje['precio'] }}  $ARS </th></div>
-                        <th><div class="col text-left"> <button type="button" class="btn btn-outline-success">🛒</button> </th></div>
+                        <th><div class="col text-left"> <a href = "{{ route('compraItems',$viaje)}}"class="btn btn-outline-success">🛒</a> </th></div>
                     </tr>
                 </div>
                 @endforeach

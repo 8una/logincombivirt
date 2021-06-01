@@ -9,7 +9,7 @@
 </head>
 <body>
 @section('content')
-@section('contentAdmin')
+
         <div>Cargar un nuevo item</div>    
         <form method="POST" action="{{route('item.cargado')}}">
             @csrf
@@ -20,10 +20,7 @@
                 <input type="number" name="precio" value = "0"/><br>
                 {!! $errors->first('precio','<small>:message</small></br>')!!}
             </label><br>
-            <label for="">Stock</label><br>
-                <input type="number" name="stock" value = "0"/><br>
-                {!! $errors->first('stock','<small>:message</small></br>')!!}
-            </label><br>
+
             <br>
             <button class="btn btn-primary ml-2" type="submit">Enviar</button>
             <button type="button" class="btn btn-outline-primary"><a href="{{route('item.index')}}"> Atras </a></button>

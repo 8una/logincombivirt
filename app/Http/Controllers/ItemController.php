@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Item;
+use App\Models\ItemViaje;
+use App\Models\Viaje;
 
 use Illuminate\Http\Request;
 
@@ -14,6 +16,7 @@ class ItemController extends Controller
         $msg = "";
         return view('item.lista')->with(['items' =>$items])->with('msg',$msg);
     }
+    
     public function crearForm()
     {
         $data = '';
@@ -24,7 +27,6 @@ class ItemController extends Controller
         try {
             $request->validate(['nombre' => 'required',
             'precio' => 'required',
-            'stock' => 'required',
             ]);
             $nombre = $request->input('nombre');
             $cantidadItems= Item::where("nombre", "=", $nombre)->count();
@@ -32,7 +34,6 @@ class ItemController extends Controller
                 $item = new Item;
                 $item->nombre = $request->input('nombre');
                 $item->precio = $request->input('precio');
-                $item->stock = $request->input('stock');
                 $item->save();
             }
             else{
@@ -59,20 +60,23 @@ class ItemController extends Controller
             $item->update([
                 'nombre'=>request('nombre'),
                 'precio'=>request('precio'),
-                'stock'=>request('stock'),
             ]);
-            return view('item.actualizar')->with('item',$item)->with('data',$msg);
+            
+            
         } catch (\Illuminate\Database\QueryException $th) {
             $needle = 'item_nombre_unique';
             if (str_contains($th, $needle)) {
                 $msg = 'el nombre de item ingresado ya esta registrado en el sistema';
             }
             else{
-                $msg = 'el nombre de item ingresado ya esta registrado en el sistema';
+                $msg = 'el nombre de item ingresado ya esta registrado en el sistema2';
             }
-            return view("item.actualizar", ["data"=>$msg, "item"=>$item]);
             //return view('item.actualizar')->with('item',$item)->with('data',$msg);
         }   
+        catch(Illuminate\Database\Eloquent\Collection $e){
+            $msg = "no se";
+        }
+        return view('item.actualizar')->with('item',$item)->with('data',$msg);
     
 /*$nombre2 = request('nombre');
         $cantidadItems= Item::where("nombre", "=", $nombre2)->count();
@@ -104,10 +108,19 @@ class ItemController extends Controller
     }
     public function eliminar(Item $item)
     {
-        $item->delete();
-        return redirect()->route('item.index');
+        $viajes = ItemViaje::where('nombreItem','=',$item->nombre)->get();
+        $msg = "el item se  borró con éxito ";
+        if ($viajes->count() ==0){
+            $item->delete();
+        }
+        else{
+            $msg = "el item no se puede borrar";
+        }
+        $items = Item::all();
+        return view('item.lista')->with(['items' =>$items])->with('msg',$msg);
         
     }
+    
     
     public function confirmarBorrado(Item $item)
     {

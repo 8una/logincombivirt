@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Usuarioviaje extends Model
+class Combi extends Model
 {
-    protected $fillable = ['dniusuario', 'idViaje', 'estado'];
+    protected $fillable = ['DNI', 'fechaInicio', 'fechaFin'];
     public $timestamps = false;
 }
