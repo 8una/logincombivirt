@@ -24,7 +24,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/myprofile', 'HomeController@userProfile')->name('myprofile');
 
 //ADMIN
-Route::get('/admin', 'adminController@show')->name('homeAdmin');
+Route::get('/admin', 'adminController@show')->name('uAdmin');
 
 //Gestion de combis
 Route::post('/buscarCombi', 'adminController@showBuscarCombi')->name('buscarCombi');

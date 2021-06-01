@@ -24,7 +24,7 @@
             <button class="btn btn-outline-dark ml-2 h-75 mt-2 w-25"> <a href= "{{route('crearRuta')}}" >Cargar nueva Ruta</a></button>
             <button class="btn btn-outline-dark ml-2 h-75 mt-2"> <a href= "{{route('crearCiudad')}}" >Agregar Ciudad</a></button>
             <button class="btn btn-outline-dark ml-2 h-75 mt-2"> <a href= "{{route('quitarCiudad')}}" >Quitar Ciudad</a></button>
-            <button class="btn btn-outline-dark ml-2 h-75 mt-2"> <a href= "{{route('homeAdmin')}}" >Atras</a></button>
+            
         </div>
         <div class="d-flex w-100">
             <form method = 'POST' action = "{{route('buscarRuta')}}" ><input class="btn btn-outline-dark ml-2 m-2 h-75 justify-content-right" type = "submite" name = "ruta" placeholder="Ruta a Buscar">@csrf</input></form>

@@ -13,7 +13,7 @@
         @csrf 
         <label for=""></label>
             <h3 class="d-inline m-2 p-2">Nombre:</h3>
-                <input class="form-control" name="ciudad"  type="text" placeholder="Ciudad:">
+                <input class="form-control w-25 m-3 p-2" name="ciudad"  type="text" placeholder="Ciudad:">
         </label>
         <div class="m-2 p-2">
             <button class="btn btn-primary">Agregar</button>

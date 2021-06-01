@@ -37,7 +37,7 @@
         <div class="d-flex">
         
             <button class="btn btn-outline-dark ml-2 h-75 mt-2" > <a href="{{route('crearCombi')}}"> Crear Combi  </a></button>
-            <button class="btn btn-outline-dark ml-2 h-75 mt-2"> <a href= "{{route('homeAdmin')}}" >Atras</a></button>
+            
             <form method = 'POST' action = "{{route('buscarCombi')}}" ><input class="btn btn-outline-dark ml-2 m-2 h-75 justify-content-right" type = "submite" name = "patente" placeholder="Patente a Buscar">@csrf</input>
             </form>
         </div>

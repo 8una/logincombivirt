@@ -38,7 +38,7 @@
         <h4 class="text-light h2 text-right">Manipulacion De Viajes:</h4>
         <button class="btn btn-dark btn-lg"><a href="{{route("crearViaje")}}" class="text-light"> Cargar Viajes</a></button>
         <button class="btn btn-dark btn-lg"> <a href="#" class="text-light"> Historial de viajes</a></button>
-        <button class="btn btn-dark btn-lg"> <a href="{{route('homeAdmin')}}" class="text-light">Atras</a></button>
+        <button class="btn btn-dark btn-lg"> <a href="{{route('gestionDeViajes')}}" class="text-light">Atras</a></button>
     </div>
 
         <br>

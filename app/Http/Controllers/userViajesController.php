@@ -231,6 +231,6 @@ class userViajesController extends Controller
         $hoy = date("Y-m-d H:i:s");  
         $msg = "";
         $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', Auth::user()->DNI)->where('viajes.fin', '<', $hoy)->get();
-        return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
+        return view('vistasDeUsuario/viajesDelUsuarioPasados')->with(['data' => $data])->with('msg', $msg);
     }
 }

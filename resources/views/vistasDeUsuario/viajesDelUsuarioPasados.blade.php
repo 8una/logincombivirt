@@ -42,12 +42,13 @@
                         <th scope="col">Acciones:</th>
                     </tr>
                 </thead>
+                @if(!$data->isEmpty())
                 @foreach ($data as $viaje)
                     <tr>   
                         <th><div class="col text-start"> {{$viaje->ruta}}</th></div>
                         <th><div class="col text-start"> {{$viaje->fecha}} </th></div>
                         <th><div class="col text-center"> {{$viaje->hora}} </th></div>
-                        <th><div class="col text-center">{{$viaje->duracion}} </th></div>
+                        <th><div class="col text-center">{{$viaje->duracion}} Hs </th></div>
                         <th><div class="col text-center">{{$viaje->precio}} $ARS</th></div>
                         <th><div class="col text-center">{{$viaje->estado}} </th></div>
                         <th>
@@ -65,7 +66,11 @@
                     </tr>
                 </div>
                 @endforeach
+                @else
+                    <div class="fw-bold text-secondary text-center">Usted no tiene viajes realizados   </div>
+                @endif
         </table>
+        
             </div>
     @endsection
 @endsection
