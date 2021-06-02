@@ -8,9 +8,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+
 </head>
 <body>
-    
+    <script type="text/javascript">
+        function chequearDiferentesOrigenesYDestinos(){
+            var origen = document.getElementById("origen").value;
+            var destino = document.getElementById("destino").value;
+            if ((origen == destino)&&(origen !='N/A')){
+                alert("El origen y el destino no pueden ser iguales");
+            return false;
+        }
+    }
+    </script>
 @section('content')
 @section('content2')
     
@@ -25,16 +35,31 @@
         {{-- BUSCADOR --}}
         <div class="bg-dark w-100 d-flex justify-content-center">
             <div class="border border-primary border-3 w-100 bg-light rounded-pill rounded-3 m-2 p-2  ">
-                <form action="" class="m-2 p-2 ">
+                <form action="{{route('buscarViaje')}}"  class="m-2 p-2 ">
                     <h3 class="m-2 p-2 ">Buscar un viaje</h3>
-                    <div class="d-flex ">            
+                    <h6 class="text-secondary d-inline mr-4">Origen</h6>
+                    <h6 class="text-secondary d-inline ml-5 mr-5 pl-3">Destino</h6>
+                    <h6 class="text-secondary d-inline ml-5 mr-5 pr-5">Desde</h6>
+                    <h6 class="text-secondary d-inline ml-5 mr-5 pl-5">Hasta</h6>
+                    <div class="d-flex ">           
+                        
+                        <select class="form-select m-2" aria-label="Seleccione Ruta" name="origen" id="origen">
+                            <option selected  value="N/A"><p class="text-secondary">N/A</p> </option>
+                            @foreach ($origen as $origen)
+                                <option value="{{$origen->nombre}}">{{$origen->nombre}}</option>
+                            @endforeach
+                        </select>
 
-                        <form method = 'POST' action = "{{route('buscarRuta')}}" ><input class="btn btn-outline-dark ml-2 m-2 h-75 justify-content-right" type = "submite" name = "ruta" placeholder="Ruta a Buscar">@csrf</input></form>
-                        <form method = 'POST' action = "{{route('buscarRutaPorOrigen')}}"  ><input class="btn btn-outline-dark ml-2 m-2 h-75 justify-content-right" type = "submite" name = "origen" placeholder="Buscar Por Origen">@csrf</input></form>
-                        <form method = 'POST' action = "{{route('buscarRutaPorDestino')}}"><input class="btn btn-outline-dark ml-2 m-2 h-75 justify-content-right" type = "submite" name = "destino" placeholder="Buscar Por Destino">@csrf</input></form>
-                        <input type="date" class="form-control w-25 m-2" name="fecha-viaje" id="" >
-                    <input type="date" class="form-control w-25 m-2" name="fecha-viaje" id="" >
-                    <button class="rounded-pill btn btn-primary">Buscar</button>
+                        <select class="form-select  m-2" aria-label="Seleccione Ruta" name="destino" id="destino">
+                            <option selected value="N/A""><p class="text-secondary">N/A</p> </option>
+                            @foreach ($destino as $destino)
+                                <option value="{{$destino->nombre}}">{{$destino->nombre}}</option>
+                            @endforeach
+                        </select>
+                    
+                        <input size="16" type="date" class="datepicker m-2 p-2 w-25" id="desde" min="{{now()->format('Y-m-d')}}" name="desde" > 
+                        <input size="16" type="date" class="datepicker m-2 p-2 w-25" id="hasta" min="{{max(now()->format('Y-m-d'), request('desde')) }}" name="hasta" > 
+                    <button class="rounded-pill btn btn-primary" onclick="return chequearDiferentesOrigenesYDestinos() ">Buscar</button>
                 </div>
                 </form>
             </div>
@@ -92,8 +117,8 @@
                         </a>
                 </div>
                 </div><!--//container-->
-              </div>
-              <div class="col">
+            </div>
+            <div class="col">
                 <div class="container my-4 w-100  rounded-pill" >
                     <div class="card border-primary mb-3 m-width-100">
                         <div class="row">
@@ -114,7 +139,7 @@
         {{--  --}}
         <div class="col-md-12">
             <h3>Viajes:</h3>
-
+        
 
                 <table class="table table-striped ">
                     <div class="container "">
@@ -127,18 +152,25 @@
                                 <th scope="col"><form action="{{ route('ordenarViaje')}}"><button class="btn btn-dark btn-lg" name="boton" value="3"> Acciones:</button></form></th>
                             </tr>
                         </thead>
-                @foreach ($data as $viaje)  
-                <tr>
-
+                @if (!$data->isEmpty())
+                    @foreach ($data as $viaje)  
+                    <tr>
+                        <tr>   
+                            <th><div class="col text-left">{{$viaje->ruta}}</th></div>
+                            <th><div class="col text-center">{{$viaje->fecha}} </th></div>
+                            <th><div class="col text-center">{{$viaje->hora}}  </th></div>
+                            <th><div class="col text-left">{{$viaje->precio}}  $ARS </th></div>
+                            <th><div class="col text-left"> <a href = "{{ route('compraItems',$viaje->id)}}"class="btn btn-outline-success">🛒</a> </th></div>
+                        </tr>
+                    </div>
+                    @endforeach
+    
+                    
+                @else<tr>
                     <tr>   
-                        <th><div class="col text-left">{{$viaje['ruta']}}</th></div>
-                        <th><div class="col text-center">{{$viaje['fecha']}} </th></div>
-                        <th><div class="col text-center">{{$viaje['hora']}}  </th></div>
-                        <th><div class="col text-left">{{$viaje['precio'] }}  $ARS </th></div>
-                        <th><div class="col text-left"> <a href = "{{ route('compraItems',$viaje)}}"class="btn btn-outline-success">🛒</a> </th></div>
-                    </tr>
-                </div>
-                @endforeach
+                        <th><div class=" text-center"> <h3 class="text-center text-secondary"> No hay viajes para esos parametros...</h3></th></div>
+                @endif
+                
                 </table> 
             </div>
         <div class="cartel-subscripcion class="col-md-12"" >

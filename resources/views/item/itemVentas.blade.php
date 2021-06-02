@@ -49,7 +49,7 @@
                             <th><div class="col text-center">{{$item['precio']}}</th></div>
                         <th>
                             <div class="d-flex">
-                                <div class="pl-2"><form method="GET" action="{{ route('item.agregarCarro',$item,$viaje)}}"><button >Agregar al viaje 📋</button></form></div>
+                                <div class="pl-2"><form method="GET" action="{{ route('item.agregarCarro',$item,$viaje->id)}}"><button >Agregar al viaje 📋</button></form></div>
                             </div> 
                         </th>
                     </tr>

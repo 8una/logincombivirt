@@ -116,3 +116,8 @@ Route::delete('/borrarciudad', 'adminRutasController@borrarciudad')->name('borra
 //calificaciones de viajes
 Route::get('/calificarViaje/{usuario}', 'userViajesController@calificarviaje')->name('calificarviaje');
 Route::post('/usuarioCalificaViaje/{viaje}', 'userViajesController@usuarioCalificaViaje')->name('usuarioCalificaViaje');
+
+
+
+//BUSCAR VVIAJE buscarViaje
+Route::get('/buscarViaje', 'HomeController@buscarViaje')->name('buscarViaje');

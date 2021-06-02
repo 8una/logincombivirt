@@ -9,7 +9,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
-use App\\Models\Admin;
+use App\Models\Admin;
 
 class AdminAuthController extends Controller
 {

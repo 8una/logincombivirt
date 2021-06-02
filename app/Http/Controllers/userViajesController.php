@@ -12,6 +12,8 @@ use Carbon\Carbon;
 use App\Models\Marcados;
 use App\Models\Item;
 use App\Models\ItemViaje;
+use App\Ruta;
+use App\Ciudad;
 use Auth;
 
 
@@ -55,11 +57,10 @@ class userViajesController extends Controller
         $data = "";
         return view('vistasDeUsuario.tarjeta')->with(['viaje' => $viaje])->with('data', $data);
     }
+
     public function compraItems(Viaje $viaje)
     {
         $msg = "";
-        
-        
         if (Auth::check()){
             $hoy = date('Y-m-d');
             $usuario = Auth::user();
@@ -147,7 +148,6 @@ class userViajesController extends Controller
     {
         $value = request('boton');
         $hoy = date("Y-m-d H:i:s"); 
-        
         if ($value == 1) {
             $data = Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->orderBy('ruta', 'ASC')->get();
         } elseif ($value == 2) {
@@ -155,8 +155,12 @@ class userViajesController extends Controller
         } else {
             $data = Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->orderBy('precio', 'ASC')->get();
         }
+
         $comments=Calificacion::orderBy('fecha')->get()->take(5);
-        return view('home')->with(['data'=>$data])->with('comments',$comments);
+        $ruta= Ruta::get();
+        $origen= Ciudad::get();
+        $destino= Ciudad::get();
+        return view('home')->with(['data'=>$data])->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
     }
 
     public function reprogramarViaje($dni, $ruta, $idviajeviejo)
@@ -230,7 +234,7 @@ class userViajesController extends Controller
         
         $hoy = date("Y-m-d H:i:s");  
         $msg = "";
-        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', Auth::user()->DNI)->where('viajes.fin', '<', $hoy)->get();
+        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', Auth::user()->DNI)->where('viajes.fin', '<', $hoy) ->get();
         return view('vistasDeUsuario/viajesDelUsuarioPasados')->with(['data' => $data])->with('msg', $msg);
     }
 }
