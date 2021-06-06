@@ -33,11 +33,11 @@ class HomeController extends Controller
         $ruta= Ruta::get();
         $origen= Ciudad::get();
         $destino= Ciudad::get();
-        return view('home')->with(['data'=>$data])->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+        return view('home')->with(['data'=>$data])->with(['request'=>$request])->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
     }
 
     public function userProfile(Request $request) {
-       // echo Auth::user();
+    
         $data= Viaje::where("cant disponibles", ">", 0)->get();
 
         return view ('userProfile');

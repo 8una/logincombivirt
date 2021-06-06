@@ -19,6 +19,7 @@
 
 <body>
     @section('content')
+    @include('layouts.navAdmin') 
         <h1 class="m-2">Administracion de Rutas</h1>
         <div class="d-flex">
             <button class="btn btn-outline-dark ml-2 h-75 mt-2 w-25"> <a href= "{{route('crearRuta')}}" >Cargar nueva Ruta</a></button>

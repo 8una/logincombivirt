@@ -9,6 +9,7 @@
 </head>
 <body>
     @section('content')
+    @include('layouts.navAdmin') 
     <form method="POST" action="{{ route('cargarNuevaCiudad')}} ">
         @csrf 
         <label for=""></label>

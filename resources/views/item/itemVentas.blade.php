@@ -26,7 +26,7 @@
 </script>
 <body>
 @section('content')
-   
+
     <h1 class="m-2">Items disponibles </h1>
         <div>
             <button class="btn btn-outline-primary ml-2"> <a href= "{{route('home')}}" >Atras</a></button>

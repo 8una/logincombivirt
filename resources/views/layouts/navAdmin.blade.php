@@ -1,22 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Combis-19</title>
-    <link rel="shortcut icon" href="{{asset('images/favicon.ico')}}" type="image/x-icon">
-</head>
-<body>
-    <div class="d-flex bg-dark">
-      <img  src="{{ asset('images/logo_is.png') }}" alt="" width="100" height="100">
-       <div class=""">
-          <ul class="d-flex text-light h2 align-middle "  >
-            <li>Inicio</li>
-        
-          </ul>        
-       </div>
+<div class="bg-dark">
+   
+    <div class="container ">
+        <div class="row m-2 p-2 justify-content-center">
+            <div class="col-3 ">
+            <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="{{route("gestionDeViajes")}}" class="text-dark"> Administracion de Viajes</a></button>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="{{route("gestionDeCombis")}}" class="text-dark"> Administracion de Combis</a></button>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-primary btn-lg w-100 h-100"><a href="{{route("gestionDeCombis")}}" class="text-dark"> gestion De Cuentas</a></button>
+            </div>
     </div>
-    @yield('contentAdmin')
-</body>
-</html>
+    <div class="row m-2 p-2 justify-content-center">
+        
+        <div class="col-3">
+            <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="{{route("item.index")}}"" class="text-dark"> gestion De Items</a></button>
+            </div>
+        
+        <div class="col-3">
+            <button type="button" class="btn btn-primary btn-lg w-100 h-100"><a href="{{route("chofer.index")}}"" class="text-dark"> gestion De Choferes</a></button>
+        </div>
+
+        <div class="col-3">
+            <button type="button" class="btn btn-primary btn-lg w-100 h-100" ><a href="{{route("ruta.index")}}"" class="text-dark">Rutas</a></button>
+        </div>
+    </div>
+</div>
+</div>
+
+@yield('content2')

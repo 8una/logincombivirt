@@ -9,6 +9,7 @@
 </head>
 <body>
     @section('content')
+    @include('layouts.navAdmin') 
     <h1>Seleccion de Combi y Chofer</h1>
         <br>
         <table>

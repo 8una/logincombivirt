@@ -9,6 +9,7 @@
 </head>
 <body>
     @section('content')
+    @include('layouts.navAdmin') 
     <hr><h5>{{$msg}}</h5>
     <h1>Crear Nuevo viaje</h1>
 

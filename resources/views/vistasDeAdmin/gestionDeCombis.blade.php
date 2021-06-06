@@ -33,6 +33,7 @@
 
 <body>
     @section('content')
+    @include('layouts.navAdmin') 
         <h1 class="m-2">Gestion de combis</h1>
         <div class="d-flex">
         

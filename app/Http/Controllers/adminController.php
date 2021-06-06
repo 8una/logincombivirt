@@ -14,19 +14,20 @@ class adminController extends Controller
         return view("vistasDeAdmin/homeAdmin");
     }
 
-    public function showGestionCombis(){
- 
+    public function showGestionCombis(Request $request){
+        $request->user()->authorizeRoles(['admin']);
         $data=Combi::all();
         $msg="";
         return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg);
     }
 
-    public function showCrearCombi(){
+    public function showCrearCombi(Request $request){
+        $request->user()->authorizeRoles(['admin']);
         $data = '';
         return view('vistasDeAdmin/crearCombi', ['data' =>$data]);
     }
-    public function showBuscarCombi(){
-        
+    public function showBuscarCombi(Request $request){
+        $request->user()->authorizeRoles(['admin']);
         $data=Combi::where('patente','=',request('patente'))->get();
         $msg="";
         return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg);
