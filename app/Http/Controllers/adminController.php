@@ -11,26 +11,26 @@ class adminController extends Controller
     public function show(Request $request)
     {
         $request->user()->authorizeRoles(['admin']);
-        return view("vistasDeAdmin/homeAdmin");
+        return view("vistasDeAdmin/homeAdmin")->with(['request' =>$request]);
     }
 
     public function showGestionCombis(Request $request){
         $request->user()->authorizeRoles(['admin']);
         $data=Combi::all();
         $msg="";
-        return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg);
+        return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg)->with(['request' =>$request]);
     }
 
     public function showCrearCombi(Request $request){
         $request->user()->authorizeRoles(['admin']);
         $data = '';
-        return view('vistasDeAdmin/crearCombi', ['data' =>$data]);
+        return view('vistasDeAdmin/crearCombi')->with(['data' =>$data])->with(['request' =>$request]);
     }
     public function showBuscarCombi(Request $request){
         $request->user()->authorizeRoles(['admin']);
         $data=Combi::where('patente','=',request('patente'))->get();
         $msg="";
-        return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg);
+        return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg)->with(['request' =>$request]);
     }
 
 

@@ -9,12 +9,12 @@ use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $items = Item::get();
         
         $msg = "";
-        return view('item.lista')->with(['items' =>$items])->with('msg',$msg);
+        return view('item.lista')->with(['request'=>$request])->with(['items' =>$items])->with('msg',$msg);
     }
     
     public function crearForm()

@@ -1,4 +1,5 @@
 @extends('layout')
+@if($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 
 <html lang="en">
@@ -31,3 +32,4 @@
     @endsection
 </body>
 </html>
+@endif

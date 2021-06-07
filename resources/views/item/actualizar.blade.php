@@ -1,5 +1,6 @@
 
 @extends('layouts.app')
+@if($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,3 +25,4 @@
     <p>{{$data}}</p>
     @endsection
 </html>
+@endif

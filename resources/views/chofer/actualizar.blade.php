@@ -1,5 +1,8 @@
 @extends('layouts.nav')
 @extends('layouts.app')
+@if($request->user()->authorizeRoles(['admin']))
+<button class="btn btn-dark btn-lg"><div class="ml-2"><a href="{{route('uAdmin')}}" class="text-light"> Administración</a></div></button>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,3 +31,4 @@
     @endsection
 </html>
 
+@endif

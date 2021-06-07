@@ -10,30 +10,30 @@ use DB;
 
 class adminRutasController extends Controller
 {
-    public function showindex(){
+    public function showindex(Request $request){
  
         $data=Ruta::all();
         $msg="";
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
+        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
 
 
-    public function crearRuta()
+    public function crearRuta(Request $request)
     {
         $origen=Ciudad::select('nombre')->distinct()->get();
         $msg="Por favor seleccione el origen de la Ruta:";
-        return view('ruta/origen')->with(['data' =>$origen])->with("mensaje", $msg);
+        return view('ruta/origen')->with(['data' =>$origen])->with("mensaje", $msg)->with("request", $request);
     }
 
-    public function elegirDestino()
+    public function elegirDestino(Request $request)
     {
         $origen=request('combo');
         $destino=Ciudad::select('nombre')->where('nombre','<>', $origen)->distinct()->get();
         $msg="Por favor seleccione el destino de la Ruta:";
-        return view('ruta/destino')->with(['data' =>$destino])->with("origen", $origen)->with("mensaje", $msg);
+        return view('ruta/destino')->with(['data' =>$destino])->with("origen", $origen)->with("mensaje", $msg)->with("request", $request);
     }
 
-    public function cargarNuevaRuta()
+    public function cargarNuevaRuta(Request $request)
     {
         $destino= request('combo');
         $origen= request('origen');
@@ -51,7 +51,7 @@ class adminRutasController extends Controller
             $msg="No se puede crear la ruta, ya existe.";
         }
         $data=Ruta::all();
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
+        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
 
     public function borrarRuta($ruta)
@@ -73,32 +73,32 @@ class adminRutasController extends Controller
         return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
     }
 
-    public function buscarRuta()
+    public function buscarRuta(Request $request)
     {
         $msg="";
         $data=Ruta::where('nombreRuta', request('ruta'))->orderBy('nombreRuta')->get();
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
+        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
-    public function buscarRutaPorOrigen()
+    public function buscarRutaPorOrigen(Request $request)
     {
         $msg="";
         $data=Ruta::where('origen', request('origen'))->orderBy('origen')->get();
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
+        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
-    public function buscarRutaPorDestino()
+    public function buscarRutaPorDestino(Request $request)
     {
         $msg="";
         $data=Ruta::where('destino', request('destino'))->orderBy('destino')->get();
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
+        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
 
-    public function crearCiudad()
+    public function crearCiudad(Request $request)
     {
         $msg="Ingrese el nombre de la nueva ciudad:";
-        return view('ruta/crearCiudad')->with("mensaje", $msg);
+        return view('ruta/crearCiudad')->with("mensaje", $msg)->with("request", $request);
     }
 
-    public function cargarNuevaCiudad()
+    public function cargarNuevaCiudad(Request $request)
     {
         $msg="Ciudad cargada correctamente:";
         
@@ -113,14 +113,14 @@ class adminRutasController extends Controller
             $msg="No se puede cargar la ciudad, ya existe.";
         }
         $data=Ruta::all();
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
+        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
 
-    public function quitarCiudad()
+    public function quitarCiudad(Request $request)
     {
         $data=Ciudad::all();
         $msg="Elija la ciudad que quiere quitar:";
-        return view('ruta/quitarCiudad')->with(['data' =>$data])->with("mensaje", $msg);
+        return view('ruta/quitarCiudad')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
 
     public function borrarciudad()
