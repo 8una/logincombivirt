@@ -12,23 +12,23 @@ use DB;
 use Illuminate\Http\Request;
 class adminViajesController extends Controller
 {
-    public function showGestionDeViajes()
+    public function showGestionDeViajes(Request $request)
     {
         $hoy=date('Y-m-d');
         $msg="";
         $data=Viaje::where('fecha','>=', $hoy)->orderBy('fecha','ASC')->orderBy('hora','ASC')->get();
-        return view('vistasDeAdmin/gestionDeViajes')->with(['data' =>$data])->with('msg',$msg);
+        return view('vistasDeAdmin/gestionDeViajes')->with(['data' =>$data])->with('msg',$msg)->with("request",$request);
     } 
 
 
-    public function create()
+    public function create(Request $request)
     {
         $data=Ruta::all();
         $msg=" ";
-        return view('/vistasDeAdmin/crearViaje')->with(['data' =>$data])->with('msg',$msg); 
+        return view('/vistasDeAdmin/crearViaje')->with(['data' =>$data])->with('msg',$msg)->with("request",$request); 
     }
 
-    public function selectcombiYChofer()
+    public function selectcombiYChofer(Request $request)
     {
 
         $ruta = request('combo');
@@ -69,7 +69,7 @@ class adminViajesController extends Controller
 
         $choferesCount=$choferes->count();
         
-        return view("vistasDeAdmin/selectCombiYChofer")->with(['data' =>$combisPatente])->with(['choferes' =>$choferes])->with("ruta",$ruta)->with("precio",$precio)->with("fecha",$fecha)->with("hora",$hora)->with("duracion",$duracion)->with('cantCombis',$combisCount)->with('cantChoferes',$choferesCount); 
+        return view("vistasDeAdmin/selectCombiYChofer")->with(['data' =>$combisPatente])->with("request",$request)->with(['choferes' =>$choferes])->with("ruta",$ruta)->with("precio",$precio)->with("fecha",$fecha)->with("hora",$hora)->with("duracion",$duracion)->with('cantCombis',$combisCount)->with('cantChoferes',$choferesCount); 
     }
 
     public function crearviaje()

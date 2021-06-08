@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@if($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,7 @@
 </head>
 <body>
     @section('content')
+    @include('layouts.navAdmin') 
     <form method="POST" action="{{ route('cargarNuevaRuta')}} ">
         @csrf 
         <label for=""></label>
@@ -35,3 +37,4 @@
     @endsection
 </body>
 </html>
+@endif

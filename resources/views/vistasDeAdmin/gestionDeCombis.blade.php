@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@if($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,6 +33,7 @@
 
 <body>
     @section('content')
+    @include('layouts.navAdmin') 
         <h1 class="m-2">Gestion de combis</h1>
         <div class="d-flex">
         
@@ -79,3 +80,4 @@
     @endsection
 </body>
 </html>
+@endif

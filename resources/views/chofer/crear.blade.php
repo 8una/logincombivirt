@@ -9,6 +9,7 @@
 </head>
 <body>
 @section('content')
+@include('layouts.navAdmin')  
         <div><h1> Cargar un nuevo chofer </h1></div>   
         <form method="POST" action="{{route('chofer.creado')}}">
             @csrf

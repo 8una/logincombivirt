@@ -1,4 +1,5 @@
 @extends('layout')
+@if($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 
 <html lang="en">
@@ -10,6 +11,7 @@
 </head>
 <body>
     @section('content')
+    @include('layouts.navAdmin') 
         
     
     <br>
@@ -30,3 +32,4 @@
     @endsection
 </body>
 </html>
+@endif

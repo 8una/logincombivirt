@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@if($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +10,7 @@
 </head>
 <body>
     @section('content')
+    @include('layouts.navAdmin') 
         <div><h1> Cargar una nueva combi </h1></div>   
         <form method="POST" action="{{ route('combi.store')}}">
             @csrf
@@ -38,3 +39,4 @@
     @endsection
 </body>
 </html>
+@endif

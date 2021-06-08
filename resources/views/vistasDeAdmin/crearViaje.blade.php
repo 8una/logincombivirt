@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@if($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,7 @@
 </head>
 <body>
     @section('content')
+    @include('layouts.navAdmin') 
     <hr><h5>{{$msg}}</h5>
     <h1>Crear Nuevo viaje</h1>
 
@@ -54,3 +56,4 @@
 </body>
 </html>
 
+@endif

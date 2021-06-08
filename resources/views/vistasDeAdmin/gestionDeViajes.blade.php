@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@if($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,12 +18,18 @@
     }
 </script>
 <body>
+    
     @section('content')
-        
+    @include('layouts.navAdmin')  
     
     <h1>Administracion de viajes</h1>
-   
-    <div class="border border-primary border-3 ">
+    <div class="bg-dark">
+    
+        <button class="btn btn-dark btn-lg"><a href="{{route("crearViaje")}}" class="text-light"> Cargar Viajes</a></button>
+        <button class="btn btn-dark btn-lg"> <a href="#" class="text-light"> Historial de viajes</a></button>
+       
+    </div>
+    <div class="border border-primary border-3">
         <form action="" class="m-2 p-2 ">
             <h3 class="m-2 p-2 ">Buscar un viaje</h3>
             <div class="d-flex ">
@@ -34,12 +41,7 @@
 
     </div>
     <br><br><br>
-    <div class="bg-dark">
-        <h4 class="text-light h2 text-right">Manipulacion De Viajes:</h4>
-        <button class="btn btn-dark btn-lg"><a href="{{route("crearViaje")}}" class="text-light"> Cargar Viajes</a></button>
-        <button class="btn btn-dark btn-lg"> <a href="#" class="text-light"> Historial de viajes</a></button>
-        <button class="btn btn-dark btn-lg"> <a href="{{route('gestionDeViajes')}}" class="text-light">Atras</a></button>
-    </div>
+   
 
         <br>
         <br>
@@ -88,3 +90,4 @@
     @endsection
 </body>
 </html>
+@endif

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@if($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,7 @@
 </head>
 <body>
     @section('content')
+    @include('layouts.navAdmin') 
     <h2>Datos Del Viaje:</h2>
     <hr>
     <h5 class="p-2 m-2"> Elegir la nueva fecha, hora y duracion</h3>
@@ -80,3 +82,4 @@
     @endsection
 </body>
 </html>
+@endif

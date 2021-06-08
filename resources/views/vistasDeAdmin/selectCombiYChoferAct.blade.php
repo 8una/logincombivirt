@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@if($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,7 @@
 </head>
 <body>
     @section('content')
-
+    @include('layouts.navAdmin') 
     <h1>Seleccion de Combi y Chofer</h1>
         <br>
         <table>
@@ -70,3 +71,4 @@
     @endsection
 </body>
 </html>    
+@endif
