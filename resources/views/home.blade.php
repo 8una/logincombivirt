@@ -20,6 +20,7 @@
             return false;
         }
     }
+</script>
     </script>
 @section('content')
 @section('content2')
@@ -37,23 +38,38 @@
             <div class="border border-primary border-3 w-100 bg-light rounded-pill rounded-3 m-2 p-2  ">
                 <form action="{{route('buscarViaje')}}"  class="m-2 p-2 ">
                     <h3 class="m-2 p-2 ">Buscar un viaje</h3>
-                    <h6 class="text-secondary d-inline mr-4">Origen</h6>
-                    <h6 class="text-secondary d-inline ml-5 mr-5 pl-3">Destino</h6>
-                    <h6 class="text-secondary d-inline ml-5 mr-5 pr-5">Desde</h6>
-                    <h6 class="text-secondary d-inline ml-5 mr-5 pl-5">Hasta</h6>
+                    <div class="d-flex">
+                        <div><h6 class="text-secondary d-inline pr-5 mr-5">Origen</h6></div>
+                        <div><h6 class="text-secondary d-inline pr-5 mr-5">Destino</h6></div>
+                        <div><h6 class="text-secondary d-inline pr-5 mr-5">Ruta</h6></div>
+                        <div><h6 class="text-secondary d-inline pl-5 ml-5 mr-5 pr-5">Desde</h6></div>
+                        <div><h6 class="text-secondary d-inline pl-5 ml-5 ">Hasta</h6></div>
+                    </div>
                     <div class="d-flex ">           
                         
-                        <select class="form-select m-2" aria-label="Seleccione Ruta" name="origen" id="origen">
-                            <option selected  value="N/A"><p class="text-secondary">N/A</p> </option>
+
+                        <input type="radio" name="rad" onclick="origen.disabled = false; destino.disabled= true;ruta.disabled= true; destino.value='N/A'; ruta.value='N/A' " />
+                        <select class="form-select m-2" aria-label="Seleccione Ruta"  name="origen" id="origen" disabled="disabled" >
+                            <option selected  id="n/a" value="N/A"><p class="text-secondary">N/A</p> </option>
                             @foreach ($origen as $origen)
                                 <option value="{{$origen->nombre}}">{{$origen->nombre}}</option>
+                            @endforeach 
+                        </select>
+                        
+                        <input type="radio" name="rad" onclick="origen.disabled = true; destino.disabled= false; ruta.disabled= true; origen.value='N/A'; ruta.value='N/A' " />
+                        <select class="form-select  m-2" aria-label="Seleccione Ruta" name="destino" id="destino" disabled="disabled">
+                            <option selected value="N/A" id="origen1"><p class="text-secondary">N/A</p> </option>
+                            @foreach ($destino as $destino)
+                                <option value="{{$destino->nombre}}">{{$destino->nombre}}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-select  m-2" aria-label="Seleccione Ruta" name="destino" id="destino">
+
+                        <input type="radio" name="rad" onclick="origen.disabled = true; destino.disabled= true; ruta.disabled= false; destino.value='N/A'; origen.value='N/A' "  />
+                        <select class="form-select  m-2" aria-label="Seleccione Ruta" name="ruta" id="ruta" disabled="disabled">
                             <option selected value="N/A""><p class="text-secondary">N/A</p> </option>
-                            @foreach ($destino as $destino)
-                                <option value="{{$destino->nombre}}">{{$destino->nombre}}</option>
+                            @foreach ($ruta as $ruta)
+                                <option value="{{$ruta->nombreRuta}}">{{$ruta->nombreRuta}}</option>
                             @endforeach
                         </select>
                     
@@ -134,7 +150,7 @@
                         </div>
                     </div>
                 </div>
-              </div>
+            </div>
 
         {{--  --}}
         <div class="col-md-12">
