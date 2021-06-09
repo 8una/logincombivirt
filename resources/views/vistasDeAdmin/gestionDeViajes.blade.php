@@ -1,5 +1,8 @@
 @extends('layouts.app')
+@if (!Auth::user())
+Usted no tiene permiso para visualizar esta página. 
 
+@elseif($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,23 +32,7 @@
         <button class="btn btn-dark btn-lg"> <a href="#" class="text-light"> Historial de viajes</a></button>
        
     </div>
-    <div class="border border-primary border-3">
-        <form action="" class="m-2 p-2 ">
-            <h3 class="m-2 p-2 ">Buscar un viaje</h3>
-            <div class="d-flex ">
-            <input type="text" class="form-control w-25 m-2" name="Ruta" id="" placeholder="ruta">
-            <input type="date" class="form-control w-25 m-2" name="fecha-viaje" id="">
-            <button class="rounded-pill btn btn-primary w-25"> Buscar</button>
-        </div>
-        </form>
-
-    </div>
-    <br><br><br>
    
-
-        <br>
-        <br>
-
     <hr>
         {{$msg}}
     <hr>
@@ -90,3 +77,4 @@
     @endsection
 </body>
 </html>
+@endif

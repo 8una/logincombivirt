@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('content')
+@if (!Auth::user())
+Usted no tiene permiso para visualizar esta página. 
+
+@elseif($request->user()->authorizeRoles(['admin']))
 @include('layouts.navAdmin') 
 <div class="container">
     <div class="row justify-content-center">
@@ -27,3 +31,4 @@
     </div>
 </div>
 @endsection
+@endif

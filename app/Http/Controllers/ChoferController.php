@@ -9,23 +9,23 @@ use Illuminate\Support\Facades\Validator;
 
 class ChoferController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $msg = "";
         $choferes = Chofer::get();
-        return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg);
+        return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg)->with('request', $request);
     }
-    public function crearForm()
+    public function crearForm(Request $request)
     {
         $data = '';
-        return view('chofer.crear', ['data' =>$data]);
+        return view('chofer.crear', ['data' =>$data])->with('request', $request);
     }
-    public function actualizarForm(Chofer $chofer)
+    public function actualizarForm(Chofer $chofer, Request $request)
     {
 
         //return view("chofer.actualizar", compact("chofer"));
         $data = '';
-        return view('chofer.actualizar')->with('chofer',$chofer)->with('data',$data);
+        return view('chofer.actualizar')->with('chofer',$chofer)->with('data',$data)->with('request', $request);
     }
     public function crear(Request $request)
     {
@@ -80,10 +80,10 @@ class ChoferController extends Controller
                 $msg = "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres";
             }*/
         }        
-        return view('chofer.crear', ['data' =>$msg]);
+        return view('chofer.crear', ['data' =>$msg])->with('request', $request);
         //return redirect()->route('chofer.index');      
     }
-    public function actualizar(Chofer $chofer)
+    public function actualizar(Chofer $chofer, Request $request)
     {       
         try {
             $msg = "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres, 1 numero, 1 caracter especial ";
@@ -161,9 +161,9 @@ class ChoferController extends Controller
         }
                      
             //return redirect()->route('chofer.index');
-        return view("chofer.actualizar", ["data"=>$msg,"chofer"=>$chofer]);
+        return view("chofer.actualizar", ["data"=>$msg,"chofer"=>$chofer])->with('request', $request);
     }
-    public function eliminar(Chofer $chofer)
+    public function eliminar(Chofer $chofer, Request $request)
     {
         $hoy=date('Y-m-d');
         $msg = "Se borró el chofer seleccionado con éxito";
@@ -175,7 +175,7 @@ class ChoferController extends Controller
             $msg = "No se puede eliminar el chofer seleccionado porque tiene viajes programados.";
         }
         $choferes = Chofer::all();
-        return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg);
+        return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg)->with('request', $request);
     }
     
     public function perfil(Chofer $chofer, Request $request)

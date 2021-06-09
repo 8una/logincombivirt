@@ -1,5 +1,8 @@
 @extends('layouts.app')
-@if($request->user()->authorizeRoles(['admin']))
+@if (!Auth::user())
+Usted no tiene permiso para visualizar esta página. 
+
+@elseif($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,7 +42,7 @@
         
             {{-- <button class="btn btn-outline-dark ml-2 h-75 mt-2" > <a href="{{route('crearCombi')}}"> Crear Combi  </a></button> --}}
             
-            <form method = 'POST' action = "{{route('buscarCombi')}}" ><input class="btn btn-outline-dark ml-2 m-2 h-75 justify-content-right" type = "submite" name = "patente" placeholder="Cuenta a Buscar">@csrf</input>
+            <form method = 'POST' action = "{{route('buscarCuenta')}}" ><input class="btn btn-outline-dark ml-2 m-2 h-75 justify-content-right" type = "submite" name = "email" placeholder="Email de Cuenta a Buscar">@csrf</input>
             </form>
         </div>
 

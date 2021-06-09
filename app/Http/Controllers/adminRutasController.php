@@ -54,7 +54,7 @@ class adminRutasController extends Controller
         return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
 
-    public function borrarRuta($ruta)
+    public function borrarRuta($ruta, Request $request)
     {
         $hoy = date("Y-m-d");
         $msg="La ruta se borro satisfactoriamente";
@@ -70,7 +70,7 @@ class adminRutasController extends Controller
             Ruta::where('id',$ruta)->delete();
         }
         $data=Ruta::all();
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
+        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with('request',$request);
     }
 
     public function buscarRuta(Request $request)
@@ -123,7 +123,7 @@ class adminRutasController extends Controller
         return view('ruta/quitarCiudad')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
 
-    public function borrarciudad()
+    public function borrarciudad(Request $request)
     {
         $ciudad= request('combo');
         $hoy = date("Y-m-d");
@@ -138,7 +138,7 @@ class adminRutasController extends Controller
             Ciudad::where('nombre', request('combo'))->delete();
         /* } */
         $data=Ruta::all();
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
+        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with('request',$request);
     }
 
 }
