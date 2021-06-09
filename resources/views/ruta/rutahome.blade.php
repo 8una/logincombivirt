@@ -10,7 +10,7 @@
 </head>
 <script type="text/javascript">
     function ConfirmDelete(){
-        var respuesta=confirm("¿Estas seguro que deseas eliminar la ruta?");
+        var respuesta=confirm("¿Estas seguro que deseas eliminar la ruta?, esto podria eliminar viajes con pasajeros");
         if (respuesta){
             return true;
         }

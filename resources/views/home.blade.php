@@ -39,16 +39,20 @@
                 <form action="{{route('buscarViaje')}}"  class="m-2 p-2 ">
                     <h3 class="m-2 p-2 ">Buscar un viaje</h3>
                     <div class="d-flex">
+                        <input type="radio" class=" p-2 m-2 pr-3 mr-3" name="rad" onclick="origen.disabled = false; destino.disabled= true;ruta.disabled= true; destino.value='N/A'; ruta.value='N/A' " />
                         <div><h6 class="text-secondary d-inline pr-5 mr-5">Origen</h6></div>
+                        <input type="radio" class=" p-2 m-2 pr-3 mr-3" name="rad" onclick="origen.disabled = true; destino.disabled= false; ruta.disabled= true; origen.value='N/A'; ruta.value='N/A' " />
                         <div><h6 class="text-secondary d-inline pr-5 mr-5">Destino</h6></div>
+                        <input type="radio" class=" p-2 m-2 pr-3 mr-3" name="rad" onclick="origen.disabled = true; destino.disabled= true; ruta.disabled= false; destino.value='N/A'; origen.value='N/A' "  />
+
                         <div><h6 class="text-secondary d-inline pr-5 mr-5">Ruta</h6></div>
-                        <div><h6 class="text-secondary d-inline pl-5 ml-5 mr-5 pr-5">Desde</h6></div>
-                        <div><h6 class="text-secondary d-inline pl-5 ml-5 ">Hasta</h6></div>
+                        <div><h6 class="text-secondary d-inline pl-3 ml-3 mr-5 pr-5">Desde</h6></div>
+                        <div><h6 class="text-secondary d-inline pl-5 ml-5">Hasta</h6></div>
                     </div>
                     <div class="d-flex ">           
                         
 
-                        <input type="radio" name="rad" onclick="origen.disabled = false; destino.disabled= true;ruta.disabled= true; destino.value='N/A'; ruta.value='N/A' " />
+                        
                         <select class="form-select m-2" aria-label="Seleccione Ruta"  name="origen" id="origen" disabled="disabled" >
                             <option selected  id="n/a" value="N/A"><p class="text-secondary">N/A</p> </option>
                             @foreach ($origen as $origen)
@@ -56,7 +60,6 @@
                             @endforeach 
                         </select>
                         
-                        <input type="radio" name="rad" onclick="origen.disabled = true; destino.disabled= false; ruta.disabled= true; origen.value='N/A'; ruta.value='N/A' " />
                         <select class="form-select  m-2" aria-label="Seleccione Ruta" name="destino" id="destino" disabled="disabled">
                             <option selected value="N/A" id="origen1"><p class="text-secondary">N/A</p> </option>
                             @foreach ($destino as $destino)
@@ -65,7 +68,6 @@
                         </select>
 
 
-                        <input type="radio" name="rad" onclick="origen.disabled = true; destino.disabled= true; ruta.disabled= false; destino.value='N/A'; origen.value='N/A' "  />
                         <select class="form-select  m-2" aria-label="Seleccione Ruta" name="ruta" id="ruta" disabled="disabled">
                             <option selected value="N/A""><p class="text-secondary">N/A</p> </option>
                             @foreach ($ruta as $ruta)
@@ -73,8 +75,8 @@
                             @endforeach
                         </select>
                     
-                        <input size="16" type="date" class="datepicker m-2 p-2 w-25" id="desde" min="{{now()->format('Y-m-d')}}" name="desde" > 
-                        <input size="16" type="date" class="datepicker m-2 p-2 w-25" id="hasta" min="{{max(now()->format('Y-m-d'), request('desde')) }}" name="hasta" > 
+                        <input size="16" type="date" class="datepicker m-2 p-2 w-25" id="desde" min="{{now()->format('Y-m-d')}}" value="{{now()->format('Y-m-d')}}" name="desde"> 
+                        <input size="16" type="date" class="datepicker m-2 p-2 w-25" id="hasta"   name="hasta" onclick="min=desde.value"> 
                     <button class="rounded-pill btn btn-primary" onclick="return chequearDiferentesOrigenesYDestinos() ">Buscar</button>
                 </div>
                 </form>

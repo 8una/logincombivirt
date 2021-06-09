@@ -92,7 +92,6 @@ Route::delete('/cancelarViaje/{dni}/{viaje}', 'userViajesController@cancelarViaj
 Route::get('/misViajes/', 'userViajesController@showMisViajesOrdenados')->name('ordenarViaje');
 
 
-
 //GESTION DE RUTAS ENTONCES
 Route::get('/administracionRuta', 'adminRutasController@showindex')->name('ruta.index');
 Route::get('/crearRuta', 'adminRutasController@crearRuta')->name('crearRuta');

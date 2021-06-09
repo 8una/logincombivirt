@@ -127,16 +127,9 @@ class adminRutasController extends Controller
     {
         $ciudad= request('combo');
         $hoy = date("Y-m-d");
-        /*  */
+
         $msg="La ciudad se borro satisfactoriamente";
-
-        /* if ($cantViajes > 0){
-            $msg="La ciudad esta anotada a: ".$cantViajes. " viajes, la misma no se puede borrar";
-        }
-
-        else{ */
-            Ciudad::where('nombre', request('combo'))->delete();
-        /* } */
+        Ciudad::where('nombre', request('combo'))->delete();
         $data=Ruta::all();
         return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg);
     }
