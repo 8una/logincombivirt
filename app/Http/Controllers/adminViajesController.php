@@ -28,7 +28,7 @@ class adminViajesController extends Controller
         return view('/vistasDeAdmin/crearViaje')->with(['data' =>$data])->with('msg',$msg)->with("request",$request); 
     }
 
-    public function selectcombiYChofer(Request $request)
+    public function selectcombiYChofer()
     {
 
         $ruta = request('combo');
@@ -69,7 +69,7 @@ class adminViajesController extends Controller
 
         $choferesCount=$choferes->count();
         
-        return view("vistasDeAdmin/selectCombiYChofer")->with(['data' =>$combisPatente])->with("request",$request)->with(['choferes' =>$choferes])->with("ruta",$ruta)->with("precio",$precio)->with("fecha",$fecha)->with("hora",$hora)->with("duracion",$duracion)->with('cantCombis',$combisCount)->with('cantChoferes',$choferesCount); 
+        return view("vistasDeAdmin/selectCombiYChofer")->with(['data' =>$combisPatente])->with(['choferes' =>$choferes])->with("ruta",$ruta)->with("precio",$precio)->with("fecha",$fecha)->with("hora",$hora)->with("duracion",$duracion)->with('cantCombis',$combisCount)->with('cantChoferes',$choferesCount); 
     }
 
     public function crearviaje()

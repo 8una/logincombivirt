@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 use App\Combi;
 use App\Models\Viaje;
-
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class adminController extends Controller
 {
@@ -13,6 +14,23 @@ class adminController extends Controller
         $request->user()->authorizeRoles(['admin']);
         return view("vistasDeAdmin/homeAdmin")->with(['request' =>$request]);
     }
+    public function showGestionCuentas(Request $request){
+        $request->user()->authorizeRoles(['admin']);
+        $data=User::all();
+        $msg="";
+        return view('vistasDeAdmin/gestionDeCuentas')->with(['data' =>$data])->with("mensaje", $msg)->with(['request' =>$request]);
+    }
+
+    public function showUnPerfil(User $user)
+    {   $data = User::where('dni','=',$user->dni)->get();
+        $msg = "";
+        
+        
+        return view('vistasDeAdmin/verPerfil')->with('data',$data)->with('msg', $msg);
+    }
+
+
+
 
     public function showGestionCombis(Request $request){
         $request->user()->authorizeRoles(['admin']);

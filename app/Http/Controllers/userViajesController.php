@@ -27,6 +27,8 @@ class userViajesController extends Controller
         $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', $dni)->where('inicio', '>', $hoy)->get();
         return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
     }
+
+    
     public function agregarViajeAUsuario(Viaje $viaje)
     {
         $numeroTarjeta = request('numero');

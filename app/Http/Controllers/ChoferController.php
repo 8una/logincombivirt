@@ -178,12 +178,13 @@ class ChoferController extends Controller
         return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg);
     }
     
-    public function perfil(Chofer $chofer)
+    public function perfil(Chofer $chofer, Request $request)
     {
+        $request->user()->authorizeRoles(['admin']);
         $viajes = Viaje::where('DNI','=',$chofer->DNI)->get();
         /*return view('chofer.perfil', ['viajes' =>$viajes,
         'chofer'=> $chofer]);*/
-        return view('chofer.perfil')->with('chofer',$chofer)->with('viajes',$viajes);
+        return view('chofer.perfil')->with('chofer',$chofer)->with('viajes',$viajes)->with('request', $request);
        // return view('chofer.perfil',compact('chofer','viajes'));
     }
 

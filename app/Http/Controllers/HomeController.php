@@ -40,8 +40,10 @@ class HomeController extends Controller
     
         $data= Viaje::where("cant disponibles", ">", 0)->get();
 
-        return view ('userProfile');
+        return view ('userProfile')->with(['request'=>$request]);
     }
+
+   
 
     public function buscarViaje()
     {
