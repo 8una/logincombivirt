@@ -1,5 +1,9 @@
 @extends('layouts.nav')
 @extends('layouts.app')
+@if (!Auth::user())
+Usted no tiene permiso para visualizar esta página. 
+
+@elseif($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,3 +53,4 @@
 @endsection
 
 
+@endif

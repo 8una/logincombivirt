@@ -17,7 +17,7 @@ class adminViajesController extends Controller
         $hoy=date('Y-m-d');
         $msg="";
         $data=Viaje::where('fecha','>=', $hoy)->orderBy('fecha','ASC')->orderBy('hora','ASC')->get();
-        return view('vistasDeAdmin/gestionDeViajes')->with(['data' =>$data])->with('msg',$msg)->with("request",$request);
+        return view('vistasDeAdmin/gestionDeViajes')->with(['data' =>$data])->with('msg',$msg)->with("request", $request);
     } 
 
 
@@ -69,10 +69,10 @@ class adminViajesController extends Controller
 
         $choferesCount=$choferes->count();
         
-        return view("vistasDeAdmin/selectCombiYChofer")->with(['data' =>$combisPatente])->with("request",$request)->with(['choferes' =>$choferes])->with("ruta",$ruta)->with("precio",$precio)->with("fecha",$fecha)->with("hora",$hora)->with("duracion",$duracion)->with('cantCombis',$combisCount)->with('cantChoferes',$choferesCount); 
+        return view("vistasDeAdmin/selectCombiYChofer")->with(['data' =>$combisPatente])->with("request", $request)->with(['choferes' =>$choferes])->with("ruta",$ruta)->with("precio",$precio)->with("fecha",$fecha)->with("hora",$hora)->with("duracion",$duracion)->with('cantCombis',$combisCount)->with('cantChoferes',$choferesCount); 
     }
 
-    public function crearviaje()
+    public function crearviaje(Request $request)
     {
         $patente = request('patente');
         $dni = request('dni');
@@ -104,10 +104,10 @@ class adminViajesController extends Controller
 
         $msg="El viaje se cargo con exito!!";
         $data= Ruta::all();
-        return view('/vistasDeAdmin/crearViaje')->with(['data' =>$data])->with('msg',$msg);
+        return view('/vistasDeAdmin/crearViaje')->with(['data' =>$data])->with('msg',$msg)->with('request',$request);
     } 
 
-    public function borrarviaje($viaje, $patente)
+    public function borrarviaje($viaje, $patente, Request $request)
     {
         $cantLibres=Viaje::where('id',$viaje)->select('cant disponibles')->get();
         $msg="El viaje se borro satisfactoriamente";
@@ -145,16 +145,16 @@ class adminViajesController extends Controller
         }
         $hoy=date('Y-m-d');
         $data=Viaje::where('fecha','>', $hoy)->orderBy('fecha','ASC')->orderBy('hora','ASC')->get();
-        return view('vistasDeAdmin/gestionDeViajes')->with(['data' =>$data])->with('msg',$msg);
+        return view('vistasDeAdmin/gestionDeViajes')->with("request", $request)->with(['data' =>$data])->with('msg',$msg);
     }
 
-    public function showActForm($viaje)
+    public function showActForm($viaje, Request $request)
     {
         $data=Viaje::where('id',$viaje)->get();
-        return view('vistasDeAdmin/actualizarViaje')->with(['data'=>$data])->with('id',$viaje);
+        return view('vistasDeAdmin/actualizarViaje')->with(['data'=>$data])->with('id',$viaje)->with('request',$request);
     }
 
-    public function selectCombiYChoferActualizar($idviaje){
+    public function selectCombiYChoferActualizar($idviaje, Request $request){
         $ruta = request('ruta');
         $fecha = request('fecha');
         $precio = request('precio');
@@ -198,10 +198,10 @@ class adminViajesController extends Controller
         })->distinct()->select('DNI')->get();
 
         $choferesCount=$choferes->count();
-        return view("vistasDeAdmin/selectCombiYChoferAct")->with(['data' =>$combisPatente])->with(['choferes' =>$choferes])->with("ruta",$ruta)->with("precio",$precio)->with("fecha",$fecha)->with("hora",$hora)->with("duracion",$duracion)->with('cantCombis',$combisCount)->with('cantChoferes',$choferesCount)->with('id',$idviaje)->with('patenteAct',$patente)->with('dniAct',$dniAct); 
+        return view("vistasDeAdmin/selectCombiYChoferAct")->with('request',$request)->with(['data' =>$combisPatente])->with(['choferes' =>$choferes])->with("ruta",$ruta)->with("precio",$precio)->with("fecha",$fecha)->with("hora",$hora)->with("duracion",$duracion)->with('cantCombis',$combisCount)->with('cantChoferes',$choferesCount)->with('id',$idviaje)->with('patenteAct',$patente)->with('dniAct',$dniAct); 
     }
 
-    public function actualizarViaje($viaje)
+    public function actualizarViaje($viaje, Request $request)
     {
         $msg = "El viaje se actualizo con exito";
         $ruta = request('ruta');
@@ -237,6 +237,6 @@ class adminViajesController extends Controller
 
         $hoy=date('Y-m-d');
         $data=Viaje::where('fecha','>', $hoy)->orderBy('fecha','ASC')->orderBy('hora','ASC')->get();
-        return view('vistasDeAdmin/gestionDeViajes')->with(['data' =>$data])->with('msg',$msg);
+        return view('vistasDeAdmin/gestionDeViajes')->with(['data' =>$data])->with('msg',$msg)->with('request',$request);
     }
 }

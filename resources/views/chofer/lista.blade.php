@@ -1,4 +1,8 @@
 @extends('layouts.app')
+@if (!Auth::user())
+Usted no tiene permiso para visualizar esta página. 
+
+@elseif($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,3 +82,7 @@
     <strong> El email ingresado ya esta registrado <strong>
 @endif
 @endisset
+
+
+
+@endif

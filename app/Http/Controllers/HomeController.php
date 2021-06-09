@@ -40,10 +40,12 @@ class HomeController extends Controller
     
         $data= Viaje::where("cant disponibles", ">", 0)->get();
 
-        return view ('userProfile');
+        return view ('userProfile')->with(['request'=>$request]);
     }
 
-    public function buscarViaje()
+   
+
+    public function buscarViaje(Request $request)
     {
         $desde= request('desde');
         $hasta= request('hasta');
@@ -137,7 +139,7 @@ class HomeController extends Controller
         $ruta= Ruta::get();
         $origen= Ciudad::get();
         $destino= Ciudad::get();
-        return view('home')->with(['data'=>$data])->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+        return view('home')->with(['data'=>$data])->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino])->with("request", $request);
     }
 
 

@@ -1,6 +1,9 @@
 
 @extends('layouts.app')
-@if($request->user()->authorizeRoles(['admin']))
+@if (!Auth::user())
+Usted no tiene permiso para visualizar esta página. 
+
+@elseif($request->user()->authorizeRoles(['admin']))
 <!DOCTYPE html>
 <html lang="en">
 <head>

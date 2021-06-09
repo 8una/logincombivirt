@@ -14,13 +14,13 @@ class ItemController extends Controller
         $items = Item::get();
         
         $msg = "";
-        return view('item.lista')->with(['request'=>$request])->with(['items' =>$items])->with('msg',$msg);
+        return view('item.lista')->with('request',$request)->with(['items' =>$items])->with('msg',$msg);
     }
     
-    public function crearForm()
+    public function crearForm(Request $request)
     {
         $data = '';
-        return view('item.crear', ['data' =>$data]);
+        return view('item.crear', ['data' =>$data])->with('request',$request);
     }
     public function crear(Request $request)
     {   $msg = "El item se cargó con éxito";
@@ -42,18 +42,18 @@ class ItemController extends Controller
             return view('item.crear', ['data' =>$msg]);
         } catch (\Illuminate\Database\QueryException $th) {
             $msg = "el precio o stock ingresado no es valido";
-            return view('item.crear', ['data' =>$msg]);
+            return view('item.crear', ['data' =>$msg])->with('request',$request);
         }   
         
               
     }
-    public function actualizarForm(Item $item)
+    public function actualizarForm(Item $item, Request $request)
     {
         $msg = "";
-        return view('item.actualizar')->with('item',$item)->with('data',$msg);
+        return view('item.actualizar')->with('item',$item)->with('data',$msg)->with('request',$request);
        // return view("item.actualizar", compact("item"));
     }
-    public function actualizar(Item $item)
+    public function actualizar(Item $item, Request $request)
     {
         $msg ="el item se actualizó con éxito";
         try {
@@ -76,7 +76,7 @@ class ItemController extends Controller
         catch(Illuminate\Database\Eloquent\Collection $e){
             $msg = "no se";
         }
-        return view('item.actualizar')->with('item',$item)->with('data',$msg);
+        return view('item.actualizar')->with('item',$item)->with('data',$msg)->with('request',$request);
     
 /*$nombre2 = request('nombre');
         $cantidadItems= Item::where("nombre", "=", $nombre2)->count();
@@ -106,7 +106,7 @@ class ItemController extends Controller
         $item->save();
         */
     }
-    public function eliminar(Item $item)
+    public function eliminar(Item $item, Request $request)
     {
         $viajes = ItemViaje::where('nombreItem','=',$item->nombre)->get();
         $msg = "el item se  borró con éxito ";
@@ -117,7 +117,7 @@ class ItemController extends Controller
             $msg = "el item no se puede borrar";
         }
         $items = Item::all();
-        return view('item.lista')->with(['items' =>$items])->with('msg',$msg);
+        return view('item.lista')->with(['items' =>$items])->with('msg',$msg)->with('request',$request);
         
     }
     

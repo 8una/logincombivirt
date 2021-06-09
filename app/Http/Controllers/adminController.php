@@ -3,38 +3,62 @@
 namespace App\Http\Controllers;
 use App\Combi;
 use App\Models\Viaje;
-
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class adminController extends Controller
 {
     public function show(Request $request)
     {
         $request->user()->authorizeRoles(['admin']);
-        return view("vistasDeAdmin/homeAdmin")->with(['request' =>$request]);
+        return view("vistasDeAdmin/homeAdmin")->with('request',$request);
+    }
+    public function showGestionCuentas(Request $request){
+        $request->user()->authorizeRoles(['admin']);
+        $data=User::all();
+        $msg="";
+        return view('vistasDeAdmin/gestionDeCuentas')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
 
-    public function showGestionCombis(Request $request){
+    public function showUnPerfil(User $user, Request $request)
+    {   $data = User::where('dni','=',$user->dni)->get();
+        $msg = "";
+        
+        
+        return view('vistasDeAdmin/verPerfil')->with('data',$data)->with('msg', $msg)->with('request',$request);
+    }
+
+    public function showBuscarCuenta(Request $request){
         $request->user()->authorizeRoles(['admin']);
+        $data=User::where('email','=',request('email'))->get();
+        $msg="";
+        return view('vistasDeAdmin/gestionDeCuentas')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
+    }
+
+
+
+    public function showGestionCombis(Request $request){
+   
         $data=Combi::all();
         $msg="";
-        return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg)->with(['request' =>$request]);
+        return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
 
     public function showCrearCombi(Request $request){
         $request->user()->authorizeRoles(['admin']);
         $data = '';
-        return view('vistasDeAdmin/crearCombi')->with(['data' =>$data])->with(['request' =>$request]);
+        return view('vistasDeAdmin/crearCombi')->with(['data' =>$data])->with("request", $request);
     }
     public function showBuscarCombi(Request $request){
         $request->user()->authorizeRoles(['admin']);
         $data=Combi::where('patente','=',request('patente'))->get();
         $msg="";
-        return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg)->with(['request' =>$request]);
+        return view('vistasDeAdmin/gestionDeCombis')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
     }
 
 
-    public function store()
+    public function store(Request $request)
     {
         $patente = request('patente');
         $tipoCombi = request('tipo');
@@ -87,12 +111,12 @@ class adminController extends Controller
         else{
             $msg=" La patente ya existe";
         }
-        return view('vistasDeAdmin/crearCombi', ['data' =>$msg]);
+        return view('vistasDeAdmin/crearCombi', ['data' =>$msg])->with('request',$request);
         
     }
 
 
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
         $hoy = date("Y-m-d");
         $msg="La patente se elimino con éxito";
@@ -112,12 +136,12 @@ class adminController extends Controller
         }
         $data=Combi::all();
         
-        return view('vistasDeAdmin/gestionDeCombis')->with('data',$data)->with("mensaje", $msg);
+        return view('vistasDeAdmin/gestionDeCombis')->with('request',$request)->with('data',$data)->with("mensaje", $msg);
     }  
 
 
 
-    public function showActCombi($combi)
+    public function showActCombi($combi, Request $request)
     {
         $msg="Se cambio el modo de la combi";
         $tipo = Combi::where('id',$combi)->get('tipo');
@@ -156,7 +180,7 @@ class adminController extends Controller
             }
         }
         $data=Combi::all();
-        return view('vistasDeAdmin/gestionDeCombis')->with('data',$data)->with('mensaje',$msg);  
+        return view('vistasDeAdmin/gestionDeCombis')->with('data',$data)->with('mensaje',$msg)->with('request',$request);  
     } 
 }
 
