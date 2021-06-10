@@ -1,6 +1,7 @@
 
 @extends('layouts.nav')
 @extends('layouts.app')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +33,7 @@
             <h1>Combis 19</h1>
             <h2>El servicio de viajes personalizados que buscas, seguro y confiable</h2>
         </div>
-
+       
         {{-- BUSCADOR --}}
         <div class="bg-dark w-100 d-flex justify-content-center">
             <div class="border border-primary border-3 w-100 bg-light rounded-pill rounded-3 m-2 p-2  ">
@@ -156,6 +157,9 @@
 
         {{--  --}}
         <div class="col-md-12">
+            <hr>
+                {{$msg}}
+            <hr>
             <h3>Viajes:</h3>
         
 
@@ -178,7 +182,7 @@
                             <th><div class="col text-center">{{$viaje->fecha}} </th></div>
                             <th><div class="col text-center">{{$viaje->hora}}  </th></div>
                             <th><div class="col text-left">{{$viaje->precio}}  $ARS </th></div>
-                            <th><div class="col text-left"> <a href = "{{ route('compraItems',$viaje->id)}}"class="btn btn-outline-success">🛒</a> </th></div>
+                            <th><div class="col text-left"> <a href = "{{ route('compraViaje',$viaje)}}"class="btn btn-outline-success">🛒</a> </th></div>
                         </tr>
                     </div>
                     @endforeach
@@ -210,3 +214,4 @@
 @endsection
 </body>
 </html>
+

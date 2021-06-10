@@ -13,8 +13,9 @@ Usted no tiene permiso para visualizar esta página.
 </head>
 <body>
 @section('content')
-@include('layouts.navAdmin')  
-        <div>Cargar un nuevo item</div>    
+@include('layouts.navAdmin') 
+
+        <div>Cargar un nuevo item</div>
         <form method="POST" action="{{route('item.cargado')}}">
             @csrf
             <label for="">Nombre <br>
@@ -29,10 +30,10 @@ Usted no tiene permiso para visualizar esta página.
             <button class="btn btn-primary ml-2" type="submit">Enviar</button>
             <button type="button" class="btn btn-outline-primary"><a href="{{route('item.index')}}"> Atras </a></button>
         </form>
-        
+
         <p>{{$data}}</p>
-        
-   
+
+
     @endsection
 </body>
 </html>

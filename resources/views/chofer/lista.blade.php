@@ -30,11 +30,10 @@ Usted no tiene permiso para visualizar esta página.
 </script>
 <body>
 @section('content')
-@include('layouts.navAdmin')  
     <h1 class="m-2">Gestion de choferes</h1>
         <div>
             <button class="btn btn-outline-primary ml-2" > <a href="{{route('chofer.crear')}}"> Crear Chofer  </a></button>
-            
+            <button class="btn btn-outline-primary ml-2" > <a href="{{route('uAdmin')}}"> Atrás  </a></button>
         </div>
         <div>
             
@@ -61,9 +60,11 @@ Usted no tiene permiso para visualizar esta página.
                             <th><div class="col text-center">{{$chofer['email']}}</th></div>
                         <th>
                             <div class="d-flex">
-                                <div class="pr-2"><form method="POST" action="{{ route('chofer.borrado', $chofer)}}">@csrf @method('DELETE')<button onclick="return ConfirmDelete() ">Eliminar ✖</button></form></div>
-                                <div class="pl-2"><form method="GET" action="{{ route('chofer.update',$chofer)}}"><button onclick="return ConfirmEdit() ">Editar 📋</button></form></div>
-                                <div class="pr-2"><form method="GET" action="{{ route('chofer.perfil',$chofer)}}"><button >Ver perfil</button></form></div>
+                                
+                            <div class="pr-2"><form method="POST"  action="{{ route('chofer.borrado', $chofer)}}">@csrf @method('DELETE')<button class="btn btn-outline-danger" onclick="return ConfirmDelete() ">Eliminar ✖</button></form></div>
+                            <div class="pl-2"><form method="" action="{{ route('chofer.update',$chofer)}}">@csrf <button  class="btn btn-primary ml-2">Editar 📋</button></form></div>
+
+                                <div class="pr-2"><form method="GET" action="{{ route('chofer.perfil',$chofer)}}"><button class="btn btn-primary ml-2">Ver perfil</button></form></div>
                             </div> 
                         </th>
                     </tr>

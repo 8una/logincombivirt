@@ -4,6 +4,7 @@
 Usted no tiene permiso para visualizar esta página. 
 
 @elseif($request->user()->authorizeRoles(['admin']))
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,8 +15,8 @@ Usted no tiene permiso para visualizar esta página.
 </head>
 <body>
 @section('content')
-@include('layouts.navAdmin')  
-    <h1> Edición del item "{{$item->nombre}}" </h1>
+@include('layouts.navAdmin') 
+    <h1> Edición del item {{$item->id}} </h1>
     <form  method="POST" action="{{route ('item.actualizado',$item)}}">
         @csrf @method('PATCH')
         <p>nombre: <input type="text" name="nombre" value = "{{$item->nombre}}"/></p>

@@ -13,19 +13,19 @@ class ChoferController extends Controller
     {
         $msg = "";
         $choferes = Chofer::get();
-        return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg)->with('request', $request);
+        return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg)->with('request',$request);
     }
     public function crearForm(Request $request)
     {
         $data = '';
-        return view('chofer.crear', ['data' =>$data])->with('request', $request);
+        return view('chofer.crear', ['data' =>$data])->with('request',$request);
     }
     public function actualizarForm(Chofer $chofer, Request $request)
     {
 
         //return view("chofer.actualizar", compact("chofer"));
         $data = '';
-        return view('chofer.actualizar')->with('chofer',$chofer)->with('data',$data)->with('request', $request);
+        return view('chofer.actualizar')->with('chofer',$chofer)->with('data',$data)->with('request',$request);
     }
     public function crear(Request $request)
     {
@@ -80,7 +80,7 @@ class ChoferController extends Controller
                 $msg = "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres";
             }*/
         }        
-        return view('chofer.crear', ['data' =>$msg])->with('request', $request);
+        return view('chofer.crear', ['data' =>$msg]);
         //return redirect()->route('chofer.index');      
     }
     public function actualizar(Chofer $chofer, Request $request)
@@ -120,6 +120,10 @@ class ChoferController extends Controller
             if (request('email')== null){
                 $msg = "Tiene que ingresar un email";
             }
+
+            $choferes = Chofer::get();
+            return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg)->with('request',$request);
+            //return view("chofer.actualizar", ["data"=>$msg,"chofer"=>$chofer]);
             //echo $msg.PHP_EOL;
             
             //return redirect()->route('chofer.index');
@@ -146,6 +150,7 @@ class ChoferController extends Controller
                 $cantChoferes = Chofer::where("dni", "=", request('dni'))->count();
                 if ($cantChoferes == 1){
                     $msg = "el dni ingresado ya se encuentra registrado en el sistema";
+                    return view("chofer.actualizar", ["data"=>$msg,"chofer"=>$chofer]);
                 }                
             }
             else{
@@ -153,6 +158,7 @@ class ChoferController extends Controller
                     $cantChoferes2 = Chofer::where("email", "=", request('email'))->count();
                     if ($cantChoferes2 == 1){
                         $msg = "el email ingresado ya se encuentra registrado en el sistema";
+                        return view("chofer.actualizar", ["data"=>$msg,"chofer"=>$chofer])->with('request',$request);
                     }
         
                 }
@@ -161,7 +167,7 @@ class ChoferController extends Controller
         }
                      
             //return redirect()->route('chofer.index');
-        return view("chofer.actualizar", ["data"=>$msg,"chofer"=>$chofer])->with('request', $request);
+        
     }
     public function eliminar(Chofer $chofer, Request $request)
     {
@@ -175,16 +181,15 @@ class ChoferController extends Controller
             $msg = "No se puede eliminar el chofer seleccionado porque tiene viajes programados.";
         }
         $choferes = Chofer::all();
-        return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg)->with('request', $request);
+        return view('chofer.lista')->with(['choferes' =>$choferes])->with('msg',$msg)->with('request',$request);
     }
     
     public function perfil(Chofer $chofer, Request $request)
     {
-        $request->user()->authorizeRoles(['admin']);
         $viajes = Viaje::where('DNI','=',$chofer->DNI)->get();
         /*return view('chofer.perfil', ['viajes' =>$viajes,
         'chofer'=> $chofer]);*/
-        return view('chofer.perfil')->with('chofer',$chofer)->with('viajes',$viajes)->with('request', $request);
+        return view('chofer.perfil')->with('chofer',$chofer)->with('viajes',$viajes)->with('request',$request);
        // return view('chofer.perfil',compact('chofer','viajes'));
     }
 

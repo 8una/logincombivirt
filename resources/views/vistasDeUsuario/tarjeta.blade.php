@@ -9,9 +9,13 @@
 </head>
 <body>
 @section('content')
-        <div><h1> Pago de viaje </h1></div>   
+@include('layouts.navAdmin') 
+        <div><h1> Pago de viaje </h1></div>
         <form method="POST" action="{{route('pagarViajeConfirmado',$viaje)}}">
             @csrf
+            <label for="">Nombre y apellido</label><br>
+                <input type="text" name="nombreApellido" /><br>
+            </label><br>
             <label for="">Numero de tarjeta <br>
                 <input type="number" name="numero" required minlength="2" maxlength="10" >
             </label><br>
@@ -22,12 +26,11 @@
                 <input type="number" name="codigo" /><br>
             </label>
             <button class="btn btn-primary ml-2" type="submit">Confirmar Pago</button>
-            <button type="button" class="btn btn-outline-primary"><a href="{{route('compraItems',$viaje)}}"> Atras </a></button>
+            <button type="button" class="btn btn-outline-primary"><a href="{{route('compraViaje',$viaje)}}"> Atras </a></button>
 
         </form>
         <p>{{$data}}</p>
-        
+
     @endsection
 </body>
 </html>
-

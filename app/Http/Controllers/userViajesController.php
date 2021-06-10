@@ -15,6 +15,7 @@ use App\Models\ItemViaje;
 use App\Ruta;
 use App\Ciudad;
 use Auth;
+use App\Models\Suscriptores;
 
 
 
@@ -29,29 +30,37 @@ class userViajesController extends Controller
     }
 
     
-    public function agregarViajeAUsuario(Viaje $viaje)
+    public function agregarViajeAUsuario(Viaje $viaje, Request $request)
     {
         $numeroTarjeta = request('numero');
         $usuario = Auth::user();
+        $dni = $usuario->dni;
         if ($numeroTarjeta % 10 < 5){
             #tiene saldo
             Usuarioviaje::create([
-                'dniusuario' => $usuario->DNI,
+                'dniusuario' => $dni,
                 'idViaje' => $viaje->id,
                 'estado' => "pendiente",
             ]); 
-            $cantLibres=Viaje::where('id','=',$viaje->id)->select('cant disponibles')->get();
+            $cantLibres=Viaje::where('id','=',$viaje->id)->value('cant disponibles');
             $cantLibres -= 1;
             Viaje::where('id','=',$viaje->id)->update([
                 'cant disponibles'=> $cantLibres,
             ]);
-            $data = "se compró el viaje exitosamente!";
-        }
+            #para que retorne al home despues del pago
+            $msg = "se compró el viaje exitosamente!";
+            $comments=Calificacion::orderBy('fecha')->get()->take(5);
+            $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
+            $ruta= Ruta::get();
+                    $origen= Ciudad::get();
+                    $destino= Ciudad::get();
+                    return view('home')->with(['data'=>$data])->with("msg", $msg)->with("request", $request)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+                }
         else{
             $data = "la tarjeta ingresada no tiene saldo suficiente";
             #notienesaldo
+            return view('vistasDeUsuario.tarjeta')->with(['viaje' => $viaje])->with('data', $data);
         }
-        return view('vistasDeUsuario.tarjeta')->with(['viaje' => $viaje])->with('data', $data);
 
     }
     public function formPago(Viaje $viaje)
@@ -60,6 +69,129 @@ class userViajesController extends Controller
         return view('vistasDeUsuario.tarjeta')->with(['viaje' => $viaje])->with('data', $data);
     }
 
+    public function comprarViaje(Viaje $viaje, Request $request)
+    {
+        $msg = "";
+        
+        
+        if (Auth::check()){
+            $hoy = date('Y-m-d');
+            $usuario = Auth::user();
+            $dni = $usuario->dni;
+            $usuarioM = Marcados::where('DNI',$dni)->get();
+            if ($usuarioM->count() == 0 ){       
+                $usuario2=DB::table('users')->where('users.dni','=',$dni)->whereNotExists(function ($query) use ($viaje) {
+                    $fecha = $viaje->fecha;
+                    $hora = $viaje->hora;
+                    $fechaInicio= date ('Y-m-d H:i:s', (strtotime( $fecha.$hora)));
+                    $fechaFin = strtotime ( '+'.$viaje->duracion.' hour' , strtotime ($fechaInicio)) ; 
+                    $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin);  
+                    $query->select(DB::raw(1))
+                        ->from('usuarioViajes')                                                    
+                        ->whereColumn('users.dni', 'usuarioViajes.dniusuario')->join('viajes','usuarioViajes.idViaje','=','viajes.id')->whereBetween('viajes.inicio',[$fechaInicio,$fechaFin])
+                        ->orWhereColumn('users.dni', 'usuarioViajes.dniusuario')->whereBetween('viajes.fin',[$fechaInicio,$fechaFin])
+                        ->orWhereColumn('users.dni', 'usuarioViajes.dniusuario')->where('viajes.inicio','<', $fechaInicio)->where('viajes.fin','>', $fechaInicio)
+                        ->orWhereColumn('users.dni', 'usuarioViajes.dniusuario')->where('viajes.inicio','>', $fechaInicio)->where('viajes.fin','<', $fechaInicio);
+                })->distinct()->select('dni')->get();
+                
+                if ($usuario2->count() > 0){
+                    
+                    #ir a la vista de items
+                    
+                    $items = Item::get();    
+                    $suscriptor = Suscriptores::where('dni',$dni)->get();
+                    $cantItem = 0;
+                    if ($suscriptor->count() > 0){
+                        #se realiza el descuento
+                        $precioTotal = $viaje->precio * 0.1;
+                        $precioTotal = $viaje->precio - $precioTotal;
+                        $msg = "Se realizó un 10% de descuento por ser usuario suscriptor";
+                        return view('item.itemVentas')->with(['items' => $items])->with(['viaje' => $viaje])->with(['precioTotal' =>$precioTotal])->with('msg',$msg);
+                    }
+                    $precioTotal = $viaje->precio ;
+                    $msg = "";
+                    return view('item.itemVentas')->with(['items' => $items])->with(['viaje' => $viaje])->with(['precioTotal' =>$precioTotal])->with('msg',$msg);
+                }
+                else{
+                    $msg = "no puede comprar el viaje seleccionado porque se superpone con otro que tiene pendiente";
+                    #retornar a la misma vista con este msg
+                    $comments=Calificacion::orderBy('fecha')->get()->take(5);
+                    $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
+                    $hoy = date("Y-m-d H:i:s");
+                    $ruta= Ruta::get();
+                    $origen= Ciudad::get();
+                    $destino= Ciudad::get();
+                    return view('home')->with(['data'=>$data])->with("request", $request)->with("msg", $msg)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+                }
+            }
+            else {
+                $usuarioM2 = Marcados::where('DNI',$dni)->where('fechaFin','>=',$viaje->fecha)->where('fechaInicio','<=',$viaje->fecha)->get();
+                if ($usuarioM2->count() > 0){
+                    $fech = Marcados::where('DNI',$dni)->where('fechaFin','>=',$viaje->fecha)->value('fechaFin');
+                    $msg = "No puede comprar el viaje porque esta marcado como sospechoso de covid. Puede comprar después de la fecha ".$fech;
+                    #retornar a la misma vista con este mensaje
+                    $comments=Calificacion::orderBy('fecha')->get()->take(5);
+                    $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
+                    $hoy = date("Y-m-d H:i:s");
+                    $ruta= Ruta::get();
+                    $origen= Ciudad::get();
+                    $destino= Ciudad::get();
+                    return view('home')->with(['data'=>$data])->with("msg", $msg)->with("request", $request)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+                }
+                else{
+                    
+                    $usuario2=DB::table('users')->where('users.dni','=',$dni)->whereNotExists(function ($query) use ($viaje) {
+                        $fecha = $viaje->fecha;
+                        $hora = $viaje->hora;
+                        $fechaInicio= date ('Y-m-d H:i:s', (strtotime( $fecha.$hora)));
+                        $fechaFin = strtotime ( '+'.$viaje->duracion.' hour' , strtotime ($fechaInicio)) ; 
+                        $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin);  
+                        $query->select(DB::raw(1))
+                            ->from('usuarioViajes')                                                    
+                            ->whereColumn('users.dni', 'usuarioViajes.dniusuario')->join('viajes','usuarioViajes.idViaje','=','viajes.id')->whereBetween('viajes.inicio',[$fechaInicio,$fechaFin])
+                            ->orWhereColumn('users.dni', 'usuarioViajes.dniusuario')->whereBetween('viajes.fin',[$fechaInicio,$fechaFin])
+                            ->orWhereColumn('users.dni', 'usuarioViajes.dniusuario')->where('viajes.inicio','<', $fechaInicio)->where('viajes.fin','>', $fechaInicio)
+                            ->orWhereColumn('users.dni', 'usuarioViajes.dniusuario')->where('viajes.inicio','>', $fechaInicio)->where('viajes.fin','<', $fechaInicio);
+                    })->distinct()->select('dni')->get();
+                    
+                    if ($usuario2->count() > 0){
+                        #ir a la vista de items
+                        
+                        $items = Item::get();    
+                        $suscriptor = Suscriptores::where('dni',$dni)->get();
+                        $cantItem = 0;
+                        if ($suscriptor->count() > 0){
+                            #se realiza el descuento
+                            $precioTotal = $viaje->precio * 0.1;
+                            $precioTotal = $viaje->precio - $precioTotal;
+                            $msg = "Se realizó un 10% de descuento por ser usuario suscriptor";
+                            return view('item.itemVentas')->with(['items' => $items])->with(['viaje' => $viaje])->with(['precioTotal' =>$precioTotal])->with('msg',$msg);
+                        }
+                        $precioTotal = $viaje->precio ;
+                        $msg = "";
+                        return view('item.itemVentas')->with(['items' => $items])->with(['viaje' => $viaje])->with(['precioTotal' =>$precioTotal])->with('msg',$msg);
+
+                    }
+                    else{
+                        $msg = "no puede comprar el viaje seleccionado porque se superpone con otro que tiene pendiente";
+                        #retornar a la misma vista con este msg
+                        $comments=Calificacion::orderBy('fecha')->get()->take(5);
+                        $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
+                        $hoy = date("Y-m-d H:i:s");
+                    $ruta= Ruta::get();
+                    $origen= Ciudad::get();
+                    $destino= Ciudad::get();
+                    return view('home')->with(['data'=>$data])->with("msg", $msg)->with("request", $request)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+                }
+                }      
+            }
+        }    
+        else{
+            #retornar a la vista de login
+            return view ('auth.login');
+        }
+        
+    }
     public function compraItems(Viaje $viaje)
     {
         $msg = "";
@@ -102,18 +234,37 @@ class userViajesController extends Controller
     }
 
 
-    public function agregarItemAViaje(Item $item,Viaje $viaje)
+    public function agregarItemAViaje(Item $item,Viaje $viaje,$precioTotal)
         {
             $usuario = Auth::user();
-            $dni = $usuario->DNI;
+            $dni = $usuario->dni;
             ItemViaje::create([
                 'DNI' => $dni,
                 'nombreItem' => $item->nombre,
                 'precioItem' => $item->precio,
                 'idViaje' => $viaje->id,
             ]); 
+
+            $usuario = Auth::user();
+            $suscriptor = Suscriptores::where('dni',$usuario->dni)->get();
+            if ($suscriptor->count() > 0){
+                $msg = "Se realizó un 10% de descuento por ser usuario suscriptor";
+                $itemDescontado = $item->precio - ($item->precio * 0.1); 
+                $precioTotal = $precioTotal + $itemDescontado;
+            }
+            else{
+                $msg = "";
+                $precioTotal = $precioTotal + $item->precio;
+            }
+
+            $cantItem=Item::where('nombre','=',$item->nombre)->value('cant');
+
+            $cantItem += 1;
+            Item::where('nombre','=',$item->nombre)->update([
+                'cant'=> $cantItem,
+            ]);
             $items = Item::get();
-            return view('item.itemVentas')->with(['items' =>$items]);
+            return view('item.itemVentas')->with(['items' => $items])->with(['viaje' => $viaje])->with(['precioTotal' =>$precioTotal])->with('msg',$msg);
         }
 
     public function cancelarViaje($dni, $idviaje)
@@ -146,6 +297,30 @@ class userViajesController extends Controller
         return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
     }
 
+    public function sacarItemAViaje(Item $item,Viaje $viaje,$precioTotal)
+        {
+            $itemViaje = ItemViaje::where('nombreItem',$item->nombre);
+            $itemViaje->delete();
+            $usuario = Auth::user();
+            $suscriptor = Suscriptores::where('dni',$usuario->dni)->get();
+            if ($suscriptor->count() > 0){
+                $msg = "Se realizó un 10% de descuento por ser usuario suscriptor";
+                $itemDescontado = $item->precio - ($item->precio * 0.1); 
+                $precioTotal = $precioTotal - $itemDescontado;
+            }
+            else{
+                $msg = "";
+                $precioTotal = $precioTotal - $item->precio;
+            }
+            $cantItem=Item::where('nombre','=',$item->nombre)->value('cant');
+            $cantItem -= 1;
+            Item::where('nombre','=',$item->nombre)->update([
+                'cant'=> $cantItem,
+            ]);
+            $items = Item::get();
+            return view('item.itemVentas')->with(['items' => $items])->with(['viaje' => $viaje])->with(['precioTotal' =>$precioTotal])->with('msg',$msg);
+
+        }
     public function showMisViajesOrdenados()
     {
         $value = request('boton');
