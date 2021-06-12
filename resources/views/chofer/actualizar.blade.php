@@ -4,8 +4,6 @@
 Usted no tiene permiso para visualizar esta página. 
 
 @elseif($request->user()->authorizeRoles(['admin']))
-<button class="btn btn-dark btn-lg"><div class="ml-2"><a href="{{route('uAdmin')}}" class="text-light"> Administración</a></div></button>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

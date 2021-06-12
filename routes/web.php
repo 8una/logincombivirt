@@ -49,6 +49,14 @@ Route::get('/updateItem/{item}','ItemController@actualizarForm')->name('item.upd
 Route::patch('/itemActualizado/{item}','ItemController@actualizar')->name('item.actualizado');
 Route::delete('/itemBorrado/{item}','ItemController@eliminar')->name('item.borrar');
 //FIN GESTION DE ITEMS
+//GESTION DE COMPRAR VIAJE
+Route::get('/agregarItemViaje/{item}/{viaje}/{precioTotal}', 'userViajesController@agregarItemAViaje')->name('item.agregarCarro');
+Route::get('/sacarItemViaje/{item}/{viaje}/{precioTotal}', 'userViajesController@sacarItemAViaje')->name('item.sacarCarro');
+Route::get('/comprarViaje/{viaje}', 'userViajesController@comprarViaje')->name('compraViaje');
+Route::get('/pagarViaje/{viaje}', 'userViajesController@formPago')->name('pagarViaje');
+Route::post('/viajePagado/{viaje}', 'userViajesController@agregarViajeAUsuario')->name('pagarViajeConfirmado');
+//FIN GESTION COMPRAR VIAJE
+
 
 //Gestion de choferes
 Route::get('/gestionDeChoferes','ChoferController@index')->name('chofer.index');
@@ -82,12 +90,7 @@ Route::get('/viajesDelUsuario', 'userViajesController@viajesDelUsuario')->name('
 //Reprogramar viaje
 Route::post('/reprogramar/{dni}/{ruta}/{idviaje}', 'userViajesController@reprogramarViaje')->name('reprogramar');
 Route::post('/actualizar/{dni}/{idviajeviejo}/{idviajenuevo}', 'userViajesController@actualizarViaje')->name('actualizar');
-//Comprar viaje
 
-Route::get('/agregarItemViaje/{item}/{viaje]', 'userViajesController@agregarItemAViaje')->name('item.agregarCarro');
-Route::get('/comprarViaje/{viaje}', 'userViajesController@compraItems')->name('compraItems');
-Route::get('/pagarViaje/{viaje}', 'userViajesController@formPago')->name('pagarViaje');
-Route::post('/viajePagado/{viaje}', 'userViajesController@agregarViajeAUsuario')->name('pagarViajeConfirmado');
 
 //Cancelar viaje
 Route::delete('/cancelarViaje/{dni}/{viaje}', 'userViajesController@cancelarViaje')->name('cancelarViaje');

@@ -7,7 +7,8 @@ use App\Models\Viaje;
 use App\Calificacion;
 use App\Ruta;
 use App\Ciudad;
-use DB;
+
+use Illuminate\Support\Facades\DB;
 class HomeController extends Controller
 {
     /**
@@ -26,21 +27,28 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(Request $request)
-    {   
+    {    
+        $items2 = DB::table('items')->update(array(
+            'cant'=> 0));
+        $msg = "";
         $comments=Calificacion::orderBy('fecha', 'DESC')->get()->take(5);
         $hoy = date("Y-m-d H:i:s");
         $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
         $ruta= Ruta::get();
         $origen= Ciudad::get();
         $destino= Ciudad::get();
-        return view('home')->with(['data'=>$data])->with(['request'=>$request])->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+        return view('home')->with(['data'=>$data])->with("msg", $msg)->with("request", $request)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
     }
+ 
+
+       
+    
 
     public function userProfile(Request $request) {
     
         $data= Viaje::where("cant disponibles", ">", 0)->get();
 
-        return view ('userProfile')->with(['request'=>$request]);
+        return view ('userProfile')->with("request", $request);
     }
 
    
@@ -52,7 +60,7 @@ class HomeController extends Controller
         $origen= request('origen');
         $destino= request('destino'); //AGREGAR EL TESTEO DE RUTAS
         $ruta= request('ruta');
-
+        $msg="";
         $hoy= date('Y-m-d');
 
         if ($origen != null){
@@ -134,12 +142,12 @@ class HomeController extends Controller
                     $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha",'>=', $hoy)->get();
                 }     
             }  
-    
+        
         $comments=Calificacion::orderBy('fecha')->get()->take(5);
         $ruta= Ruta::get();
         $origen= Ciudad::get();
         $destino= Ciudad::get();
-        return view('home')->with(['data'=>$data])->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino])->with("request", $request);
+        return view('home')->with(['data'=>$data])->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino])->with("request", $request)->with("msg", $msg);
     }
 
 

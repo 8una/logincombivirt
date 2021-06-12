@@ -4,14 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class Suscriptores extends Model
 {
-    public $table = "Items";
+    public $table = "Suscriptores";
     public $timestamps = false;
 
     protected $fillable = [
-        'nombre',
-        'precio',
-        'cant',
+        'dni'
     ];
 }

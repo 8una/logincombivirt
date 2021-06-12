@@ -14,7 +14,7 @@ class ItemController extends Controller
         $items = Item::get();
         
         $msg = "";
-        return view('item.lista')->with('request',$request)->with(['items' =>$items])->with('msg',$msg);
+        return view('item.lista')->with(['items' =>$items])->with('msg',$msg)->with('request',$request);
     }
     
     public function crearForm(Request $request)
@@ -34,6 +34,7 @@ class ItemController extends Controller
                 $item = new Item;
                 $item->nombre = $request->input('nombre');
                 $item->precio = $request->input('precio');
+                $item->cant = 0;
                 $item->save();
             }
             else{
@@ -42,7 +43,7 @@ class ItemController extends Controller
             return view('item.crear', ['data' =>$msg]);
         } catch (\Illuminate\Database\QueryException $th) {
             $msg = "el precio o stock ingresado no es valido";
-            return view('item.crear', ['data' =>$msg])->with('request',$request);
+            return view('item.crear', ['data' =>$msg]);
         }   
         
               
@@ -122,9 +123,9 @@ class ItemController extends Controller
     }
     
     
-    public function confirmarBorrado(Item $item)
+    public function confirmarBorrado(Item $item, Request $request)
     {
-        return view('item.confirmarBorrado',compact('item'));
+        return view('item.confirmarBorrado',compact('item'))->with('request',$request);
     }
     public function cancelar()
     {
