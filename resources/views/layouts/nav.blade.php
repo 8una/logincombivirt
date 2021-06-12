@@ -24,12 +24,9 @@
           <button class="btn btn-dark btn-lg"><div class="ml-2"><a class="text-light" href="{{route('misViajes', Auth::user()->dni)}}"> Mis viajes </a></div></button>
           <button class="btn btn-dark btn-lg"><div class="ml-2"><a href="{{route('misViajesPasados', Auth::user()->dni)}}" class="text-light"> Historial </a></div></button>
           <button class="btn btn-dark btn-lg"><div class="ml-2"><a href="" class="text-light"> Subscripcion </a></div></button>
-          @if($request->user()->authorizeRoles(['admin']))
+         {{--  @if($request->user()->authorizeRoles(['admin']))
           <button class="btn btn-dark btn-lg"><div class="ml-2"><a href="{{route('uAdmin')}}" class="text-light"> Administración</a></div></button>
-          @endif
-          
-          
-      
+          @endif --}}
         @endauth
         </div>        
      </div>

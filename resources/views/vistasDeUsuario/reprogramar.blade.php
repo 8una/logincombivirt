@@ -61,7 +61,7 @@
             <div class="d-flex ">
                 <div class="pr-2">
                     <form method="POST"
-                        action="{{ route('actualizar', [Auth::user()->DNI, $idviajeviejo, $viaje->id]) }}">
+                        action="{{ route('actualizar', [Auth::user()->dni, $idviajeviejo, $viaje->id]) }}">
                         @csrf<button class="btn btn-primary ml-2">Seleccionar 📋</button></form>
                 </div>
 

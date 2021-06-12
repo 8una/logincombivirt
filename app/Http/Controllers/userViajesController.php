@@ -167,10 +167,16 @@ class userViajesController extends Controller
 
     public function reprogramarViaje($dni, $ruta, $idviajeviejo)
     {
-        $hoy = date('Y-m-d');
-        $hoymas15 = date('Y-m-d', strtotime($hoy . ' + 15 days'));
+        /* $infectado=  */
+        $fin=Marcados::where('DNI',$dni)->value('fechaFin');
+        if ($fin != null){
+            $diaDeViaje= $fin;
+        }
+        else{
+            $diaDeViaje= Viaje::where(id,$idviajeviejo)->select('fecha')->get();
+            }
         $msg = "";
-        $data = DB::table('viajes')->where('ruta', $ruta)->where('fecha', '>', $hoymas15)->get();
+        $data = DB::table('viajes')->where('ruta', $ruta)->where('fecha', '>', $diaDeViaje)->get();
 
         return view('vistasDeUsuario/reprogramar')->with(['data' => $data, 'idviajeviejo' => $idviajeviejo]);
     }
@@ -185,6 +191,21 @@ class userViajesController extends Controller
         $idViajeViejo = Usuarioviaje::where('id', $idusuarioviaje)->value('idViaje');
         $Fecha_viaje_viejo = Viaje::where('id', $idViajeViejo)->value('fecha');
         $Hora_viaje_viejo = Viaje::where('id', $idViajeViejo)->value('hora');
+
+        /* Superposivcion horaria */
+       /*  $data=DB::table('chofers')->whereNotExists(function ($query) {
+            $fechaInicio= date ('Y-m-d H:i:s', (strtotime( request('fecha').request('hora'))));
+            $fechaFin = strtotime ( '+'.request('duracion').' hour' , strtotime ($fechaInicio)) ; 
+            $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin);  
+            $query->select(DB::raw(1))
+                ->from('viajes')                                                    
+                ->whereColumn('chofers.DNI', 'viajes.DNI')->whereBetween('viajes.inicio',[$fechaInicio,$fechaFin])
+                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->whereBetween('viajes.fin',[$fechaInicio,$fechaFin])
+                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->where('viajes.inicio','<', $fechaInicio)->where('viajes.fin','>', $fechaInicio)
+                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->where('viajes.inicio','>', $fechaInicio)->where('viajes.fin','<', $fechaInicio);
+        })->distinct()->select('DNI')->get(); */
+        /* Superposivcion horaria */
+        
         if ($Fecha_viaje_nuevo == $Fecha_viaje_viejo) {
             if($Hora_viaje_viejo == $Hora_viaje_nuevo) {
                 $msg = "Usted ya dispone de un viaje el día $Fecha_viaje_viejo a las $Hora_viaje_viejo.";
