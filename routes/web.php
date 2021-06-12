@@ -95,7 +95,7 @@ Route::post('/actualizar/{dni}/{idviajeviejo}/{idviajenuevo}', 'userViajesContro
 //Cancelar viaje
 Route::delete('/cancelarViaje/{dni}/{viaje}', 'userViajesController@cancelarViaje')->name('cancelarViaje');
 //Ordenar viajes del usuario:
-Route::get('/misViajes/', 'userViajesController@showMisViajesOrdenados')->name('ordenarViaje');
+Route::get('/misViajes/', 'HomeController@showMisViajesOrdenados')->name('ordenarViaje');
 
 
 //GESTION DE RUTAS ENTONCES

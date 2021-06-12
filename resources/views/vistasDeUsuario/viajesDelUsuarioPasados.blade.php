@@ -25,7 +25,7 @@
     @section('content')
     @section('content2')
     <div>
-        <h3 class="m-2">Mis viajes:</h3>
+        <h3 class="m-2">Historial:</h3>
         <hr>
             <p class="m-2">{{$msg}}</p> 
         <hr>

@@ -39,10 +39,7 @@ class HomeController extends Controller
         $destino= Ciudad::get();
         return view('home')->with(['data'=>$data])->with("msg", $msg)->with("request", $request)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
     }
- 
 
-       
-    
 
     public function userProfile(Request $request) {
     
@@ -50,8 +47,6 @@ class HomeController extends Controller
 
         return view ('userProfile')->with("request", $request);
     }
-
-   
 
     public function buscarViaje(Request $request)
     {
@@ -61,22 +56,27 @@ class HomeController extends Controller
         $destino= request('destino'); //AGREGAR EL TESTEO DE RUTAS
         $ruta= request('ruta');
         $msg="";
-        $hoy= date('Y-m-d');
-
+        $hoy= date("Y-m-d H:i:s");
+        
+        $hora=date("H:i:s");
+        $hora= strtotime ('-3 hour', strtotime ($hora));
+        $hora = date ( 'H:i:s' , $hora); 
+        $desde=$desde." ".$hora;
+        
         if ($origen != null){
 
             if ($desde != null){
                 if($hasta != null){
-                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha", '>=', $desde)->where("viajes.fin",'<=', $hasta)->where('rutas.origen', $origen)->get();
+                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio", '>=', $desde)->where("viajes.fin",'<=', $hasta)->where('rutas.origen', $origen)->get();
                 }
                 else{
                     //viajes hasta el infinito con origen dado
-                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha", '>=', $desde)->where('rutas.origen', $origen)->get();
+                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio", '>=', $desde)->where('rutas.origen', $origen)->get();
                 }
             }
             else{
                 if ($hasta != null){
-                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha", '>=', $desde)->where('rutas.origen', $origen)->get();
+                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio", '>=', $desde)->where('rutas.origen', $origen)->get();
                 }
                 else{
                     $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where('rutas.origen', $origen)->get();
@@ -86,16 +86,16 @@ class HomeController extends Controller
         else if($destino != null){
                 if ($desde != null){
                     if($hasta != null){
-                        $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha", '>=', $desde)->where("viajes.fin",'<=', $hasta)->where('rutas.destino', $destino)->get();
+                        $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio", '>=', $desde)->where("viajes.fin",'<=', $hasta)->where('rutas.destino', $destino)->get();
                     }
                     else{
                         //viajes hasta el infinito con origen dado
-                        $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha", '>=', $desde)->where('rutas.destino', $destino)->get();
+                        $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio", '>=', $desde)->where('rutas.destino', $destino)->get();
                     }
                 }
                 else{
                     if ($hasta != null){
-                        $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha", '>=', $desde)->where('rutas.destino', $destino)->get();
+                        $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio", '>=', $desde)->where('rutas.destino', $destino)->get();
                     }
                     else{
                         $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where('rutas.destino', $destino)->get();
@@ -106,16 +106,16 @@ class HomeController extends Controller
         else if($ruta != null){
             if ($desde != null){
                 if($hasta != null){
-                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha", '>=', $desde)->where("viajes.fin",'<=', $hasta)->where('rutas.nombreRuta', $ruta)->get();
+                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio", '>=', $desde)->where("viajes.fin",'<=', $hasta)->where('rutas.nombreRuta', $ruta)->get();
                 }
                 else{
                     //viajes hasta el infinito con origen dado
-                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha", '>=', $desde)->where('rutas.nombreRuta', $ruta)->get();
+                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio", '>=', $desde)->where('rutas.nombreRuta', $ruta)->get();
                 }
             }
             else{
                 if ($hasta != null){
-                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha", '>=', $desde)->where('rutas.nombreRuta', $ruta)->get();
+                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio", '>=', $desde)->where('rutas.nombreRuta', $ruta)->get();
                 }
                 else{
                     $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where('rutas.nombreRuta', $ruta)->get();
@@ -125,11 +125,11 @@ class HomeController extends Controller
         else 
             if($desde != null){
                 if ($hasta != null){
-                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha", '>=', $desde)->where("viajes.fin",'<=', $hasta)->get();
+                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio", '>=', $desde)->where("viajes.fin",'<=', $hasta)->get();
                     }
                 else{
                     //si Hasta es = null
-                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha", '>=', $desde)->get();
+                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio", '>=', $desde)->get();
                 }
             } 
             else{
@@ -139,15 +139,38 @@ class HomeController extends Controller
                     }
                 else{
                     //si Hasta es = null
-                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.fecha",'>=', $hoy)->get();
+                    $data=DB::table('viajes')->join('rutas', 'rutas.nombreRuta', '=', 'viajes.ruta')->where("viajes.cant disponibles", ">", 0)->where("viajes.inicio",'>=', $hoy)->get();
                 }     
             }  
         
-        $comments=Calificacion::orderBy('fecha')->get()->take(5);
+        $comments=Calificacion::orderBy('fecha', 'DESC')->get()->take(5);
         $ruta= Ruta::get();
         $origen= Ciudad::get();
         $destino= Ciudad::get();
         return view('home')->with(['data'=>$data])->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino])->with("request", $request)->with("msg", $msg);
+    }
+
+
+    public function showMisViajesOrdenados()
+    {
+        $value = request('boton');
+        $hoy = date("Y-m-d H:i:s"); 
+        $hoy= strtotime ('-3 hour', strtotime ($hoy));
+        $hoy = date ( 'Y-m-d H:i:s' , $hoy); 
+        if ($value == 1) {
+            $data = Viaje::where("cant disponibles", ">", 0)->where('inicio', '>=', $hoy)->orderBy('ruta', 'ASC')->get();
+        } elseif ($value == 2) {
+            $data = Viaje::where("cant disponibles", ">", 0)->where('inicio', '>=', $hoy)->orderBy('inicio', 'ASC')->orderBy('hora', 'ASC')->get();
+        } else {
+            $data = Viaje::where("cant disponibles", ">", 0)->where('inicio', '>=', $hoy)->orderBy('precio', 'ASC')->get();
+        }
+        $msg="";
+        $comments=Calificacion::orderBy('fecha', 'DESC')->get()->take(5);
+        $ruta= Ruta::get();
+        $origen= Ciudad::get();
+        $destino= Ciudad::get();
+        
+        return view('home')->with(['data'=>$data])->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino])->with('msg',$msg);
     }
 
 

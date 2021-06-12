@@ -35,6 +35,14 @@ class userViajesController extends Controller
         $numeroTarjeta = request('numero');
         $usuario = Auth::user();
         $dni = $usuario->dni;
+
+        //lineas de thomas
+        $hoy = date("Y-m-d H:i:s"); 
+        $hoy= strtotime ('-3 hour', strtotime ($hoy));
+        $hoy = date ( 'Y-m-d H:i:s' , $hoy); 
+        //fin
+
+
         if ($numeroTarjeta % 10 < 5){
             #tiene saldo
             Usuarioviaje::create([
@@ -321,24 +329,6 @@ class userViajesController extends Controller
             return view('item.itemVentas')->with(['items' => $items])->with(['viaje' => $viaje])->with(['precioTotal' =>$precioTotal])->with('msg',$msg);
 
         }
-    public function showMisViajesOrdenados()
-    {
-        $value = request('boton');
-        $hoy = date("Y-m-d H:i:s"); 
-        if ($value == 1) {
-            $data = Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->orderBy('ruta', 'ASC')->get();
-        } elseif ($value == 2) {
-            $data = Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->orderBy('inicio', 'ASC')->orderBy('hora', 'ASC')->get();
-        } else {
-            $data = Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->orderBy('precio', 'ASC')->get();
-        }
-
-        $comments=Calificacion::orderBy('fecha')->get()->take(5);
-        $ruta= Ruta::get();
-        $origen= Ciudad::get();
-        $destino= Ciudad::get();
-        return view('home')->with(['data'=>$data])->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
-    }
 
     public function reprogramarViaje($dni, $ruta, $idviajeviejo)
     {
@@ -432,7 +422,7 @@ class userViajesController extends Controller
         
         $hoy = date("Y-m-d H:i:s");  
         $msg = "";
-        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', Auth::user()->DNI)->where('viajes.fin', '<', $hoy) ->get();
+        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', Auth::user()->dni)->where('viajes.fin', '<', $hoy) ->get();
         return view('vistasDeUsuario/viajesDelUsuarioPasados')->with(['data' => $data])->with('msg', $msg);
     }
 

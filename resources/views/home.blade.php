@@ -158,7 +158,7 @@
         {{--  --}}
         <div class="col-md-12">
             <hr>
-                {{$msg}}
+                <p>{{$msg}}</p>
             <hr>
             <h3>Viajes:</h3>
         
@@ -182,7 +182,7 @@
                             <th><div class="col text-center">{{$viaje->fecha}} </th></div>
                             <th><div class="col text-center">{{$viaje->hora}}  </th></div>
                             <th><div class="col text-left">{{$viaje->precio}}  $ARS </th></div>
-                            <th><div class="col text-left"> <a href = "{{ route('compraViaje',$viaje)}}"class="btn btn-outline-success">🛒</a> </th></div>
+                            <th><div class="col text-left"> <a href = "{{ route('compraViaje',$viaje->id)}}"class="btn btn-outline-success">🛒</a> </th></div>
                         </tr>
                     </div>
                     @endforeach
@@ -190,7 +190,7 @@
                     
                 @else<tr>
                     <tr>   
-                        <th><div class=" text-center"> <h3 class="text-center text-secondary"> No hay viajes para esos parametros...</h3></th></div>
+                        <th><div class=" text-center"> <h3 class="text-center text-secondary"> No hay viajes disponibles...</h3></th></div>
                 @endif
                 
                 </table> 
