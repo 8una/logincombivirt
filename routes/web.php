@@ -54,7 +54,9 @@ Route::get('/agregarItemViaje/{item}/{viaje}/{precioTotal}', 'userViajesControll
 Route::get('/sacarItemViaje/{item}/{viaje}/{precioTotal}', 'userViajesController@sacarItemAViaje')->name('item.sacarCarro');
 Route::get('/comprarViaje/{viaje}', 'userViajesController@comprarViaje')->name('compraViaje');
 Route::get('/pagarViaje/{viaje}', 'userViajesController@formPago')->name('pagarViaje');
+Route::get('/pagarViajeOtraTarjeta/{viaje}', 'userViajesController@formPagoOtraTarjeta')->name('pagarViajeOtraTarjeta');
 Route::post('/viajePagado/{viaje}', 'userViajesController@agregarViajeAUsuario')->name('pagarViajeConfirmado');
+Route::post('/viajePagadoTarjetaPre/{viaje}', 'userViajesController@agregarViajeAUsuario2')->name('pagarViajeConfirmado2');
 //FIN GESTION COMPRAR VIAJE
 
 
@@ -122,6 +124,9 @@ Route::delete('/borrarciudad', 'adminRutasController@borrarciudad')->name('borra
 Route::get('/calificarViaje/{usuario}', 'userViajesController@calificarviaje')->name('calificarviaje');
 Route::post('/usuarioCalificaViaje/{viaje}', 'userViajesController@usuarioCalificaViaje')->name('usuarioCalificaViaje');
 
+//gestion de subscripcion
+Route::get('/subscripcion', 'userViajesController@subscribirseForm')->name('subscribirse');
+Route::post('/suscripto', 'userViajesController@subscripcion')->name('suscripto');
 
 
 //BUSCAR VVIAJE buscarViaje

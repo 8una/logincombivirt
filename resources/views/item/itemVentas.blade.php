@@ -12,10 +12,12 @@
 <body>
 
 @section('content')
+
 <div class="d-flex bg-dark text-light justify-content-end">
     <h1 class="m-2 ">Viaje seleccionado:  </h1>
     <button class="btn btn-primary ml-2 pr-4 "> <a href= "{{route('home')}}" style="color:black">Atras</a></button>
 </div>
+
 <table class="table table-striped ">
                     <div class="container "">
                         <thead class="bg-primary">
@@ -39,7 +41,6 @@
                 <hr>
                 {{$msg}}
             <hr>
-   
     <h3 class="m-2">Items disponibles </h3>
         <div>
             

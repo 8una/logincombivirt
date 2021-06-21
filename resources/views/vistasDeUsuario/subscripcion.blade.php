@@ -10,8 +10,9 @@
 <body>
 @section('content')
 
-        <div><h1> Pago de viaje </h1></div>
-        <form method="POST" action="{{route('pagarViajeConfirmado',$viaje)}}">
+        <div><h1> Subscripción </h1></div>
+        <div><h4>Ingresa los siguientes datos de una tarjeta para poder adquerir beneficios de descuentos para tus compras </h4></div>
+        <form method="POST" action="{{route('suscripto')}}">
             @csrf
             <label for="">Nombre y apellido</label><br>
                 <input type="text" name="nombreApellido" /><br>
@@ -26,7 +27,7 @@
                 <input type="number" name="codigo" /><br>
             </label>
             <button class="btn btn-primary ml-2" type="submit">Confirmar Pago</button>
-            <button type="button" class="btn btn-outline-primary"><a href="{{route('pagarViaje',$viaje)}}"> Atras </a></button>
+            <button type="button" class="btn btn-outline-primary"><a href="{{route ('home')}}"> Atras </a></button>
 
         </form>
         <p>{{$data}}</p>

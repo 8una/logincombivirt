@@ -21,6 +21,58 @@ use App\Models\Suscriptores;
 
 class userViajesController extends Controller
 {
+    public function subscripcion(Request $request)
+    {
+        $user = Auth::user();
+        $numeroTarjeta = request('numero');
+        if ($numeroTarjeta % 10 < 5){
+            #tiene saldo
+            Suscriptores::create([
+                'dni' => $user->dni,
+                'nroTarjeta' => $numeroTarjeta,
+            ]); 
+            $comments=Calificacion::orderBy('fecha')->get()->take(5);
+                $hoy = date("Y-m-d H:i:s");
+                $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
+                $hoy = date("Y-m-d H:i:s");
+                $ruta= Ruta::get();
+                $origen= Ciudad::get();
+                $destino= Ciudad::get();
+                $msg = "Felicidades! Se realizó la suscripción con éxito!";
+                return view('home')->with(['data'=>$data])->with("request", $request)->with("msg", $msg)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+        }
+        else{
+            $data = "la tarjeta ingresada no tiene saldo suficiente";
+            return view('vistasDeUsuario/subscripcion')->with(['data' => $data]);
+        }
+    }
+
+    public function subscribirseForm(Request $request)
+    {
+        if (Auth::check()){
+            $user = Auth::user();
+            $sub = Suscriptores::where('dni',$user->dni);
+            if ($sub->count() == 0){
+                $data = "";
+                return view('vistasDeUsuario/subscripcion')->with(['data' => $data]);
+            }
+            else{
+                $comments=Calificacion::orderBy('fecha')->get()->take(5);
+                $hoy = date("Y-m-d H:i:s");
+                $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
+                $hoy = date("Y-m-d H:i:s");
+                $ruta= Ruta::get();
+                $origen= Ciudad::get();
+                $destino= Ciudad::get();
+                $msg = "usted ya se encuentra suscripto";
+                return view('home')->with(['data'=>$data])->with("request", $request)->with("msg", $msg)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+            }
+        }
+        else{
+            #retornar a la vista de login
+            return view ('auth.login');
+        }   
+    }
     public function showMisViajes($dni)
     {
         $hoy = date("Y-m-d H:i:s"); 
@@ -29,7 +81,50 @@ class userViajesController extends Controller
         return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
     }
 
-    
+
+
+    public function agregarViajeAUsuario2 (Viaje $viaje, Request $request)
+    {
+        $numeroTarjeta = request('numero');
+        $usuario = Auth::user();
+        $dni = $usuario->dni;
+
+        //lineas de thomas
+        $hoy = date("Y-m-d H:i:s"); 
+        $hoy= strtotime ('-3 hour', strtotime ($hoy));
+        $hoy = date ( 'Y-m-d H:i:s' , $hoy); 
+        //fin
+
+
+        if ($numeroTarjeta % 10 < 5){
+            #tiene saldo
+            Usuarioviaje::create([
+                'dniusuario' => $dni,
+                'idViaje' => $viaje->id,
+                'estado' => "pendiente",
+            ]); 
+            $cantLibres=Viaje::where('id','=',$viaje->id)->value('cant disponibles');
+            $cantLibres -= 1;
+            Viaje::where('id','=',$viaje->id)->update([
+                'cant disponibles'=> $cantLibres,
+            ]);
+            #para que retorne al home despues del pago
+            $msg = "se compró el viaje exitosamente!";
+            $comments=Calificacion::orderBy('fecha')->get()->take(5);
+            $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
+            $ruta= Ruta::get();
+                    $origen= Ciudad::get();
+                    $destino= Ciudad::get();
+                    return view('home')->with(['data'=>$data])->with("msg", $msg)->with("request", $request)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+                }
+        else{
+            $data = "la tarjeta ingresada no tiene saldo suficiente";
+            #notienesaldo
+            $tarjetas = Suscriptores::where('dni',$dni)->get();
+            return view('vistasDeUsuario.pagarTarjetasSub')->with(['viaje' => $viaje])->with('data', $data)->with('tarjetas', $tarjetas);
+        }
+
+    }
     public function agregarViajeAUsuario(Viaje $viaje, Request $request)
     {
         $numeroTarjeta = request('numero');
@@ -71,10 +166,33 @@ class userViajesController extends Controller
         }
 
     }
+    
+
+    
+
+    public function formPagoOtraTarjeta(Viaje $viaje)
+    {
+        $data = "";
+        
+        
+         return view('vistasDeUsuario.tarjeta')->with(['viaje' => $viaje])->with('data', $data);
+        
+        
+    }
     public function formPago(Viaje $viaje)
     {
         $data = "";
-        return view('vistasDeUsuario.tarjeta')->with(['viaje' => $viaje])->with('data', $data);
+        $usuario = Auth::user();
+        $dni = $usuario->dni;
+        $suscriptor = Suscriptores::where('dni',$dni)->get();
+        $tarjetas = Suscriptores::where('dni',$dni)->get();
+        if ($suscriptor->count() > 0){
+            return view('vistasDeUsuario.pagarTarjetasSub')->with(['viaje' => $viaje])->with('data', $data)->with('tarjetas', $tarjetas);
+        }
+        else{
+            return view('vistasDeUsuario.tarjeta')->with(['viaje' => $viaje])->with('data', $data);
+        }
+        
     }
 
     public function comprarViaje(Viaje $viaje, Request $request)
