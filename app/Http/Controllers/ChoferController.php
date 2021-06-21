@@ -4,11 +4,36 @@ namespace App\Http\Controllers;
 use App\Models\Chofer;
 use App\Models\Viaje;
 use App\Combi;
+use App\Usuarioviaje;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ChoferController extends Controller
 {
+
+    //home del chofer esto se ejecutaria cuando se loguea como chofer
+    public function showhome()
+    {
+        return view('vistasDeChofer/homeChofer');
+    }
+
+    //ver mi proximo viaje cvhofer
+    public function showProximoViaje($chofer)
+    {
+        //HAY QUE HACER QUE CUANDO SE CREA UN CHOFER SE AGREGA A LA TABLA DE USERS
+        $hoy=date('Y-m-d H:i:s');
+        $dnichofer= Chofer::where('DNI', $chofer)->select('DNI')->value('DNI');
+        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'DESC')->take(1)->get();
+        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'DESC')->take(1)->value('id');
+        
+        $viajeros=Usuarioviaje::where('idViaje', $proximoViajeID)->select('dniusuario')->get();
+
+
+        
+        return view('vistasDeChofer/proximoViajeChofer')->with('viajeros',$viajeros)->with('proximoViaje',$proximoViaje);
+    }
+
     public function index(Request $request)
     {
         $msg = "";
@@ -73,12 +98,6 @@ class ChoferController extends Controller
                 $msg= "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres, 1 numero, 1 caracter especial ";
             }
             $msg= "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres, 1 numero, 1 caracter especial ";
-            //$msg = $th->getMessage();
-            //$msg = "el dni ingresado no es válido";
-
-            /*if (strcmp($msg,"preg_match(): No ending delimiter '/' found" == 0)){
-                $msg = "la contraseña ingresada es invalida. Debe tener al menos: 8 caracteres";
-            }*/
         }        
         return view('chofer.crear', ['data' =>$msg]);
         //return redirect()->route('chofer.index');      
@@ -128,23 +147,7 @@ class ChoferController extends Controller
             
             //return redirect()->route('chofer.index');
         } catch (\Illuminate\Database\QueryException $th) {
-            /*$needle = 'chofer_dni_unique';
-            if (str_contains($th, $needle)) {
-                $error = 'el dni ingresado ya esta registrado en el sistema';
-            }
-            else{
-                $needle = 'chofer_email_unique';
-                if (str_contains($th,$needle)){
-                    $error = 'el email ingresado ya esta registrado en el sistema';
-                }
-                else{
-                    $error = 'el dni ingresado es invalido';
-                }
-            
-          /*  if(is_string(request('dni'))){
-                $msg = "el dni ingresado es invalido";
-            }*/
-            
+
             if ($chofer->DNI != request('dni')){
                 $msg = "el dni ingresado es invalido";
                 $cantChoferes = Chofer::where("dni", "=", request('dni'))->count();

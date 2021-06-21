@@ -126,3 +126,8 @@ Route::post('/usuarioCalificaViaje/{viaje}', 'userViajesController@usuarioCalifi
 
 //BUSCAR VVIAJE buscarViaje
 Route::get('/buscarViaje', 'HomeController@buscarViaje')->name('buscarViaje');
+
+
+//Home Chofer
+Route::get('/homeChofer', 'ChoferController@showhome')->name('homechofer');
+Route::get('/showProximoViaje/{dni}', 'ChoferController@showProximoViaje')->name('showProximoViaje');

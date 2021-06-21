@@ -22,7 +22,6 @@
         }
     }
 </script>
-    </script>
 @section('content')
 @section('content2')
     
@@ -182,7 +181,7 @@
                             <th><div class="col text-center">{{$viaje->fecha}} </th></div>
                             <th><div class="col text-center">{{$viaje->hora}}  </th></div>
                             <th><div class="col text-left">{{$viaje->precio}}  $ARS </th></div>
-                            <th><div class="col text-left"> <a href = "{{ route('compraViaje',$viaje->id)}}"class="btn btn-outline-success">🛒</a> </th></div>
+                            <th><div class="col text-left"> <a href = "{{ route('compraViaje',$viaje->id)}}"class="btn btn-outline-success">@csrf 🛒</a> </th></div>
                         </tr>
                     </div>
                     @endforeach

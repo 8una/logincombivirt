@@ -12,26 +12,27 @@
 <body>
 
 @section('content')
-@include('layouts.navAdmin') 
-<button class="btn btn-outline-primary ml-2"> <a href= "{{route('home')}}" >Atras</a></button>
-<h1 class="m-2">Viaje seleccionado:  </h1>
+<div class="d-flex bg-dark text-light justify-content-end">
+    <h1 class="m-2 ">Viaje seleccionado:  </h1>
+    <button class="btn btn-primary ml-2 pr-4 "> <a href= "{{route('home')}}" style="color:black">Atras</a></button>
+</div>
 <table class="table table-striped ">
                     <div class="container "">
                         <thead class="bg-primary">
                             <tr >
-                                <th scope ="col" class="col text-left"> Ruta: </th>
-                                <th scope="col" class="col text-center"> Fecha: </th>
-                                <th scope="col" class="col text-center"> Hora: </th>
-                                <th scope="col" class="col text-left"> Precio: </th>
-                                <th scope="col" class="col text-center"> Precio Total Viaje: </th>
+                                <th scope ="col" class="col-2 "> Ruta: </th>
+                                <th scope="col" class="col-2 "> Fecha: </th>
+                                <th scope="col" class="col-2 "> Hora: </th>
+                                <th scope="col" class="col-2 "> Precio: </th>
+                                <th scope="col" class="col-2 "> Precio Total Viaje: </th>
                             </tr>
                         </thead>
                     <tr>   
-                        <th><div class="col text-left">{{$viaje['ruta']}}</th></div>
-                        <th><div class="col text-center">{{$viaje['fecha']}} </th></div>
-                        <th><div class="col text-center">{{$viaje['hora']}}  </th></div>
-                        <th><div class="col text-left">{{$viaje['precio'] }}  $ARS </th></div>
-                        <th><div class="col text-center">{{$precioTotal }}  $ARS </th></div>
+                        <th><div class="col">{{$viaje['ruta']}}</th></div>
+                        <th><div class="col ">{{$viaje['fecha']}} </th></div>
+                        <th><div class="col ">{{$viaje['hora']}}  </th></div>
+                        <th><div class="col ">{{$viaje['precio'] }}  $ARS </th></div>
+                        <th><div class="col ">{{$precioTotal }}  $ARS </th></div>
                     </tr>
                 </div>
                 </table> 
@@ -39,13 +40,13 @@
                 {{$msg}}
             <hr>
    
-    <h1 class="m-2">Items disponibles </h1>
+    <h3 class="m-2">Items disponibles </h3>
         <div>
             
 
         <table class="table table-striped ">
                 <div class="container ">  
-                    <thead class="bg-primary">
+                    <thead class="bg-dark text-light">
                         <tr>
                             <th scope="col">Nombre:</th>
                             <th scope="col" class="text-center">Precio:</th>
@@ -60,13 +61,14 @@
                             <th><div class="col text-center">{{$item['precio']}}</th></div>
                             <th><div class="col">{{$item['cant']}}</th></div>
                         <th>
-                            <div class="col text-left"> <a href = "{{ route('item.agregarCarro',[$item,$viaje,$precioTotal])}}"class="btn btn-outline-success">Agregar al viaje 🛒</a> </div>
-                            @if ($item->cant > 0 )
-                                <div class="col text-left ">
-                                    <div class="pr-2"><form method="" action="{{ route('item.sacarCarro',[$item,$viaje,$precioTotal])}}">@csrf<button class="btn btn-outline-success">Sacar del viaje 🛒</button></form></div>
-                                </div>
-                            
-                            @endif
+                            <div class="d-flex">
+                                <div class=""> <a href = "{{ route('item.agregarCarro',[$item,$viaje,$precioTotal])}}"class="btn btn-outline-success">+ 🛒</a> </div>
+                                @if ($item->cant > 0 )
+                                    <div class="">
+                                        <div class="pr-2"><form method="" action="{{ route('item.sacarCarro',[$item,$viaje,$precioTotal])}}">@csrf<button class="btn btn-outline-success">- 🛒</button></form></div>
+                                    </div>
+                                @endif
+                            </div>
                         </th>
 
                         
@@ -77,7 +79,7 @@
                 
         </table>  
         <th>
-                <button class="btn btn-outline-primary ml-2"> <a href= "{{route('pagarViaje',$viaje)}}" >Pagar viaje</a></button>
+                <button class="btn btn-lg btn-outline-success ml-2"> <a style="text-decoration:none" href= "{{route('pagarViaje',$viaje)}}" >Pagar viaje👉🤑👈</a></button>
                         </th>    
         </div>
         
