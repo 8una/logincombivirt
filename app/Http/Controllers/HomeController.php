@@ -7,6 +7,7 @@ use App\Models\Viaje;
 use App\Calificacion;
 use App\Ruta;
 use App\Ciudad;
+use App\Models\Suscriptores;
 
 use Illuminate\Support\Facades\DB;
 class HomeController extends Controller
@@ -43,9 +44,15 @@ class HomeController extends Controller
 
     public function userProfile(Request $request) {
     
+        $tarjetasArray = [];
         $data= Viaje::where("cant disponibles", ">", 0)->get();
-
-        return view ('userProfile')->with("request", $request);
+        $tarjetas= Suscriptores::where('dni','=', Auth::user()->dni)->select('nroTarjeta')->get();
+        foreach ($tarjetas as $tarjetas){
+            $tarjetas = substr($tarjetas, 14, 10);
+            $tarjetas = substr_replace($tarjetas, '*******', 0, 7);
+            array_push($tarjetasArray , $tarjetas);
+        }
+        return view ('userProfile')->with("request", $request)->with('tarjetas', $tarjetasArray);
     }
 
     public function buscarViaje(Request $request)

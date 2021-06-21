@@ -16,8 +16,32 @@
 
                     Email: {{Auth::user()->email}}<br>
                     DNI:{{Auth::user()->dni}}<br>
+
                     <a href="misViajes/{{Auth::user()->dni}}">Mis Viajes</a>
                 </div>
+                <hr>
+                @if (!empty($tarjetas))
+                <div class="card-body h5"> Tarjetas:</div>
+                <table class="table table-striped ">
+                    <div class="container "">
+                        <thead class="bg-dark text-light">
+                            <tr >
+                                <th scope="col"> Tarjeta terminada en:</button></form></th>
+                            </tr>
+                        </thead>
+                    
+                        @foreach ($tarjetas as $tarjetas)
+                            <tr>   
+                                <th><div class="col text-left">{{$tarjetas}}</th></div>
+                            </tr>
+                        @endforeach
+                </table>
+                    <hr>
+                    <div class="card-body">
+                        <a href="{{route('showAgregarTarjeta')}}">Agregar una Tarjeta</a>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </div>

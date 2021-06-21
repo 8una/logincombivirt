@@ -127,6 +127,8 @@ Route::post('/usuarioCalificaViaje/{viaje}', 'userViajesController@usuarioCalifi
 //gestion de subscripcion
 Route::get('/subscripcion', 'userViajesController@subscribirseForm')->name('subscribirse');
 Route::post('/suscripto', 'userViajesController@subscripcion')->name('suscripto');
+Route::get('/showAgregarTarjeta', 'userViajesController@showAgregarTarjeta')->name('showAgregarTarjeta');
+Route::POST('/agregarTarjeta', 'userViajesController@agregarTarjeta')->name('agregarTarjeta');
 
 
 //BUSCAR VVIAJE buscarViaje

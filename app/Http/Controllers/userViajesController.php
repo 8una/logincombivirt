@@ -167,8 +167,42 @@ class userViajesController extends Controller
 
     }
     
+    public function showAgregarTarjeta()
+    {
+        $msg="";
+        return view('vistasDeUsuario/agregarTarjeta')->with('msg', $msg);
+    }
 
-    
+    public function agregarTarjeta(Request $request)
+    {
+        $tarjetas = Suscriptores::where('dni', '=', Auth::user()->dni)->where('nroTarjeta', '=', request('numero'))->get()->count();
+        if ($tarjetas > 0){
+            $msg = "La tarjeta de credito ya esta ingresada";
+            return view('vistasDeUsuario/agregarTarjeta')->with('msg', $msg);
+        }
+        $numeroTarjeta = request('numero');
+
+        if ($numeroTarjeta % 10 < 5){
+            #numero de tarjeta valido
+            Suscriptores::create([
+                'dni' => Auth::user()->dni,
+                'nroTarjeta' => $numeroTarjeta,
+            ]); 
+            $tarjetasArray = [];
+            $tarjetas= Suscriptores::where('dni','=', Auth::user()->dni)->select('nroTarjeta')->get();
+            foreach ($tarjetas as $tarjetas){
+                $tarjetas = substr($tarjetas, 14, 10);
+                $tarjetas = substr_replace($tarjetas, '*******', 0, 7);
+                array_push($tarjetasArray , $tarjetas);
+            }
+            return view ('userProfile')->with("request", $request)->with('tarjetas', $tarjetasArray);
+        }
+        else{
+            #numero de tarjeta invalido
+            $msg = "la tarjeta ingresada es invalida";
+            return view('vistasDeUsuario/agregarTarjeta')->with('msg', $msg);
+        }
+    }
 
     public function formPagoOtraTarjeta(Viaje $viaje)
     {

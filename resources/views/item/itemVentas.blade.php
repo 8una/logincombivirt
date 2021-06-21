@@ -41,6 +41,7 @@
                 <hr>
                 {{$msg}}
             <hr>
+   
     <h3 class="m-2">Items disponibles </h3>
         <div>
             
