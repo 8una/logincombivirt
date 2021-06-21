@@ -12,7 +12,7 @@
 <body>
 
 @section('content')
-@include('layouts.navAdmin') 
+
 <button class="btn btn-outline-primary ml-2"> <a href= "{{route('home')}}" >Atras</a></button>
 <h1 class="m-2">Viaje seleccionado:  </h1>
 <table class="table table-striped ">

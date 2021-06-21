@@ -10,6 +10,7 @@ class Suscriptores extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'dni'
+        'dni',
+        'nroTarjeta'
     ];
 }

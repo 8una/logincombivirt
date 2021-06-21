@@ -6,6 +6,8 @@ use App\Models\Viaje;
 use App\Combi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\User;
+use App\Role;
 
 class ChoferController extends Controller
 {
@@ -56,6 +58,14 @@ class ChoferController extends Controller
                     $chofer->email = $request->input('email');
                     $chofer->password = $request->input('password');
                     $chofer->save();
+                    $user = User::create([
+                        'name' => $request->input('nombre'),
+                        'lastname' => $request->input('apellido'),
+                        'DNI' => $request->input('dni'),
+                        'email' => $request->input('email'),
+                        'password' => $request->input('password'),
+                    ]);        
+                    $user->roles()->attach(Role::where('name', 'chofer')->first()); 
                 } 
                 else{
                     $msg = "el email ingresado ya esta registrado en el sistema";
