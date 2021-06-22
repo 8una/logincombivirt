@@ -139,3 +139,7 @@ Route::get('/buscarViaje', 'HomeController@buscarViaje')->name('buscarViaje');
 //Home Chofer
 Route::get('/homeChofer', 'ChoferController@showhome')->name('homechofer');
 Route::get('/showProximoViaje/{dni}', 'ChoferController@showProximoViaje')->name('showProximoViaje');
+
+//recharzar pasajero por covid
+Route::post('/rechazarPasajero/{dni}', 'ChoferController@rechazarPasajero')->name('rechazarPasajero');
+Route::get('/cargarDeclaracionJurada/{dni}', 'ChoferController@cargarDeclaracionJurada')->name('cargarDeclaracionJurada');

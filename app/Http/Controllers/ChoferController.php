@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use Auth;
 use App\Models\Chofer;
 use App\Models\Viaje;
+use App\Models\Marcados;
 use App\Combi;
 use App\Usuarioviaje;
 use App\User;
@@ -23,15 +25,73 @@ class ChoferController extends Controller
     {
         //HAY QUE HACER QUE CUANDO SE CREA UN CHOFER SE AGREGA A LA TABLA DE USERS
         $hoy=date('Y-m-d H:i:s');
-        $dnichofer= Chofer::where('DNI', $chofer)->select('DNI')->value('DNI');
-        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'DESC')->take(1)->get();
-        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'DESC')->take(1)->value('id');
-        
-        $viajeros=Usuarioviaje::where('idViaje', $proximoViajeID)->select('dniusuario')->get();
+        $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
+        $hoy = date ( 'Y-m-d H:i:s' , $hoy); 
+        $dnichofer= Chofer::where('DNI', Auth::user()->dni)->select('DNI')->value('DNI');
+        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->get();
+        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->value('id');
+        $inicioViaje =Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->value('inicio');
+      
+        $hoy = strtotime ( '+1 hour' , strtotime ($hoy) ) ; 
+        $hoy = date( 'Y-m-d H:i:s' , $hoy); 
+        if ($hoy > $inicioViaje){
+            $estado= 'arribando';
+        }
+        else{
+            $estado= 'inactivo';
+        }
+        //agregar el ->where('estado', '<>' 'cancelado')
+        $viajeros=Usuarioviaje::where('idViaje', $proximoViajeID)->where('estado', '<>', 'cancelado')->select('dniusuario')->get();
+        return view('vistasDeChofer/proximoViajeChofer')->with('viajeros',$viajeros)->with('proximoViaje',$proximoViaje)->with('estado',$estado);
+    }
 
+    public function rechazarPasajero($dni)
+    {
+        $marcados= Marcados::where('DNI', $dni)->get()->count();
+        $hoy=date('Y-m-d H:i:s');
+        $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
+        $hoy = date ( 'Y-m-d H:i:s' , $hoy);
+        $fechaFin= strtotime ( '+14 days' , strtotime ($hoy)); 
+        $fechaFin = date( 'Y-m-d H:i:s' , $fechaFin); 
+        if ($marcados > 0){
+            Marcados::where('DNI', $dni)->update([
+                'fechaInicio' => $hoy,
+                'fechaFin' => $fechaFin 
+            ]);
+        }
+        else{
+            Marcados::create([
+                'DNI' => $dni,
+                'fechaInicio' => $hoy,
+                'fechaFin' => $fechaFin 
+            ]);
+        }
 
-        
-        return view('vistasDeChofer/proximoViajeChofer')->with('viajeros',$viajeros)->with('proximoViaje',$proximoViaje);
+        //LINEAS DE CODIGO
+        $dnichofer= Chofer::where('DNI', Auth::user()->dni)->select('DNI')->value('DNI');
+        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->get();
+        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->value('id');
+        $inicioViaje =Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->value('inicio');
+        //sacar al usuario del viaje y cambiar el estado de usuario viajes
+        Usuarioviaje::where('dniusuario', $dni)->where('idViaje', $proximoViajeID)->update([
+            'estado' => 'cancelado'
+        ]);
+        $capacidadActualizada =Viaje::where('id',$proximoViajeID )->value('cant disponibles');
+        $capacidadActualizada = intval($capacidadActualizada);
+        $capacidadActualizada = $capacidadActualizada + 1;
+
+        Viaje::where('id',$proximoViajeID )->update([
+            'cant disponibles' => $capacidadActualizada
+        ]);
+        $chofer= Auth::user()->dni ;
+        return redirect('showProximoViaje/{$chofer}');
+    }
+
+    //CARGAR DECLARACION JURADA
+    public function cargarDeclaracionJurada($viajero)
+    {
+        $viajante=User::where('dni', $viajero)->get();
+        return view('vistasDeChofer/formularioDeDeclaracionJurada')->with('viajante',$viajante);
     }
 
     public function index(Request $request)
