@@ -13,7 +13,12 @@
 
 @section('content')
     <div >
-        <form action="{{ route('showProximoViaje',Auth::user()->dni)}}">csr<button class="w-100 bg-dark text-light" style="height: 3em; font-size: 10em;">Proximo viaje</button></form>
+        @if ($estado == 'rascandose')
+            <form action="{{ route('showProximoViaje',Auth::user()->dni)}}">@csrf<button class="w-100 bg-dark text-light" style="height: 3em; font-size: 10em;">Proximo viaje</button></form>
+        @else
+            <form action="{{ route('showviajeInfo',Auth::user()->dni)}}">@csrf<button class="w-100 bg-dark text-light" style="height: 3em; font-size: 5em;">Viaje Info</button></form>
+            <form action="{{ route('showProximoViaje',Auth::user()->dni)}}">@csrf<button class="w-100 bg-dark text-light" style="height: 3em; font-size: 5em;">Cargar Pasajero</button></form>
+        @endif
     </div>
 
 

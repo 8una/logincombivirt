@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Auth::routes();
+
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -139,3 +140,15 @@ Route::get('/buscarViaje', 'HomeController@buscarViaje')->name('buscarViaje');
 //Home Chofer
 Route::get('/homeChofer', 'ChoferController@showhome')->name('homechofer');
 Route::get('/showProximoViaje/{dni}', 'ChoferController@showProximoViaje')->name('showProximoViaje');
+
+//recharzar pasajero por covid
+Route::post('/rechazarPasajero/{dni}', 'ChoferController@rechazarPasajero')->name('rechazarPasajero');
+Route::get('/cargarDeclaracionJurada/{dni}', 'ChoferController@cargarDeclaracionJurada')->name('cargarDeclaracionJurada');
+Route::post('/cargoDeclaracionJurada', 'ChoferController@cargoDeclaracionJurada')->name('cargoDeclaracionJurada');
+
+
+//INICIAR VIAJE
+Route::post('/iniciarViaje/{viaje}', 'ChoferController@iniciarViaje')->name('iniciarViaje');
+Route::get('/showviajeInfo/{chofer}', 'ChoferController@showviajeInfo')->name('showviajeInfo');
+//finalizar viaje
+Route::post('/finalizarViaje/{viaje}', 'ChoferController@finalizarViaje')->name('finalizarViaje');
