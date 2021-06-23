@@ -49,7 +49,6 @@
     
         Usted tiene capacidad para {{$viaje['cant disponibles']}} personas
         <form method="POST" action="{{route('finalizarViaje',$viaje['id'])}}">@csrf<button>Finalizar Viaje</button></form>
-
     @endsection
 </body>
 </html>
