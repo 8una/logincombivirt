@@ -178,8 +178,8 @@
                     <tr>
                         <tr>   
                             <th><div class="col text-left">{{$viaje->ruta}}</th></div>
-                            <th><div class="col text-center">{{$viaje->fecha}} </th></div>
-                            <th><div class="col text-center">{{$viaje->hora}}  </th></div>
+                            <th><div class="col text-center">{{date('d-M-y', strtotime($viaje->fecha))}} </th></div>
+                            <th><div class="col text-center">{{date('g:ia', strtotime($viaje->hora))}}</th></div>
                             <th><div class="col text-left">{{$viaje->precio}}  $ARS </th></div>
                             <th><div class="col text-left"> <a href = "{{ route('compraViaje',$viaje->id)}}"class="btn btn-outline-success">@csrf 🛒</a> </th></div>
                         </tr>
