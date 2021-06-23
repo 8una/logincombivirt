@@ -143,3 +143,11 @@ Route::get('/showProximoViaje/{dni}', 'ChoferController@showProximoViaje')->name
 //recharzar pasajero por covid
 Route::post('/rechazarPasajero/{dni}', 'ChoferController@rechazarPasajero')->name('rechazarPasajero');
 Route::get('/cargarDeclaracionJurada/{dni}', 'ChoferController@cargarDeclaracionJurada')->name('cargarDeclaracionJurada');
+Route::post('/cargoDeclaracionJurada', 'ChoferController@cargoDeclaracionJurada')->name('cargoDeclaracionJurada');
+
+
+//INICIAR VIAJE
+Route::post('/iniciarViaje/{viaje}', 'ChoferController@iniciarViaje')->name('iniciarViaje');
+Route::get('/showviajeInfo/{chofer}', 'ChoferController@showviajeInfo')->name('showviajeInfo');
+//finalizar viaje
+Route::post('/finalizarViaje/{viaje}', 'ChoferController@finalizarViaje')->name('finalizarViaje');

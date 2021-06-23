@@ -40,7 +40,7 @@
                 <th>
                 <div class="d-flex">
                     <div><button> Cancelar   </button></div>
-                    <div> <button> Iniciar </button> </div>    
+                    <div><form method="POST" action="{{route('iniciarViaje',$viaje->id)}}"> @csrf<button> Iniciar </button> </form></div>    
                 </div> 
                 </th>
             </tr>
@@ -58,28 +58,53 @@
     <table class="table table-striped w-50 ">
         <div class="container "">
             <thead class="bg-primary">
-                <tr >
-
+                <tr>
                     <th scope="col" class="text-center">DNI:</th>
                     <th scope="col"   class="text-center "> Acciones:</th>
                 </tr>
             </thead>
     @if (!$viajeros->isEmpty())
-        @foreach ($viajeros as $data)  
-        <tr>
-            <tr>   
-                <th><div class="col text-center">{{$data->dniusuario}}  </th></div>
+        @if ($estado =='arribando')
+            @foreach ($viajeros as $data)  
+            <tr>
+                <tr>   
+                    <th><div class="col text-center">{{$data->dniusuario}}  </th></div>
+                    @if($data->estado == "en viaje") 
+                        <th> 
+                            <div class="d-flex ml-5 mr-5 pl-5 bg-success"> 
+                            <div class="bg-success"> {{$data->estado}}</div>
+                        </div>
+                        </th>
+                        
+                    @elseif($data->estado == "cancelado" )
+                        <th> 
+                            <div class="d-flex ml-5 mr-5 pl-5 bg-danger"> 
+                            <div class="bg-danger"> {{$data->estado}}</div>
+                            </div>
+                        </th>
+                    @else
+                        <th> 
+                            <div class="d-flex ml-5 mr-5 pl-5 "> 
+                            <div><form action="{{route('cargarDeclaracionJurada',$data->dniusuario)}}">@csrf<button> Cargar Declaracion Jurada</button></form></div>
+                            <div><form action="{{route('rechazarPasajero',$data->dniusuario)}}" method="POST">@csrf<button onclick="return ConfirmDelete()"> Rechazar Pasajero </button></form></div>    
+                        </div>
+                        </th>
+                    @endif
+                </tr>
+            </div>
+            @endforeach 
+        @else
+            @foreach ($viajeros as $data)
                 <th> 
                     <div class="d-flex ml-5 mr-5 pl-5 "> 
-                    <div><form action="{{route('cargarDeclaracionJurada',$data->dniusuario)}}">@csrf<button> Cargar Declaracion Jurada</button></form></div>
-                    <div><form action="{{route('rechazarPasajero',$data->dniusuario)}}" method="POST">@csrf<button onclick="return ConfirmDelete()"> Rechazar Pasajero </button></form></div>    
+                    <div><form action="{{route('cargarDeclaracionJurada',$data->dniusuario)}}" >@csrf<button class="bg-secondary text-light" disabled> Cargar Declaracion Jurada</button></form></div>
+                    <div><form action="{{route('rechazarPasajero',$data->dniusuario)}}" method="POST">@csrf<button  class="bg-secondary text-light" onclick="return ConfirmDelete()" disabled> Rechazar Pasajero </button></form></div>    
                 </div>
                 </th>
-            </tr>
-        </div>
-        @endforeach
-    @endif
-    </table>
+            @endforeach 
+        @endif
+    @endif     
+    </table>   
     @endsection
 </body>
 </html>
