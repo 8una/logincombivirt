@@ -47,6 +47,21 @@ class userViajesController extends Controller
         }
     }
 
+    public function anularSus(Request $request)
+    {
+        $user = Auth::user();
+        $delete = Suscriptores::where('dni',$user->dni)->delete();
+        $comments=Calificacion::orderBy('fecha')->get()->take(5);
+                $hoy = date("Y-m-d H:i:s");
+                $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
+                $hoy = date("Y-m-d H:i:s");
+                $ruta= Ruta::get();
+                $origen= Ciudad::get();
+                $destino= Ciudad::get();
+                $msg = "Realizó la anulación de suscripción con éxito";
+                return view('home')->with(['data'=>$data])->with("request", $request)->with("msg", $msg)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+    }
+
     public function subscribirseForm(Request $request)
     {
         if (Auth::check()){
@@ -57,7 +72,7 @@ class userViajesController extends Controller
                 return view('vistasDeUsuario/subscripcion')->with(['data' => $data]);
             }
             else{
-                $comments=Calificacion::orderBy('fecha')->get()->take(5);
+                /*$comments=Calificacion::orderBy('fecha')->get()->take(5);
                 $hoy = date("Y-m-d H:i:s");
                 $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
                 $hoy = date("Y-m-d H:i:s");
@@ -65,7 +80,16 @@ class userViajesController extends Controller
                 $origen= Ciudad::get();
                 $destino= Ciudad::get();
                 $msg = "usted ya se encuentra suscripto";
-                return view('home')->with(['data'=>$data])->with("request", $request)->with("msg", $msg)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);
+                return view('home')->with(['data'=>$data])->with("request", $request)->with("msg", $msg)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);*/
+                $tarjetasArray = [];
+                $tarjetas= Suscriptores::where('dni','=', Auth::user()->dni)->select('nroTarjeta')->get();
+                $data= "usted ya se encuentra suscripto";
+                foreach ($tarjetas as $tarjetas){
+                    $tarjetas = substr($tarjetas, 14, 10);
+                    $tarjetas = substr_replace($tarjetas, '*******', 0, 7);
+                    array_push($tarjetasArray , $tarjetas);
+                }
+                return view('vistasDeUsuario/showTarjetas')->with(['data' => $data])->with(['tarjetas' => $tarjetasArray]);
             }
         }
         else{
@@ -88,7 +112,8 @@ class userViajesController extends Controller
         $numeroTarjeta = request('numero');
         $usuario = Auth::user();
         $dni = $usuario->dni;
-
+        $numeroTarjeta = substr($numeroTarjeta, -3); 
+        $num = (int)$numeroTarjeta;
         //lineas de thomas
         $hoy = date("Y-m-d H:i:s"); 
         $hoy= strtotime ('-3 hour', strtotime ($hoy));
@@ -96,7 +121,7 @@ class userViajesController extends Controller
         //fin
 
 
-        if ($numeroTarjeta % 10 < 5){
+        if ($num % 10 < 5){
             #tiene saldo
             Usuarioviaje::create([
                 'dniusuario' => $dni,
@@ -120,8 +145,16 @@ class userViajesController extends Controller
         else{
             $data = "la tarjeta ingresada no tiene saldo suficiente";
             #notienesaldo
-            $tarjetas = Suscriptores::where('dni',$dni)->get();
-            return view('vistasDeUsuario.pagarTarjetasSub')->with(['viaje' => $viaje])->with('data', $data)->with('tarjetas', $tarjetas);
+
+            $tarjetasArray = [];
+            $tarjetas= Suscriptores::where('dni','=', Auth::user()->dni)->select('nroTarjeta')->get();
+            foreach ($tarjetas as $tarjetas){
+                $tarjetas = substr($tarjetas, 14, 10);
+                $tarjetas = substr_replace($tarjetas, '*******', 0, 7);
+                array_push($tarjetasArray , $tarjetas);
+            }
+
+            return view('vistasDeUsuario.pagarTarjetasSub')->with(['viaje' => $viaje])->with('data', $data)->with('tarjetas', $tarjetasArray);
         }
 
     }
@@ -162,6 +195,9 @@ class userViajesController extends Controller
         else{
             $data = "la tarjeta ingresada no tiene saldo suficiente";
             #notienesaldo
+
+            
+
             return view('vistasDeUsuario.tarjeta')->with(['viaje' => $viaje])->with('data', $data);
         }
 
@@ -195,7 +231,8 @@ class userViajesController extends Controller
                 $tarjetas = substr_replace($tarjetas, '*******', 0, 7);
                 array_push($tarjetasArray , $tarjetas);
             }
-            return view ('userProfile')->with("request", $request)->with('tarjetas', $tarjetasArray);
+            $data = "";
+            return view('vistasDeUsuario/showTarjetas')->with(['data' => $data])->with(['tarjetas' => $tarjetasArray]);
         }
         else{
             #numero de tarjeta invalido
@@ -219,9 +256,19 @@ class userViajesController extends Controller
         $usuario = Auth::user();
         $dni = $usuario->dni;
         $suscriptor = Suscriptores::where('dni',$dni)->get();
-        $tarjetas = Suscriptores::where('dni',$dni)->get();
+        //$tarjetas = Suscriptores::where('dni',$dni)->get();
+
+        $tarjetasArray = [];
+        $tarjetas= Suscriptores::where('dni','=', Auth::user()->dni)->select('nroTarjeta')->get();
+        foreach ($tarjetas as $tarjetas){
+            $tarjetas = substr($tarjetas, 14, 10);
+            $tarjetas = substr_replace($tarjetas, '*******', 0, 7);
+            array_push($tarjetasArray , $tarjetas);
+        }
+
+
         if ($suscriptor->count() > 0){
-            return view('vistasDeUsuario.pagarTarjetasSub')->with(['viaje' => $viaje])->with('data', $data)->with('tarjetas', $tarjetas);
+            return view('vistasDeUsuario.pagarTarjetasSub')->with(['viaje' => $viaje])->with('data', $data)->with('tarjetas', $tarjetasArray);
         }
         else{
             return view('vistasDeUsuario.tarjeta')->with(['viaje' => $viaje])->with('data', $data);

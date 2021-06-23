@@ -126,6 +126,7 @@ Route::post('/usuarioCalificaViaje/{viaje}', 'userViajesController@usuarioCalifi
 
 //gestion de subscripcion
 Route::get('/subscripcion', 'userViajesController@subscribirseForm')->name('subscribirse');
+Route::delete('/subscripcionEliminada', 'userViajesController@anularSus')->name('anularSuscripcion');
 Route::post('/suscripto', 'userViajesController@subscripcion')->name('suscripto');
 Route::get('/showAgregarTarjeta', 'userViajesController@showAgregarTarjeta')->name('showAgregarTarjeta');
 Route::POST('/agregarTarjeta', 'userViajesController@agregarTarjeta')->name('agregarTarjeta');

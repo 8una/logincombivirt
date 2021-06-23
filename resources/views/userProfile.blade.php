@@ -1,6 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<script type="text/javascript">
+    function ConfirmDelete(){
+        var respuesta=confirm("¿Estas seguro que deseas eliminar el item seleccionado?");
+        if (respuesta){
+            return true;
+        }
+        return false;
+    }
+
+ 
+</script>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -39,6 +50,9 @@
                     <hr>
                     <div class="card-body">
                         <a href="{{route('showAgregarTarjeta')}}">Agregar una Tarjeta</a>
+                    </div>
+                    <div class="card-body">
+                    <form method="POST"  action="">@csrf @method('DELETE')<button class="btn btn-outline-danger" onclick="return ConfirmDelete() ">Anular suscripción</button></form>
                     </div>
                 </div>
                 @endif
