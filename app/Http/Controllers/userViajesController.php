@@ -323,8 +323,10 @@ class userViajesController extends Controller
                     $msg = "no puede comprar el viaje seleccionado porque se superpone con otro que tiene pendiente";
                     #retornar a la misma vista con este msg
                     $comments=Calificacion::orderBy('fecha')->get()->take(5);
-                    $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
                     $hoy = date("Y-m-d H:i:s");
+                    $hoy= strtotime ('-3 hour', strtotime ($hoy));
+                    $hoy = date ( 'Y-m-d H:i:s' , $hoy);
+                    $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
                     $ruta= Ruta::get();
                     $origen= Ciudad::get();
                     $destino= Ciudad::get();
@@ -338,8 +340,10 @@ class userViajesController extends Controller
                     $msg = "No puede comprar el viaje porque esta marcado como sospechoso de covid. Puede comprar después de la fecha ".$fech;
                     #retornar a la misma vista con este mensaje
                     $comments=Calificacion::orderBy('fecha')->get()->take(5);
-                    $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
                     $hoy = date("Y-m-d H:i:s");
+                    $hoy= strtotime ('-3 hour', strtotime ($hoy));
+                    $hoy = date ( 'Y-m-d H:i:s' , $hoy);
+                    $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
                     $ruta= Ruta::get();
                     $origen= Ciudad::get();
                     $destino= Ciudad::get();
