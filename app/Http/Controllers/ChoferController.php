@@ -204,6 +204,22 @@ class ChoferController extends Controller
             $cantidadChoferes2= Chofer::where("email", "=", $email)->count();
             if ($cantidadChoferes == 0 ){
                 if($cantidadChoferes2 == 0){
+                    
+                    $user = User::create([
+                        'name' => $request->input('nombre'),
+                        'lastname' => $request->input('apellido'),
+                        'DNI' => $request->input('dni'),
+                        'email' => $request->input('email'),
+                        'password' => $request->input('password'),
+                    ]); 
+                    /*$chofer = Chofer::create([
+                        'nombre' => $request->input('nombre'),
+                        'apellido' => $request->input('apellido'),
+                        'dni' => $request->input('dni'),
+                        'email' => $request->input('email'),
+                        'password' => Hash::make($request->input('password')),
+                    ]); */
+
                     $chofer = new Chofer;
                     $chofer->nombre = $request->input('nombre');
                     $chofer->apellido = $request->input('apellido');
@@ -212,13 +228,8 @@ class ChoferController extends Controller
                     $chofer->password = $request->input('password');
                     $chofer->save();
 
-                    $user = User::create([
-                        'name' => $request->input('nombre'),
-                        'lastname' => $request->input('apellido'),
-                        'DNI' => $request->input('dni'),
-                        'email' => $request->input('email'),
-                        'password' => Hash::make($request->input('password')),
-                    ]); 
+                    
+                    
 
                     $user->roles()->attach(Role::where('name', 'Chofer')->first());  
                 } 
