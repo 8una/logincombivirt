@@ -31,19 +31,23 @@ class ChoferController extends Controller
         $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
         $hoy = date ( 'Y-m-d H:i:s' , $hoy); 
         $dnichofer= Chofer::where('DNI', Auth::user()->dni)->select('DNI')->value('DNI');
-        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->get();
-        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->value('id');
-        $inicioViaje =Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->value('inicio');
+        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->where('estado','pendiente')->orderBy('inicio', 'ASC')->take(1)->get();
+        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->where('estado','pendiente')->orderBy('inicio', 'ASC')->take(1)->value('id');
+        $inicioViaje =Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->where('estado','pendiente')->orderBy('inicio', 'ASC')->take(1)->value('inicio');
       
         $hoy = strtotime ( '+1 hour' , strtotime ($hoy) ) ; 
         $hoy = date( 'Y-m-d H:i:s' , $hoy); 
-        if ($hoy > $inicioViaje){
-            $estado= 'arribando';
-        }
+        if($proximoViajeID != null){
+            if ($hoy > $inicioViaje){
+                $estado= 'arribando';
+            }
+            else{
+                $estado= 'inactivo';}
+            }
         else{
-            $estado= 'inactivo';
+            $estado= 'sin viajes';
         }
-        //agregar el ->where('estado', '<>' 'cancelado')
+            //agregar el ->where('estado', '<>' 'cancelado')
         $viajeros=Usuarioviaje::where('idViaje', $proximoViajeID)->get();
         return view('vistasDeChofer/proximoViajeChofer')->with('viajeros',$viajeros)->with('proximoViaje',$proximoViaje)->with('estado',$estado);
     }
@@ -54,21 +58,6 @@ class ChoferController extends Controller
         $hoy=date('Y-m-d H:i:s');
         $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
         $hoy = date ( 'Y-m-d H:i:s' , $hoy);
-        $fechaFin= strtotime ( '+14 days' , strtotime ($hoy)); 
-        $fechaFin = date( 'Y-m-d H:i:s' , $fechaFin); 
-        if ($marcados > 0){
-            Marcados::where('DNI', $dni)->update([
-                'fechaInicio' => $hoy,
-                'fechaFin' => $fechaFin 
-            ]);
-        }
-        else{
-            Marcados::create([
-                'DNI' => $dni,
-                'fechaInicio' => $hoy,
-                'fechaFin' => $fechaFin 
-            ]);
-        }
 
         //LINEAS DE CODIGO
         $dnichofer= Chofer::where('DNI', Auth::user()->dni)->select('DNI')->value('DNI');
@@ -77,7 +66,7 @@ class ChoferController extends Controller
         $inicioViaje =Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->value('inicio');
         //sacar al usuario del viaje y cambiar el estado de usuario viajes
         Usuarioviaje::where('dniusuario', $dni)->where('idViaje', $proximoViajeID)->update([
-            'estado' => 'cancelado'
+            'estado' =>'ausente'
         ]);
         $capacidadActualizada =Viaje::where('id',$proximoViajeID )->value('cant disponibles');
         $capacidadActualizada = intval($capacidadActualizada);
@@ -107,13 +96,15 @@ class ChoferController extends Controller
         $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->value('id');
         $dni = request('DNI');
         $sintomas= request('sintomas');
+        $fiebre= request('Fiebre');
+        
         if ($sintomas == null){
             $sintomas = 0;
         }
         else{
             $sintomas =count($sintomas);
         }
-        if ($sintomas >= 3){
+        if (($sintomas >= 2)||($fiebre >= 38)){
             $msg = "Usted no puede viajar, se le cancelo su viaje y por 14 dias no podra viajar";
             $marcados= Marcados::where('DNI', $dni)->get()->count();
             $hoy=date('Y-m-d H:i:s');
@@ -137,9 +128,9 @@ class ChoferController extends Controller
 
             //LINEAS DE CODIGO
             $dnichofer= Chofer::where('DNI', Auth::user()->dni)->select('DNI')->value('DNI');
-            $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->get();
-            $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->value('id');
-            $inicioViaje =Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->orderBy('inicio', 'ASC')->take(1)->value('inicio');
+            $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->where('estado','pendiente')->orderBy('inicio', 'ASC')->take(1)->get();
+            $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->where('estado','pendiente')->orderBy('inicio', 'ASC')->take(1)->value('id');
+            $inicioViaje =Viaje::where('DNI', $dnichofer)->where('inicio','>=',$hoy)->where('estado','pendiente')->orderBy('inicio', 'ASC')->take(1)->value('inicio');
             //sacar al usuario del viaje y cambiar el estado de usuario viajes
             Usuarioviaje::where('dniusuario', $dni)->where('idViaje', $proximoViajeID)->update([
                 'estado' => 'cancelado'
@@ -380,4 +371,173 @@ class ChoferController extends Controller
         $estado='rascandose';
         return view('vistasDeChofer/homeChofer')->with('estado', $estado);
     }
+
+    public function cancelarViajechofer($viaje)
+    {
+
+        Usuarioviaje::where('idViaje', $viaje)->where('estado', '<>', 'ausente')->update([
+            'estado' => 'rembolsado'
+        ]);
+
+        Usuarioviaje::where('idViaje', $viaje)->where('estado', '<>', 'en viaje')->update([
+            'estado' => 'rembolsado'
+        ]);
+
+        Viaje::where('id', $viaje)->update([
+            'estado' => 'cancelado'
+        ]);
+        $estado='rascandose';
+        return view('vistasDeChofer/homeChofer')->with('estado', $estado);
+    }
+
+    public function CargarPasajeroExistente($chofer)
+    {
+        $user= User::where('dni', '987498498')->get();
+        return view('vistasDeChofer/cargarExistente')->with('user', $user);
+    }
+
+    public function buscarCuentaConDNi()
+    {
+        $user= User::where('dni', request('dni'))->get();
+        return view('vistasDeChofer/cargarExistente')->with('user', $user);
+    }
+    public function cargoDeclaracionJuradaExistente()
+    {
+        $hoy=date('Y-m-d H:i:s');
+        $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
+        $hoy = date ( 'Y-m-d H:i:s' , $hoy); 
+        $dnichofer= Chofer::where('DNI', Auth::user()->dni)->select('DNI')->value('DNI');
+        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','<=',$hoy)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->get();
+        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','<=',$hoy)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->value('id');
+        
+        
+        $dni = request('DNI');
+        $sintomas= request('sintomas');
+        $fiebre= request('Fiebre');
+        
+        if ($sintomas == null){
+            $sintomas = 0;
+        }
+        else{
+            $sintomas =count($sintomas);
+        }
+        if (($sintomas >= 2)||($fiebre >= 38)){
+            $msg = "Usted no puede viajar, se le cancelo su viaje y por 14 dias no podra viajar";
+            $marcados= Marcados::where('DNI', $dni)->get()->count();
+            $hoy=date('Y-m-d H:i:s');
+            $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
+            $hoy = date ( 'Y-m-d H:i:s' , $hoy);
+            $fechaFin= strtotime ( '+14 days' , strtotime ($hoy)); 
+            $fechaFin = date( 'Y-m-d H:i:s' , $fechaFin); 
+            if ($marcados > 0){
+                Marcados::where('DNI', $dni)->update([
+                    'fechaInicio' => $hoy,
+                    'fechaFin' => $fechaFin 
+                ]);
+            }
+            else{
+                Marcados::create([
+                    'DNI' => $dni,
+                    'fechaInicio' => $hoy,
+                    'fechaFin' => $fechaFin 
+                ]);
+            }
+            $estado='viajando';
+            return view('vistasDeChofer/homeChofer')->with('estado', $estado);
+        }
+        else{
+            $msg ="Pasajero Aceptado, Buen viaje";
+            Usuarioviaje::create([
+                'dniusuario' => $dni,
+                'estado' => 'en viaje',
+                'idViaje'=> $proximoViajeID
+            ]);
+            $capacidadActualizada =Viaje::where('id',$proximoViajeID )->value('cant disponibles');
+            $capacidadActualizada = intval($capacidadActualizada);
+            $capacidadActualizada = $capacidadActualizada - 1;
+
+            Viaje::where('id',$proximoViajeID )->update([
+                'cant disponibles' => $capacidadActualizada
+            ]);
+
+            $estado='viajando';
+            return view('vistasDeChofer/homeChofer')->with('estado', $estado);
+        }
+            
+
+    }
+
+    public function CargarPasajeroInexistente($chofer)
+    {
+        return view('vistasDeChofer/crearUserProvisorio');
+    }
+
+
+    public function cargoDeclaracionJuradaInexistente()
+    {
+        //AYUDA PARA CREAR UN USUARIO
+        $hoy=date('Y-m-d H:i:s');
+        $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
+        $hoy = date ( 'Y-m-d H:i:s' , $hoy); 
+        $dnichofer= Chofer::where('DNI', Auth::user()->dni)->select('DNI')->value('DNI');
+        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','<=',$hoy)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->get();
+        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','<=',$hoy)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->value('id');
+        
+        
+        $dni = request('DNI');
+        $sintomas= request('sintomas');
+        $fiebre= request('Fiebre');
+        
+        if ($sintomas == null){
+            $sintomas = 0;
+        }
+        else{
+            $sintomas =count($sintomas);
+        }
+        if (($sintomas >= 2)||($fiebre >= 38)){
+            $msg = "Usted no puede viajar, se le cancelo su viaje y por 14 dias no podra viajar";
+            $marcados= Marcados::where('DNI', $dni)->get()->count();
+            $hoy=date('Y-m-d H:i:s');
+            $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
+            $hoy = date ( 'Y-m-d H:i:s' , $hoy);
+            $fechaFin= strtotime ( '+14 days' , strtotime ($hoy)); 
+            $fechaFin = date( 'Y-m-d H:i:s' , $fechaFin); 
+            if ($marcados > 0){
+                Marcados::where('DNI', $dni)->update([
+                    'fechaInicio' => $hoy,
+                    'fechaFin' => $fechaFin 
+                ]);
+            }
+            else{
+                Marcados::create([
+                    'DNI' => $dni,
+                    'fechaInicio' => $hoy,
+                    'fechaFin' => $fechaFin 
+                ]);
+            }
+            $estado='viajando';
+            return view('vistasDeChofer/homeChofer')->with('estado', $estado);
+        }
+        else{
+            $msg ="Pasajero Aceptado, Buen viaje";
+            Usuarioviaje::create([
+                'dniusuario' => $dni,
+                'estado' => 'en viaje',
+                'idViaje'=> $proximoViajeID
+            ]);
+            $capacidadActualizada =Viaje::where('id',$proximoViajeID )->value('cant disponibles');
+            $capacidadActualizada = intval($capacidadActualizada);
+            $capacidadActualizada = $capacidadActualizada - 1;
+
+            Viaje::where('id',$proximoViajeID )->update([
+                'cant disponibles' => $capacidadActualizada
+            ]);
+
+            $estado='viajando';
+            return view('vistasDeChofer/homeChofer')->with('estado', $estado);
+        }
+            
+
+    }
+    
 }

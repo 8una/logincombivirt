@@ -110,9 +110,8 @@ Route::post('/elegirDestino', 'adminRutasController@cargarNuevaRuta')->name('car
 Route::delete('/borrarRuta/{ruta}', 'adminRutasController@borrarRuta')->name('ruta.borrar');
 
 //buscarRuta
-Route::post('/buscarPorRuta', 'adminRutasController@buscarRuta')->name('buscarRuta');
-Route::post('/buscarPorRutaPorOrigen', 'adminRutasController@buscarRutaPorOrigen')->name('buscarRutaPorOrigen');
-Route::post('/buscarPorRutaPorDestino', 'adminRutasController@buscarRutaPorDestino')->name('buscarRutaPorDestino');
+Route::get('/buscarPorRuta', 'adminRutasController@buscarRuta')->name('buscarRuta');
+
 
 //Crear ciudad:
 Route::get('/agregarCiudad', 'adminRutasController@crearCiudad')->name('crearCiudad');
@@ -152,3 +151,14 @@ Route::post('/iniciarViaje/{viaje}', 'ChoferController@iniciarViaje')->name('ini
 Route::get('/showviajeInfo/{chofer}', 'ChoferController@showviajeInfo')->name('showviajeInfo');
 //finalizar viaje
 Route::post('/finalizarViaje/{viaje}', 'ChoferController@finalizarViaje')->name('finalizarViaje');
+
+
+Route::post('/cancelarViajechofer/{viaje}', 'ChoferController@cancelarViajechofer')->name('cancelarViajechofer');
+
+//cargar En vuelo
+Route::get('/cargarPasajeroExistente/{chofer}', 'ChoferController@cargarPasajeroExistente')->name('cargarPasajeroExistente');
+Route::get('/buscarCuentaConDNi/', 'ChoferController@buscarCuentaConDNi')->name('buscarCuentaConDNi');
+Route::post('/cargoDeclaracionJuradaExistente/', 'ChoferController@cargoDeclaracionJuradaExistente')->name('cargoDeclaracionJuradaExistente');
+
+Route::get('/cargarPasajeroInexistente/{chofer}', 'ChoferController@cargarPasajeroInexistente')->name('cargarPasajeroInexistente');
+Route::post('/cargoDeclaracionJuradaInexistente/', 'ChoferController@cargoDeclaracionJuradaInexistente')->name('cargoDeclaracionJuradaInexistente');

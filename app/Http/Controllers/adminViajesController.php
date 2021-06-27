@@ -97,9 +97,11 @@ class adminViajesController extends Controller
             'hora'=> $hora,
             'duracion'=> $duracion,
             'cant disponibles'=> $capacidadCombi,
+            'estado'=> 'pendiente',
             'precio'=>$precio,
             'inicio'=>$fechaInicio,
-            'fin'=>$fechaFin
+            'fin'=>$fechaFin,
+            'estado'=>'pendiente'
         ]);
 
         $msg="El viaje se cargo con exito!!";

@@ -25,18 +25,57 @@ Usted no tiene permiso para visualizar esta página.
     @section('content')
     @include('layouts.navAdmin') 
         <h1 class="m-2">Administracion de Rutas</h1>
+        
+        <div class="bg-dark w-100 d-flex">
+            <div class="border border-primary border-3 w-100 bg-light rounded-pill rounded-3 m-2 p-2">
+                <form action="{{route('buscarRuta')}}" class="m-2 p-2 ">
+                    @csrf
+                    <h3 class="m-2 p-2 ">Buscar una Ruta</h3>
+                    <div class="d-flex justify-content-center">
+                        <input type="radio" class=" p-2 m-2 pr-3" name="rad" onclick="origen.disabled = false; destino.disabled= true;ruta.disabled= true; destino.value='N/A'; ruta.value='N/A' " />
+                        <div><h6 class="text-secondary d-inline  mr-5">Origen</h6></div>
+                        <input type="radio" class=" p-2 m-2 pr-3 mr-3" name="rad" onclick="origen.disabled = true; destino.disabled= false; ruta.disabled= true; origen.value='N/A'; ruta.value='N/A' " />
+                        <div><h6 class="text-secondary d-inline pr-5 mr-5">Destino</h6></div>
+                        <input type="radio" class=" p-2 m-2  mr-3" name="rad" onclick="origen.disabled = true; destino.disabled= true; ruta.disabled= false; destino.value='N/A'; origen.value='N/A' "  />
+
+                        <div><h6 class="text-secondary d-inline pr-5 mr-5">Ruta</h6></div>
+                    </div>
+                    <div class="d-flex justify-content-center">           
+                        
+
+                        
+                        <select class="form-select m-2" aria-label="Seleccione Ruta"  name="origen" id="origen" disabled="disabled" >
+                            <option selected  id="n/a" value="N/A"><p class="text-secondary">N/A</p> </option>
+                            @foreach ($origen as $origen)
+                                <option value="{{$origen->nombre}}">{{$origen->nombre}}</option>
+                            @endforeach 
+                        </select>
+                        
+                        <select class="form-select  m-2" aria-label="Seleccione Ruta" name="destino" id="destino" disabled="disabled">
+                            <option selected value="N/A" id="origen1"><p class="text-secondary">N/A</p> </option>
+                            @foreach ($destino as $destino)
+                                <option value="{{$destino->nombre}}">{{$destino->nombre}}</option>
+                            @endforeach
+                        </select>
+
+
+                        <select class="form-select  m-2" aria-label="Seleccione Ruta" name="ruta" id="ruta" disabled="disabled">
+                            <option selected value="N/A""><p class="text-secondary">N/A</p> </option>
+                            @foreach ($ruta as $ruta)
+                                <option value="{{$ruta->nombreRuta}}">{{$ruta->nombreRuta}}</option>
+                            @endforeach
+                        </select>
+                    <button class="rounded-pill btn btn-primary">Buscar</button>
+                </div>
+                </form>
+            </div>
+        </div>
         <div class="d-flex">
             <button class="btn btn-outline-dark ml-2 h-75 mt-2 w-25"> <a href= "{{route('crearRuta')}}" >Cargar nueva Ruta</a></button>
             <button class="btn btn-outline-dark ml-2 h-75 mt-2"> <a href= "{{route('crearCiudad')}}" >Agregar Ciudad</a></button>
             <button class="btn btn-outline-dark ml-2 h-75 mt-2"> <a href= "{{route('quitarCiudad')}}" >Quitar Ciudad</a></button>
             
         </div>
-        <div class="d-flex w-100">
-            <form method = 'POST' action = "{{route('buscarRuta')}}" ><input class="btn btn-outline-dark ml-2 m-2 h-75 justify-content-right" type = "submite" name = "ruta" placeholder="Ruta a Buscar">@csrf</input></form>
-            <form method = 'POST' action = "{{route('buscarRutaPorOrigen')}}"  ><input class="btn btn-outline-dark ml-2 m-2 h-75 justify-content-right" type = "submite" name = "origen" placeholder="Buscar Por Origen">@csrf</input></form>
-            <form method = 'POST' action = "{{route('buscarRutaPorDestino')}}"><input class="btn btn-outline-dark ml-2 m-2 h-75 justify-content-right" type = "submite" name = "destino" placeholder="Buscar Por Destino">@csrf</input></form>
-        </div>
-
         <div>
             <h3 class="m-2">Rutas:</h3>
             <hr>
@@ -50,17 +89,24 @@ Usted no tiene permiso para visualizar esta página.
                             <th scope="col">Acciones:</th>
                         </tr>
                     </thead>
-                    @foreach ($data as $ruta)
-                        <tr>   
-                            <th><div class="col">{{$ruta['nombreRuta']}}</th></div>
-                            <th>
-                                <div class="d-flex ">
-                                    <div class="pr-2"><form method="POST" action="{{ route('ruta.borrar', $ruta)}}">@csrf @method('DELETE')<button class="btn btn-outline-danger" onclick="return ConfirmDelete()">Eliminar ✖</button></form></div>
-                                </div>
-                            </th> 
+                    @if (!$data->isEmpty())
+                        @foreach ($data as $data)
+                            <tr>   
+                                <th><div class="col">{{$data['nombreRuta']}}</th></div>
+                                <th>
+                                    <div class="d-flex ">
+                                        <div class="pr-2"><form method="POST" action="{{ route('ruta.borrar', $ruta)}}">@csrf @method('DELETE')<button class="btn btn-outline-danger" onclick="return ConfirmDelete()">Eliminar ✖</button></form></div>
+                                    </div>
+                                </th> 
+                            </tr>
+                        </div>
+                        @endforeach
+                    @else
+                    <tr>   
+                        <th><div class="col text-secondary text-center" >No hay informacion</th></
                         </tr>
-                    </div>
-                    @endforeach
+                    @endif
+                    
             </table>
                 </div>
                 
