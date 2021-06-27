@@ -210,7 +210,7 @@ class ChoferController extends Controller
                         'lastname' => $request->input('apellido'),
                         'DNI' => $request->input('dni'),
                         'email' => $request->input('email'),
-                        'password' => $request->input('password'),
+                        'password' => Hash::make($request->input('password')),
                     ]); 
                     /*$chofer = Chofer::create([
                         'nombre' => $request->input('nombre'),

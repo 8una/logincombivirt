@@ -32,15 +32,18 @@
             @foreach ($tarjetas as $tarjeta)
             <div>
 
-            <form method="GET" action="">
-            @csrf
+            <form method="POST" action="{{route('borrarTarjeta',$tarjeta)}}">@csrf @method('DELETE')
+            
             
             <label for="">Numero de tarjeta terminada en <br>
             <div>
                 <input type="text" name="numero" value = "{{$tarjeta}}" required minlength="2" maxlength="10" >
-                
+               
+                <button type="submit" class="btn btn-outline-success">Sacar tarjeta </button> </div>
             </div>
             </div>
+
+        </form>
 
         </form>
 
@@ -56,7 +59,7 @@
             <form method="POST"  action="{{route('anularSuscripcion')}}">@csrf @method('DELETE')<button class="btn btn-outline-primary" onclick="return ConfirmDelete() ">Anular suscripción</button></form>
         </div>
         
-        <p>{{$data}}</p>
+        <p><h4>{{$data}}</h4></p>
 
     @endsection
 </body>

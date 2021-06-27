@@ -83,7 +83,7 @@ class userViajesController extends Controller
                 return view('home')->with(['data'=>$data])->with("request", $request)->with("msg", $msg)->with('comments',$comments)->with(['ruta'=>$ruta])->with(['origen'=>$origen])->with(['destino'=>$destino]);*/
                 $tarjetasArray = [];
                 $tarjetas= Suscriptores::where('dni','=', Auth::user()->dni)->select('nroTarjeta')->get();
-                $data= "usted ya se encuentra suscripto";
+                $data= "Usted ya se encuentra suscripto";
                 foreach ($tarjetas as $tarjetas){
                     $tarjetas = substr($tarjetas, 14, 10);
                     $tarjetas = substr_replace($tarjetas, '*******', 0, 7);
@@ -202,6 +202,38 @@ class userViajesController extends Controller
         }
 
     }
+    public function sacarTarjeta($nroTarjeta)
+    {
+        $user = Auth::user();
+        $tarjetas = Suscriptores::where('dni',$user->dni)->get();
+        if($tarjetas->count() > 1){
+            $nroTarjeta = substr($nroTarjeta, -3); 
+            $num = (int)$nroTarjeta;
+            $delete = Suscriptores::where('nroTarjeta','LIKE','%'.$num)->delete();
+
+            $tarjetasArray = [];
+                $tarjetas= Suscriptores::where('dni','=', Auth::user()->dni)->select('nroTarjeta')->get();
+                $data= "Se borró la tarjeta con éxito";
+                foreach ($tarjetas as $tarjetas){
+                    $tarjetas = substr($tarjetas, 14, 10);
+                    $tarjetas = substr_replace($tarjetas, '*******', 0, 7);
+                    array_push($tarjetasArray , $tarjetas);
+                }
+                return view('vistasDeUsuario/showTarjetas')->with(['data' => $data])->with(['tarjetas' => $tarjetasArray]);
+
+        }
+        else{
+            $tarjetasArray = [];
+                $tarjetas= Suscriptores::where('dni','=', Auth::user()->dni)->select('nroTarjeta')->get();
+                $data= "No puede sacar sacar la tarjeta si solo posee una";
+                foreach ($tarjetas as $tarjetas){
+                    $tarjetas = substr($tarjetas, 14, 10);
+                    $tarjetas = substr_replace($tarjetas, '*******', 0, 7);
+                    array_push($tarjetasArray , $tarjetas);
+                }
+                return view('vistasDeUsuario/showTarjetas')->with(['data' => $data])->with(['tarjetas' => $tarjetasArray]);
+        }
+    }
     
     public function showAgregarTarjeta()
     {
@@ -218,7 +250,7 @@ class userViajesController extends Controller
         }
         $numeroTarjeta = request('numero');
 
-        if ($numeroTarjeta % 10 < 5){
+        
             #numero de tarjeta valido
             Suscriptores::create([
                 'dni' => Auth::user()->dni,
@@ -231,14 +263,10 @@ class userViajesController extends Controller
                 $tarjetas = substr_replace($tarjetas, '*******', 0, 7);
                 array_push($tarjetasArray , $tarjetas);
             }
-            $data = "";
+            $data = "Se agregó la tarjeta con éxito";
             return view('vistasDeUsuario/showTarjetas')->with(['data' => $data])->with(['tarjetas' => $tarjetasArray]);
-        }
-        else{
-            #numero de tarjeta invalido
-            $msg = "la tarjeta ingresada es invalida";
-            return view('vistasDeUsuario/agregarTarjeta')->with('msg', $msg);
-        }
+        
+        
     }
 
     public function formPagoOtraTarjeta(Viaje $viaje)

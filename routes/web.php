@@ -131,6 +131,7 @@ Route::delete('/subscripcionEliminada', 'userViajesController@anularSus')->name(
 Route::post('/suscripto', 'userViajesController@subscripcion')->name('suscripto');
 Route::get('/showAgregarTarjeta', 'userViajesController@showAgregarTarjeta')->name('showAgregarTarjeta');
 Route::POST('/agregarTarjeta', 'userViajesController@agregarTarjeta')->name('agregarTarjeta');
+Route::delete('/sacarTarjeta/{nroTarjeta}', 'userViajesController@sacarTarjeta')->name('borrarTarjeta');
 
 
 //BUSCAR VVIAJE buscarViaje

@@ -30,7 +30,7 @@
             <input type="number" name="codigo" /><br>
         </label>
         <button class="btn btn-primary mt-2" type="submit">Guardar Tarjeta</button>
-        <button type="button" class="btn btn-outline-primary mt-2"><a href="{{route('myprofile')}}"> Atras </a></button>
+        <button type="button" class="btn btn-outline-primary mt-2"><a href="{{route('subscribirse')}}"> Atras </a></button>
 
     </form>
     @endsection
