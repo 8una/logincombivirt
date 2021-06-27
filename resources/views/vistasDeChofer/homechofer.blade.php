@@ -17,7 +17,8 @@
             <form action="{{ route('showProximoViaje',Auth::user()->dni)}}">@csrf<button class="w-100 bg-dark text-light" style="height: 3em; font-size: 10em;">Proximo viaje</button></form>
         @else
             <form action="{{ route('showviajeInfo',Auth::user()->dni)}}">@csrf<button class="w-100 bg-dark text-light" style="height: 3em; font-size: 5em;">Viaje Info</button></form>
-            <form action="{{ route('showProximoViaje',Auth::user()->dni)}}">@csrf<button class="w-100 bg-dark text-light" style="height: 3em; font-size: 5em;">Cargar Pasajero</button></form>
+            <form action="{{ route('cargarPasajeroExistente',Auth::user()->dni)}}">@csrf<button class="w-100 bg-dark text-light" style="height: 3em; font-size: 5em;">Cargar Pasajero Existente</button></form> 
+            <form action="{{ route('cargarPasajeroInexistente',Auth::user()->dni)}}">@csrf<button class="w-100 bg-dark text-light" style="height: 3em; font-size: 5em;">Cargar Pasajero Inexistente</button></form> 
         @endif
     </div>
 

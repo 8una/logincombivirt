@@ -13,8 +13,11 @@ class adminRutasController extends Controller
     public function showindex(Request $request){
  
         $data=Ruta::all();
-        $msg="";
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
+        $msg=""; 
+        $ruta= Ruta::get();
+        $origen= Ciudad::get();
+        $destino= Ciudad::get();
+        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request)->with('origen', $origen)->with('destino',$destino)->with('ruta', $ruta);
     }
 
 
@@ -75,22 +78,30 @@ class adminRutasController extends Controller
 
     public function buscarRuta(Request $request)
     {
+        $origen= request('origen');
+        $destino= request('destino'); //AGREGAR EL TESTEO DE RUTAS
+        $ruta= request('ruta');
         $msg="";
-        $data=Ruta::where('nombreRuta', request('ruta'))->orderBy('nombreRuta')->get();
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
-    }
-    public function buscarRutaPorOrigen(Request $request)
-    {
+
+        if ($origen != null){
+            $data=Ruta::where('origen', $origen)->get();
+                }
+        else if($destino !=null){
+            $data=Ruta::where('destino', $destino)->get();
+        }
+        else if ($ruta != null){
+            $data=Ruta::where('nombreRuta', $ruta)->get();        }
+        else{
+            $data=Ruta::get();
+        }
+
         $msg="";
-        $data=Ruta::where('origen', request('origen'))->orderBy('origen')->get();
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
+        $ruta= Ruta::get();
+        $origen= Ciudad::get();
+        $destino= Ciudad::get();
+        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request)->with('origen', $origen)->with('destino',$destino)->with('ruta', $ruta);
     }
-    public function buscarRutaPorDestino(Request $request)
-    {
-        $msg="";
-        $data=Ruta::where('destino', request('destino'))->orderBy('destino')->get();
-        return view('ruta/rutahome')->with(['data' =>$data])->with("mensaje", $msg)->with("request", $request);
-    }
+   
 
     public function crearCiudad(Request $request)
     {

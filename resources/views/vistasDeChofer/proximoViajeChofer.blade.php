@@ -16,6 +16,15 @@
         }
         return false;
     }
+
+
+    function ConfirmCancel(){
+        var respuesta=confirm("Si el viaje se cancela se reembolsara el 100% a todos los anotados ¿esta seguro?");
+        if (respuesta){
+            return true;
+        }
+        return false;
+    }
 </script>
 <body>
     @section('content')
@@ -38,15 +47,22 @@
                 <th><div class="col text-center">{{$viaje->fecha}} </th></div>
                 <th><div class="col text-center">{{$viaje->hora}}  </th></div>
                 <th>
-                <div class="d-flex">
-                    <div><button> Cancelar   </button></div>
-                    <div><form method="POST" action="{{route('iniciarViaje',$viaje->id)}}"> @csrf<button> Iniciar </button> </form></div>    
-                </div> 
+                    @if ($estado =='arribando')
+                        <div class="d-flex">
+                            <div><form method="POST" action="{{route('cancelarViajechofer',$viaje->id)}}"> @csrf<button onclick="return ConfirmCancel()"> Cancelar </button> </form></div>    
+                            <div><form method="POST" action="{{route('iniciarViaje',$viaje->id)}}"> @csrf<button> Iniciar </button> </form></div>    
+                        </div> 
+                    @else
+                    <div class="d-flex">
+                        <div><form method="POST" action="{{route('cancelarViajechofer',$viaje->id)}}"> @csrf<button disabled onclick="return ConfirmCancel()"> Cancelar </button > </form></div>    
+                        <div><form method="POST" action="{{route('iniciarViaje',$viaje->id)}}"> @csrf<button disabled> Iniciar </button> </form></div>    
+                    </div>
+                    @endif 
                 </th>
             </tr>
         </div>
         @endforeach
-    @endif
+    {{-- @endif --}}
     </table>
     @if ($estado =='arribando')
         <div class="bg-success">Arribando</div>
@@ -68,7 +84,7 @@
             @foreach ($viajeros as $data)  
             <tr>
                 <tr>   
-                    <th><div class="col text-center">{{$data->dniusuario}}  </th></div>
+                    <th> <div class="col text-center">{{$data->dniusuario}}</div></th>
                     @if($data->estado == "en viaje") 
                         <th> 
                             <div class="d-flex ml-5 mr-5 pl-5 bg-success"> 
@@ -82,9 +98,15 @@
                             <div class="bg-danger"> {{$data->estado}}</div>
                             </div>
                         </th>
+                    @elseif($data->estado == "ausente" )
+                        <th> 
+                            <div class="d-flex ml-5 mr-5 pl-5 bg-secondary"> 
+                            <div class="bg-secondary"> {{$data->estado}}</div>
+                            </div>
+                        </th>
                     @else
                         <th> 
-                            <div class="d-flex ml-5 mr-5 pl-5 "> 
+                            <div class="d-flex ml-5 mr-5 pl-5"> 
                             <div><form action="{{route('cargarDeclaracionJurada',$data->dniusuario)}}">@csrf<button> Cargar Declaracion Jurada</button></form></div>
                             <div><form action="{{route('rechazarPasajero',$data->dniusuario)}}" method="POST">@csrf<button onclick="return ConfirmDelete()"> Rechazar Pasajero </button></form></div>    
                         </div>
@@ -93,17 +115,21 @@
                 </tr>
             </div>
             @endforeach 
-        @else
+        @elseif ($estado =='inactivo')
             @foreach ($viajeros as $data)
+                <th> <div class="col text-center">{{$data->dniusuario}}</div></th>
                 <th> 
                     <div class="d-flex ml-5 mr-5 pl-5 "> 
                     <div><form action="{{route('cargarDeclaracionJurada',$data->dniusuario)}}" >@csrf<button class="bg-secondary text-light" disabled> Cargar Declaracion Jurada</button></form></div>
                     <div><form action="{{route('rechazarPasajero',$data->dniusuario)}}" method="POST">@csrf<button  class="bg-secondary text-light" onclick="return ConfirmDelete()" disabled> Rechazar Pasajero </button></form></div>    
-                </div>
+                    </div>
                 </th>
             @endforeach 
+            @endif 
         @endif
-    @endif     
+    @elseif($estado='sin viajes')
+        <div class="h3 text-secondary"> Usted no tiene ningun viaje todavia </div>
+    @endif 
     </table>   
     @endsection
 </body>
