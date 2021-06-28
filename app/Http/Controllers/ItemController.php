@@ -59,7 +59,6 @@ class ItemController extends Controller
         $msg ="el item se actualizó con éxito";
         try {
             $item->update([
-                'nombre'=>request('nombre'),
                 'precio'=>request('precio'),
             ]);
             
