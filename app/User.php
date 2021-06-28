@@ -110,4 +110,8 @@ public function isUser() {
    return $this->roles()->where('name', 'user')->exists();
 }
 
+public function isChofer() {
+   return $this->roles()->where('name', 'chofer')->exists();
+}
+
 }

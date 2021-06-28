@@ -212,7 +212,7 @@ class ChoferController extends Controller
                     $chofer->password = $request->input('password');
                     $chofer->save();
 
-                    $user->roles()->attach(Role::where('name', 'Chofer')->first());  
+                    $user->roles()->attach(Role::where('name', 'chofer')->first());  
                 } 
                 else{
                     $msg = "el email ingresado ya esta registrado en el sistema";

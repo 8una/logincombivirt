@@ -27,7 +27,16 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+    public function redirectPath()
+{
+    if (\Auth::user()->isChofer()) {
+        return "/homeChofer";
+        // or return route('routename');
+    }
 
+    return "/";
+    // or return route('routename');
+}
     /**
      * Create a new controller instance.
      *

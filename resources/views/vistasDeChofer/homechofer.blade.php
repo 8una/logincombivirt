@@ -1,5 +1,16 @@
 @extends('layouts.app')
-
+@guest
+           Usted no tiene permiso para ver esta página.
+            @else
+            @if(Auth::user()->isAdmin())
+            Usted no tiene permiso para ver esta página.
+            @endif
+            @if(Auth::user()->isUser())
+            Usted no tiene permiso para ver esta página.
+            @endif  
+            @if(Auth::user()->isChofer())
+            
+            
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,4 +37,5 @@
 @endsection
 </body>
 </html>
-
+@endif  
+            @endguest
