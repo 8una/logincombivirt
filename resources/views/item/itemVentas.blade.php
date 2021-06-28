@@ -31,8 +31,8 @@
                         </thead>
                     <tr>   
                         <th><div class="col">{{$viaje['ruta']}}</th></div>
-                        <th><div class="col ">{{$viaje['fecha']}} </th></div>
-                        <th><div class="col ">{{$viaje['hora']}}  </th></div>
+                        <th><div class="col ">{{date('d-M-y', strtotime($viaje->fecha))}}</th></div>
+                        <th><div class="col ">{{date('g:ia', strtotime($viaje->hora))}}</th></div>
                         <th><div class="col ">{{$viaje['precio'] }}  $ARS </th></div>
                         <th><div class="col ">{{$precioTotal }}  $ARS </th></div>
                     </tr>
@@ -81,7 +81,7 @@
                 
         </table>  
         <th>
-                <button class="btn btn-lg btn-outline-success ml-2"> <a style="text-decoration:none" href= "{{route('pagarViaje',$viaje)}}" >Pagar viaje👉🤑👈</a></button>
+                <button class="btn btn-lg btn-outline-success ml-2"> <a style="text-decoration:none" href= "{{route('pagarViaje',$viaje)}}" >Pagar</a></button>
                         </th>    
         </div>
         

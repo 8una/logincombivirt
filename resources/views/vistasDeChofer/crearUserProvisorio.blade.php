@@ -24,7 +24,7 @@
                 <div class="form-check">
                     <div>
                         Fiebre:
-                    <input type="number" name="Fiebre" id="Fiebre" placeholder="º" required>
+                    <input type="number" name="fiebre" id="Fiebre" placeholder="º" required>
                     </div>
                     <div>
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="sintomas[]">

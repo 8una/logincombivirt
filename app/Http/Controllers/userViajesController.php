@@ -99,9 +99,11 @@ class userViajesController extends Controller
     }
     public function showMisViajes($dni)
     {
-        $hoy = date("Y-m-d H:i:s"); 
+        $hoy=date('Y-m-d H:i:s');
+        $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
+        $hoy = date ( 'Y-m-d H:i:s' , $hoy);  
         $msg = "";
-        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', $dni)->where('inicio', '>', $hoy)->get();
+        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('usuarioviajes.dniusuario', $dni)->where('viajes.inicio', '>=', $hoy)->get();
         return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
     }
 
@@ -304,6 +306,7 @@ class userViajesController extends Controller
         
     }
 
+    
     public function comprarViaje(Viaje $viaje, Request $request)
     {
         $msg = "";
@@ -561,65 +564,15 @@ class userViajesController extends Controller
 
         }
 
-    public function reprogramarViaje($dni, $ruta, $idviajeviejo)
+    public function mostrarDetalles($dni, $idviaje)
     {
-        /* $infectado=  */
-        $fin=Marcados::where('DNI',$dni)->value('fechaFin');
-        if ($fin != null){
-            $diaDeViaje= $fin;
-        }
-        else{
-            $diaDeViaje= Viaje::where(id,$idviajeviejo)->select('fecha')->get();
-            }
-        $msg = "";
-        $data = DB::table('viajes')->where('ruta', $ruta)->where('fecha', '>', $diaDeViaje)->get();
-
-        return view('vistasDeUsuario/reprogramar')->with(['data' => $data, 'idviajeviejo' => $idviajeviejo]);
-    }
-
-    public function actualizarViaje($dni, $idusuarioviaje, $idviajenuevo)
-    {
-        $hoy = date("Y-m-d");
-        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', $dni)->where('fecha', '>', $hoy)->get();
-        $hayEspacio = Viaje::where('id', $idviajenuevo)->value('cant disponibles');
-        $Fecha_viaje_nuevo = Viaje::where('id', $idviajenuevo)->value('fecha');
-        $Hora_viaje_nuevo = Viaje::where('id', $idviajenuevo)->value('hora');
-        $idViajeViejo = Usuarioviaje::where('id', $idusuarioviaje)->value('idViaje');
-        $Fecha_viaje_viejo = Viaje::where('id', $idViajeViejo)->value('fecha');
-        $Hora_viaje_viejo = Viaje::where('id', $idViajeViejo)->value('hora');
-
-        /* Superposivcion horaria */
-       /*  $data=DB::table('chofers')->whereNotExists(function ($query) {
-            $fechaInicio= date ('Y-m-d H:i:s', (strtotime( request('fecha').request('hora'))));
-            $fechaFin = strtotime ( '+'.request('duracion').' hour' , strtotime ($fechaInicio)) ; 
-            $fechaFin = date ( 'Y-m-d H:i:s' , $fechaFin);  
-            $query->select(DB::raw(1))
-                ->from('viajes')                                                    
-                ->whereColumn('chofers.DNI', 'viajes.DNI')->whereBetween('viajes.inicio',[$fechaInicio,$fechaFin])
-                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->whereBetween('viajes.fin',[$fechaInicio,$fechaFin])
-                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->where('viajes.inicio','<', $fechaInicio)->where('viajes.fin','>', $fechaInicio)
-                ->orWhereColumn('chofers.DNI', 'viajes.DNI')->where('viajes.inicio','>', $fechaInicio)->where('viajes.fin','<', $fechaInicio);
-        })->distinct()->select('DNI')->get(); */
-        /* Superposivcion horaria */
+        $viajeid= Usuarioviaje::where('id', $idviaje)->value('idViaje');
+        $items=ItemViaje::where('DNI', $dni)->where('idViaje', $viajeid)->get();
         
-        if ($Fecha_viaje_nuevo == $Fecha_viaje_viejo) {
-            if($Hora_viaje_viejo == $Hora_viaje_nuevo) {
-                $msg = "Usted ya dispone de un viaje el día $Fecha_viaje_viejo a las $Hora_viaje_viejo.";
-                return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg); 
-            }
-
-        }  elseif ($hayEspacio > 0) {
+        $viaje=Viaje::where('id', $viajeid)->get();
         
-        Usuarioviaje::where('dniusuario', $dni)->where('id', $idusuarioviaje)->update(array('idViaje' => $idviajenuevo));
-        $msg = "Usted ha reprogramado su viaje con éxito";
-        return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
-        }
-        else {
-            $msg = "El viaje que usted seleccionó no dispone de asientos libres. Por favor, seleccione otro viaje.";
-        return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
-        }
+        return view('vistasDeUsuario/mostrarDetallesViaje')->with('items',$items)->with('viaje',$viaje);
     }
-
 
     public function showMisViajesPasados($dni)
     {

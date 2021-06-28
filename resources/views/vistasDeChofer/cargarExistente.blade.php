@@ -15,6 +15,7 @@
     <Button> Buscar </Button>
     </form>
     <hr>
+
     @if(!$user->isEmpty())
         <h1 class="m-2 p-2">Formulario de Declaracion Jurada</h1>
         <form method="POST" action="{{route('cargoDeclaracionJuradaExistente')}}  "class="m-2 p-2">
@@ -77,7 +78,7 @@
         </div>
         <div style="color:gray"><input type="checkbox" name="acepto" id=""  name="terminos" onclick="sumbit.disabled = false;">Acepto los terminos y condiciones</div>
         <button type="submit" name="sumbit" class="btn btn-outline-primary mt-2" disabled> Aceptar</button>
-        </form>
+        </form>        
     @endif
     @endsection
 </body>

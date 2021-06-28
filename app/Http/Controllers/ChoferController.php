@@ -203,13 +203,6 @@ class ChoferController extends Controller
                         'email' => $request->input('email'),
                         'password' => Hash::make($request->input('password')),
                     ]); 
-                    /*$chofer = Chofer::create([
-                        'nombre' => $request->input('nombre'),
-                        'apellido' => $request->input('apellido'),
-                        'dni' => $request->input('dni'),
-                        'email' => $request->input('email'),
-                        'password' => Hash::make($request->input('password')),
-                    ]); */
 
                     $chofer = new Chofer;
                     $chofer->nombre = $request->input('nombre');
@@ -218,9 +211,6 @@ class ChoferController extends Controller
                     $chofer->email = $request->input('email');
                     $chofer->password = $request->input('password');
                     $chofer->save();
-
-                    
-                    
 
                     $user->roles()->attach(Role::where('name', 'Chofer')->first());  
                 } 
@@ -407,9 +397,8 @@ class ChoferController extends Controller
         $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
         $hoy = date ( 'Y-m-d H:i:s' , $hoy); 
         $dnichofer= Chofer::where('DNI', Auth::user()->dni)->select('DNI')->value('DNI');
-        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','<=',$hoy)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->get();
-        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','<=',$hoy)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->value('id');
-        
+        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->get();
+        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->value('id');
         
         $dni = request('DNI');
         $sintomas= request('sintomas');
@@ -475,18 +464,19 @@ class ChoferController extends Controller
 
     public function cargoDeclaracionJuradaInexistente()
     {
-        //AYUDA PARA CREAR UN USUARIO
+        //Crear un usuario 
+        $correo =request('correo');
+        $dni = request('dni');
+        
         $hoy=date('Y-m-d H:i:s');
         $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
         $hoy = date ( 'Y-m-d H:i:s' , $hoy); 
         $dnichofer= Chofer::where('DNI', Auth::user()->dni)->select('DNI')->value('DNI');
-        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('inicio','<=',$hoy)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->get();
-        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('inicio','<=',$hoy)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->value('id');
+        $proximoViaje= Viaje::where('DNI', $dnichofer)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->get();
+        $proximoViajeID= Viaje::where('DNI', $dnichofer)->where('estado','en viaje')->orderBy('inicio', 'ASC')->take(1)->value('id');
         
-        
-        $dni = request('DNI');
         $sintomas= request('sintomas');
-        $fiebre= request('Fiebre');
+        $fiebre= request('fiebre');
         
         if ($sintomas == null){
             $sintomas = 0;
@@ -496,48 +486,46 @@ class ChoferController extends Controller
         }
         if (($sintomas >= 2)||($fiebre >= 38)){
             $msg = "Usted no puede viajar, se le cancelo su viaje y por 14 dias no podra viajar";
-            $marcados= Marcados::where('DNI', $dni)->get()->count();
-            $hoy=date('Y-m-d H:i:s');
-            $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
-            $hoy = date ( 'Y-m-d H:i:s' , $hoy);
             $fechaFin= strtotime ( '+14 days' , strtotime ($hoy)); 
             $fechaFin = date( 'Y-m-d H:i:s' , $fechaFin); 
-            if ($marcados > 0){
-                Marcados::where('DNI', $dni)->update([
-                    'fechaInicio' => $hoy,
-                    'fechaFin' => $fechaFin 
+            Marcados::create([
+                'DNI' => $dni,
+                'fechaInicio' => $hoy,
+                'fechaFin' => $fechaFin 
                 ]);
-            }
-            else{
-                Marcados::create([
-                    'DNI' => $dni,
-                    'fechaInicio' => $hoy,
-                    'fechaFin' => $fechaFin 
-                ]);
-            }
+            
             $estado='viajando';
             return view('vistasDeChofer/homeChofer')->with('estado', $estado);
         }
         else{
-            $msg ="Pasajero Aceptado, Buen viaje";
+            //crear user provisorio
+            $user = User::create([
+                'name' => 'nombreTemp',
+                'lastname' => 'lastnameTemp',
+                'DNI' => $dni,
+                'email' => $correo,
+                'password' => Hash::make($dni)
+            ]); 
+
             Usuarioviaje::create([
                 'dniusuario' => $dni,
                 'estado' => 'en viaje',
                 'idViaje'=> $proximoViajeID
             ]);
+            $user->roles()->attach(Role::where('name', 'user')->first());  
             $capacidadActualizada =Viaje::where('id',$proximoViajeID )->value('cant disponibles');
             $capacidadActualizada = intval($capacidadActualizada);
             $capacidadActualizada = $capacidadActualizada - 1;
 
             Viaje::where('id',$proximoViajeID )->update([
                 'cant disponibles' => $capacidadActualizada
-            ]);
+            ]);     
+            //fin crear usuario
 
             $estado='viajando';
             return view('vistasDeChofer/homeChofer')->with('estado', $estado);
         }
             
-
     }
     
 }

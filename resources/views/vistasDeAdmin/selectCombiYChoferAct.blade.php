@@ -23,6 +23,9 @@ Usted no tiene permiso para visualizar esta página.
                 <h2 class=" m-2 p-2">Eleccion De Combi y Chofer</h2>
                 <label for=""></label>
                     <h4 class="d-inline m-2 p-2">Combi:</h4>
+                    @if ($cantCombis==0)
+                        <p class="d-inline m-2 p-2">Usted No tiene Combis Para elegir </p>
+                    @else
                     <p class="d-inline m-2 p-2">Usted tiene para elegir: {{$cantCombis}} Combis</p>
                     <select name="patente">
                     @foreach ($data as $item)
@@ -30,9 +33,13 @@ Usted no tiene permiso para visualizar esta página.
                     @endforeach 
                     </select>
                 </label>
+                @endif
                 
                 <label for=""></label>
                     <h4 class="d-inline m-2 p-2 ml-5 pl-5">Chofer:</h4>
+                    @if ($cantCombis==0)
+                        <p class="d-inline m-2 p-2">Usted No tiene Choferes Para elegir </p>
+                    @else
                     <p class="d-inline m-2 p-2 ">Usted tiene para elegir: {{$cantChoferes}} Choferes</p>
                     <select name="dni">
                     @foreach ($choferes as $choferes)
@@ -40,6 +47,7 @@ Usted no tiene permiso para visualizar esta página.
                     @endforeach 
                     </select>
                 </label>
+                @endif
                 <hr>
                 <h2 class=" m-2 p-2">Datos del viaje:</h2>
                 <label for=""></label>
@@ -67,7 +75,11 @@ Usted no tiene permiso para visualizar esta página.
                     <input class="form-control" name="precio" value="{{$precio}}"  type="text" placeholder="{{$precio}}" aria-label="readonly input example" readonly>
                 </label>
                 <div class="m-2 p-2">
-                    <button class="btn btn-primary">Finalizar</button>
+                    @if (($cantChoferes==0)||($cantCombis==0))
+                        <button class="btn btn-secondary" disabled>Finalizar</button>
+                    @else
+                        <button class="btn btn-primary">Finalizar</button>
+                    @endif
                     <button type="button" class="btn btn-outline-secondary"> <a href="{{route('gestionDeViajes')}}">Cancelar</a></button>
                 </div>
             </form>

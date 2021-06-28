@@ -88,11 +88,9 @@ Route::patch('/viajeactualizarfin/{viaje}', 'adminViajesController@actualizarVia
 
 //VIAJES DE USUARIO:
 Route::get('/misViajes/{dni}', 'userViajesController@showMisViajes')->name('misViajes');
+Route::get('/mostrarDetalles/{dni}/{idviaje}', 'userViajesController@mostrarDetalles')->name('mostrarDetalles');
 Route::get('/misViajesPasados/{dni}', 'userViajesController@showMisViajesPasados')->name('misViajesPasados');
 Route::get('/viajesDelUsuario', 'userViajesController@viajesDelUsuario')->name('viajesDelUsuario');
-//Reprogramar viaje
-Route::post('/reprogramar/{dni}/{ruta}/{idviaje}', 'userViajesController@reprogramarViaje')->name('reprogramar');
-Route::post('/actualizar/{dni}/{idviajeviejo}/{idviajenuevo}', 'userViajesController@actualizarViaje')->name('actualizar');
 
 
 //Cancelar viaje
