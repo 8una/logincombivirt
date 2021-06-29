@@ -59,7 +59,7 @@ Usted no tiene permiso para visualizar esta página.
         <div class="d-flex">
             <label for=""></label>
                 <h4 class="d-inline m-2 p-2">Patente combi:</h4>
-                <input class="form-control w-25 d-inline" name="patente" value="{{$viaje['patente']}}" type="number"  placeholder="{{$viaje['patente']}} " aria-label="readonly input example" readonly>
+                <input class="form-control w-25 d-inline" name="patente" value="{{$viaje['patente']}}" type="text"  placeholder="{{$viaje['patente']}} " aria-label="readonly input example" readonly>
             </label>
         </div>
         

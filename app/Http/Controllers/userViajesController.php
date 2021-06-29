@@ -103,7 +103,7 @@ class userViajesController extends Controller
         $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
         $hoy = date ( 'Y-m-d H:i:s' , $hoy);  
         $msg = "";
-        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('usuarioviajes.dniusuario', $dni)->where('viajes.inicio', '>=', $hoy)->get();
+        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('usuarioviajes.dniusuario', $dni)->where('viajes.fin', '>=', $hoy)->get();
         return view('vistasDeUsuario/viajesDelUsuario')->with(['data' => $data])->with('msg', $msg);
     }
 
@@ -578,7 +578,7 @@ class userViajesController extends Controller
     {
         $hoy = date("Y-m-d H:i:s");  
         $msg = "";
-        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', $dni)->where('viajes.fin', '<', $hoy)->get();
+        $data = DB::table('viajes')->join('usuarioviajes', 'usuarioviajes.idViaje', '=', 'viajes.id')->where('dniusuario', $dni)->where('viajes.fin', '<', $hoy)->orWhere('usuarioviajes.estado', 'sin calificar')->where('dniusuario', $dni)->get();
         return view('vistasDeUsuario/viajesDelUsuarioPasados')->with(['data' => $data])->with('msg', $msg);
     }
 

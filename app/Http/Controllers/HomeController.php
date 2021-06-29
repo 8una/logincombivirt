@@ -36,7 +36,7 @@ class HomeController extends Controller
         $hoy = date("Y-m-d H:i:s");
         $hoy= strtotime ('-3 hour', strtotime ($hoy));
         $hoy = date ( 'Y-m-d H:i:s' , $hoy);
-        $data= Viaje::where("cant disponibles", ">", 0)->where('inicio', '>', $hoy)->get();
+        $data= Viaje::where("cant disponibles", ">", 0)->where('estado','<>','en viaje')->where('inicio', '>', $hoy)->get();
         $ruta= Ruta::get();
         $origen= Ciudad::get();
         $destino= Ciudad::get();

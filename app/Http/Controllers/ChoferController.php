@@ -19,7 +19,13 @@ class ChoferController extends Controller
     //home del chofer esto se ejecutaria cuando se loguea como chofer
     public function showhome()
     {
-        $estado = 'rascandose';
+        $enViaje= Viaje::where('DNI', Auth::user()->dni)->where('estado', '=','en viaje')->get()->count();
+        if ($enViaje > 0){
+            $estado='en viaje';
+        }
+        else{
+            $estado='rascandose';
+        }
         return view('vistasDeChofer/homeChofer')->with('estado', $estado);
     }
 
@@ -383,13 +389,35 @@ class ChoferController extends Controller
     public function CargarPasajeroExistente($chofer)
     {
         $user= User::where('dni', '987498498')->get();
-        return view('vistasDeChofer/cargarExistente')->with('user', $user);
+        $msg="";
+        return view('vistasDeChofer/cargarExistente')->with('user', $user)->with('msg', $msg);
     }
 
     public function buscarCuentaConDNi()
     {
+        $msg= "";
         $user= User::where('dni', request('dni'))->get();
-        return view('vistasDeChofer/cargarExistente')->with('user', $user);
+        $usuario= User::where('dni', request('dni'))->get()->count();
+
+        if($usuario == 0){
+            $msg= "El dni no se encuentra en el sistema";
+            return view('vistasDeChofer/cargarExistente')->with('user', $user)->with('msg', $msg);
+        }
+        else{
+            $marcado = Marcados::where('DNI',request('dni'))->where('fechaFin', '>', date('Y-m-d'))->get()->count();
+            if($marcado > 0){
+                $msg= "Usted es sospechoso de COVID-19, no puede viajar";
+                return view('vistasDeChofer/cargarExistente')->with('user', $user)->with('msg', $msg);
+            }
+            else{
+            $enviaje= UsuarioViaje::where('dniusuario', request('dni'))->get()->count();
+            if ($enviaje > 0){
+                $msg= "Este usuario ya se encuentra en el viaje";
+                return view('vistasDeChofer/cargarExistente')->with('user', $user)->with('msg', $msg);
+            }
+            return view('vistasDeChofer/cargarExistente')->with('user', $user)->with('msg', $msg);  
+        }
+    }
     }
     public function cargoDeclaracionJuradaExistente()
     {
@@ -404,6 +432,7 @@ class ChoferController extends Controller
         $sintomas= request('sintomas');
         $fiebre= request('Fiebre');
         
+
         if ($sintomas == null){
             $sintomas = 0;
         }
@@ -411,7 +440,7 @@ class ChoferController extends Controller
             $sintomas =count($sintomas);
         }
         if (($sintomas >= 2)||($fiebre >= 38)){
-            $msg = "Usted no puede viajar, se le cancelo su viaje y por 14 dias no podra viajar";
+            $msg = "Usted es sospechoso de COVID-19, no puede viajar";
             $marcados= Marcados::where('DNI', $dni)->get()->count();
             $hoy=date('Y-m-d H:i:s');
             $hoy = strtotime ( '-3 hour' , strtotime ($hoy)); 
@@ -431,11 +460,10 @@ class ChoferController extends Controller
                     'fechaFin' => $fechaFin 
                 ]);
             }
-            $estado='viajando';
-            return view('vistasDeChofer/homeChofer')->with('estado', $estado);
+            $user= User::where('dni', request('dni'))->get();
+            return view('vistasDeChofer/cargarExistente')->with('user', $user)->with('msg', $msg);
         }
         else{
-            $msg ="Pasajero Aceptado, Buen viaje";
             Usuarioviaje::create([
                 'dniusuario' => $dni,
                 'estado' => 'en viaje',
@@ -458,7 +486,8 @@ class ChoferController extends Controller
 
     public function CargarPasajeroInexistente($chofer)
     {
-        return view('vistasDeChofer/crearUserProvisorio');
+        $msg="";
+        return view('vistasDeChofer/crearUserProvisorio')->with('msg', $msg);
     }
 
 
@@ -478,14 +507,27 @@ class ChoferController extends Controller
         $sintomas= request('sintomas');
         $fiebre= request('fiebre');
         
+        $dniexistente = User::where('DNI', $dni)->get()->count();
+        $correoexistente = User::where('email', $correo)->get()->count();
+
+
         if ($sintomas == null){
             $sintomas = 0;
         }
         else{
             $sintomas =count($sintomas);
         }
-        if (($sintomas >= 2)||($fiebre >= 38)){
-            $msg = "Usted no puede viajar, se le cancelo su viaje y por 14 dias no podra viajar";
+
+        if( $dniexistente > 0){
+            $msg = "Este DNI existe en el sistema";
+            return view('vistasDeChofer/crearUserProvisorio')->with('msg', $msg);
+        }
+        elseif($correoexistente > 0){
+            $msg = "Este Correo Electronico existe en el sistema";
+            return view('vistasDeChofer/crearUserProvisorio')->with('msg', $msg);
+        }
+        elseif (($sintomas >= 2)||($fiebre >= 38)){
+            $msg = "Usted no puede viajar, se ha creado su cuenta pero por 14 dias no podra viajar";
             $fechaFin= strtotime ( '+14 days' , strtotime ($hoy)); 
             $fechaFin = date( 'Y-m-d H:i:s' , $fechaFin); 
             Marcados::create([
@@ -493,15 +535,14 @@ class ChoferController extends Controller
                 'fechaInicio' => $hoy,
                 'fechaFin' => $fechaFin 
                 ]);
-            
-            $estado='viajando';
-            return view('vistasDeChofer/homeChofer')->with('estado', $estado);
+
+            return view('vistasDeChofer/crearUserProvisorio')->with('msg', $msg);
         }
         else{
             //crear user provisorio
             $user = User::create([
-                'name' => 'nombreTemp',
-                'lastname' => 'lastnameTemp',
+                'name' => $correo,
+                'lastname' => $correo,
                 'DNI' => $dni,
                 'email' => $correo,
                 'password' => Hash::make($dni)
@@ -522,8 +563,8 @@ class ChoferController extends Controller
             ]);     
             //fin crear usuario
 
-            $estado='viajando';
-            return view('vistasDeChofer/homeChofer')->with('estado', $estado);
+            $msg = "Se ha creado su cuenta y  registrado al viaje: \n nombre de usuario: ".$correo. " \n Contraseña: ". $dni ;
+            return view('vistasDeChofer/crearUserProvisorio')->with('msg', $msg);
         }
             
     }

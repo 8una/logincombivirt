@@ -52,12 +52,21 @@
                         <th><div class="col text-center">{{$viaje->precio}} $ARS</th></div>
                         @if ($viaje->estado == 'en viaje')
                         <th><div class="col text-center"> {{$viaje->estado}}</th></div>
-                        <th>
-                            <div class="d-flex ">
-                                <div class="pr-2 text-secondary">Sin Acciones Pendientes</div>
-                            </div>
-                        </th>
-                         
+                        
+                        @elseif ($viaje->estado == 'sin calificar')
+                            <th><div class="col text-center"> {{$viaje->estado}}</th></div>
+                            <th>
+                                <div class="d-flex ">
+                                    <div class="pr-2 text-secondary">Sin Acciones Pendientes</div>
+                                </div>
+                            </th>
+                        @elseif ($viaje->estado == 'cancelado')
+                            <th><div class="col text-center"> {{$viaje->estado}}</th></div>
+                            <th>
+                                <div class="d-flex ">
+                                    <div class="pr-2 text-secondary">Rechazado Por sospechoso</div>
+                                </div>
+                            </th>
                         @else
                         <th>
                             <div class="d-flex ">
@@ -67,15 +76,11 @@
                         </th>
                         <th><div class="col text-center"> {{$viaje->estado}}</th></div> 
                         @endif
-                        
-                        
-                        
                     </tr>
                 </div>
                 @endforeach
         </table>
             </div>
-        
     @endsection
 @endsection
 </body>

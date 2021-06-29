@@ -10,20 +10,24 @@
     @extends('layouts.app')
     @section('content')
         <h3>Ingrese DNI y correo electronico</h3>
+        <hr>
+        {{$msg}}
+        <hr>
+        @if($msg != "Usted no puede viajar, se ha creado su cuenta pero por 14 dias no podra viajar")
         <form method="POST" action="{{route('cargoDeclaracionJuradaInexistente')}}  "class="m-2 p-2">
             @csrf @method('POST')
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label w-50">Correo Electronico</label>
-                <input type="email" class="form-control m-2 p-2 w-25" name="correo" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input type="email" class="form-control m-2 p-2 w-25" name="correo" id="exampleInputEmail1" aria-describedby="emailHelp" required>
               </div>
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label   w-50">DNI:</label>
-                <input type="text" class="form-control m-2 p-2 w-25" name="dni" id="exampleInputPassword1">
+                <input type="text" class="form-control m-2 p-2 w-25" name="dni" id="exampleInputPassword1" required>
               </div>
                 <h3 class="m-2 p-2 bg-dark text-light">Declaro que tengo los siguientes síntomas </h3>
                 <div class="form-check">
                     <div>
-                        Fiebre:
+                        Temperatura:
                     <input type="number" name="fiebre" id="Fiebre" placeholder="º" required>
                     </div>
                     <div>
@@ -64,6 +68,7 @@
         <div style="color:gray"><input type="checkbox" name="acepto" id=""  name="terminos" onclick="sumbit.disabled = false;">Acepto los terminos y condiciones</div>
         <button type="submit" name="sumbit" class="btn btn-outline-primary mt-2" disabled> Aceptar</button>
         </form>
+        @endif
     @endsection
 </body>
 </html>

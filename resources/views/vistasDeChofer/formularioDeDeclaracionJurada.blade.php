@@ -32,7 +32,7 @@
         <h3 class="m-2 p-2 bg-dark text-light">Declaro que tengo los siguientes síntomas </h3>
                 <div class="form-check">
                     <div>
-                        Fiebre:
+                        Temperatura:
                     <input type="number" name="Fiebre" id="Fiebre" placeholder="º" required>
                     </div>
                     <div>

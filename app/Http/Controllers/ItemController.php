@@ -110,15 +110,9 @@ class ItemController extends Controller
     {
         $viajes = ItemViaje::where('nombreItem','=',$item->nombre)->get();
         $msg = "el item se  borró con éxito ";
-        if ($viajes->count() ==0){
-            $item->delete();
-        }
-        else{
-            $msg = "el item no se puede borrar";
-        }
+        $item->delete();
         $items = Item::all();
         return view('item.lista')->with(['items' =>$items])->with('msg',$msg)->with('request',$request);
-        
     }
     
     
